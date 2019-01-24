@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="purchase_drug_medical_supplies" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="771c0151-eb18-4619-9389-e0fb6bb74c4b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select b_item_subgroup.item_subgroup_description as subgroup_description
+        ,b_item.item_number as item_code
+        ,b_item.item_common_name as item_name
+        ,distributor.distributor_name as distributor
+        ,stock_order.purchasing_offer_quantity::float as qty
+        ,base_unit.description_th as unit
+        , substr(stock_order.purchasing_offer_date,9,2) || '-' || substr(stock_order.purchasing_offer_date,6,2) || '-' ||
+                        (cast(substr(stock_order.purchasing_offer_date,1,4) as numeric) + 543) as purchasing_offer_date
+from imed.stock_order
+inner join b_item on stock_order.item_id = b_item.b_item_id
+inner join b_item_subgroup on b_item.b_item_subgroup_id = b_item_subgroup.b_item_subgroup_id
+left join imed.distributor on stock_order.distributor_id = distributor.distributor_id
+left join imed.base_unit on stock_order.small_unit_id = base_unit.base_unit_id
+where stock_order.order_from_stock_id = '1'
+and b_item.item_active = '1'
+and stock_order.purchasing_offer_date <> ''
+and  ((cast(substr(stock_order.purchasing_offer_date,1,4) as numeric) + 543) || '-' || substr(stock_order.purchasing_offer_date,6,2) || '-' || substr(stock_order.purchasing_offer_date,9,2)) between $P{start_date} and $P{end_date}
+order by subgroup_description,item_name,purchasing_offer_date]]>
+	</queryString>
+	<field name="subgroup_description" class="java.lang.String"/>
+	<field name="item_code" class="java.lang.String"/>
+	<field name="item_name" class="java.lang.String"/>
+	<field name="distributor" class="java.lang.String"/>
+	<field name="qty" class="java.lang.Double"/>
+	<field name="unit" class="java.lang.String"/>
+	<field name="purchasing_offer_date" class="java.lang.String"/>
+	<variable name="item_count" class="java.lang.Integer" resetType="Group" resetGroup="subgroup" calculation="Count">
+		<variableExpression><![CDATA[$F{item_name}]]></variableExpression>
+	</variable>
+	<group name="subgroup">
+		<groupExpression><![CDATA[$F{subgroup_description}]]></groupExpression>
+		<groupHeader>
+			<band height="24">
+				<textField isBlankWhenNull="true">
+					<reportElement x="92" y="1" width="257" height="22" uuid="74cef820-2ff8-4b78-9f79-e2e52a3ac651"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{subgroup_description}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="24">
+				<staticText>
+					<reportElement x="268" y="1" width="47" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[รวม]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="314" y="1" width="37" height="22" uuid="0762f0e6-37c4-433b-96d6-73123d63bac9"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{item_count}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="350" y="1" width="63" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[รายการ]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="131" y="0" width="555" height="22" uuid="360f91b2-d575-464a-8c62-7484806b425e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายงานการสั่งซื้อยาและเวชภัณฑ์ตามกลุ่มยาและเวชภัณฑ์ " + new java.text.SimpleDateFormat("dd MMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date})) + " ถึง " + new java.text.SimpleDateFormat("dd MMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="82" y="1" width="100" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[กลุ่มรายการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="1" width="167" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ชื่อรายการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="491" y="1" width="142" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ชื่อผู้ผลิตหรือจำหน่าย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="632" y="1" width="96" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[จำนวนที่สั่ง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="727" y="1" width="65" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[วันที่สั่ง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="182" y="1" width="86" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[รหัสรายการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="421" y="1" width="86" height="22" uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[หน่วย]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="268" y="1" width="167" height="22" isPrintWhenDetailOverflows="true" uuid="74cef820-2ff8-4b78-9f79-e2e52a3ac651"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="false" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="491" y="1" width="171" height="22" isPrintWhenDetailOverflows="true" uuid="74cef820-2ff8-4b78-9f79-e2e52a3ac651"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="false" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{distributor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="733" y="1" width="65" height="22" isPrintWhenDetailOverflows="true" uuid="74cef820-2ff8-4b78-9f79-e2e52a3ac651"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="false" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{purchasing_offer_date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="435" y="0" width="56" height="22" isPrintWhenDetailOverflows="true" uuid="74cef820-2ff8-4b78-9f79-e2e52a3ac651"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="false" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="662" y="1" width="67" height="22" uuid="99f2aa5c-cf05-4b39-aada-38881620a076"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="182" y="1" width="86" height="22" isPrintWhenDetailOverflows="true" uuid="74cef820-2ff8-4b78-9f79-e2e52a3ac651"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="false" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_code}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="506" y="3" width="296" height="20" uuid="5822823f-4bd2-4127-8e21-7eb558659775"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="12" isBold="false" isItalic="false" isUnderline="false" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd-MM-yyyy,HH:mm:ss", new java.util.Locale("th", "TH")).format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

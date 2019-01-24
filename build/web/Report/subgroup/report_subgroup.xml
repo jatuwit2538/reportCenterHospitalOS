@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="report_subgroup"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="782"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="2" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="start_date" isForPrompting="true" class="java.lang.String"/>
+	<parameter name="end_date" isForPrompting="true" class="java.lang.String"/>
+	<queryString><![CDATA[select
+distinct(case when f_item_group.f_item_group_id ='1'
+then t_order.order_common_name
+else '' end ) as drug
+,(case when f_item_group.f_item_group_id ='3'
+then t_order.order_common_name
+else '' end ) as xray
+,(case when f_item_group.f_item_group_id ='2'
+then t_order.order_common_name
+else '' end ) as lab
+,(case when t_order.order_common_name like '%EKG%'
+then t_order.order_common_name
+else '' end) as ekg
+
+from t_order inner join b_item_subgroup on t_order.b_item_subgroup_id = b_item_subgroup.b_item_subgroup_id
+inner join f_item_group on b_item_subgroup.f_item_group_id = f_item_group.f_item_group_id
+
+where substr(t_order.order_date_time,1,10) between $P{start_date} and $P{end_date}
+and (t_order.f_order_status_id <> '0') and (t_order.f_order_status_id <> '3' )]]></queryString>
+
+	<field name="drug" class="java.lang.String"/>
+	<field name="xray" class="java.lang.String"/>
+	<field name="lab" class="java.lang.String"/>
+	<field name="ekg" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="67"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="1"
+						width="782"
+						height="40"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="TH SarabunPSK" pdfFontName="fonts/THSarabun.ttf" size="28" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<text><![CDATA[รายงานแสดงรายการยา, Lab,X-ray และเวชภัณฑ์ใช้ไปรายเดือน แยกตามประเภทการตรวจรักษา]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd MMMMM yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="40"
+						width="782"
+						height="20"
+						key="textField-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" pdfFontName="fonts/THSarabun.ttf" size="16" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["จากวันที่"+"  "+
+$P{start_date}.substring( 8, 10 )+
+" "+(($P{start_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{start_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{start_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{start_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{start_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{start_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{start_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{start_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{start_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{start_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{start_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{start_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{start_date}.substring( 5, 7 ))+
+" "+$P{start_date}.substring( 0, 4 )+
+"  "+"ถึงวันที่"+"  "+
+$P{end_date}.substring( 8, 10 )+
+" "+(($P{end_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{end_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{end_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{end_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{end_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{end_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{end_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{end_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{end_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{end_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{end_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{end_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{end_date}.substring( 5, 7 ))+
+" "+$P{end_date}.substring( 0, 4 )]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="66"
+						width="781"
+						height="1"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="21"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="1"
+						y="1"
+						width="189"
+						height="20"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" pdfFontName="fonts/THSarabun.ttf" size="16" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<text><![CDATA[รายการยา]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="189"
+						y="1"
+						width="185"
+						height="20"
+						key="staticText-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" pdfFontName="fonts/THSarabun.ttf" size="16" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<text><![CDATA[รายการเอ็กซเรย์]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="373"
+						y="1"
+						width="224"
+						height="20"
+						key="staticText-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" pdfFontName="fonts/THSarabun.ttf" size="16" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<text><![CDATA[รายการ LAB]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="597"
+						y="1"
+						width="185"
+						height="20"
+						key="staticText-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" pdfFontName="fonts/THSarabun.ttf" size="16" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<text><![CDATA[EKG]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="20"
+						width="781"
+						height="1"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="0"
+						width="0"
+						height="21"
+						key="line-4"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="190"
+						y="0"
+						width="0"
+						height="20"
+						key="line-6"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="374"
+						y="0"
+						width="0"
+						height="21"
+						key="line-8"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="597"
+						y="1"
+						width="0"
+						height="20"
+						key="line-10"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="780"
+						y="0"
+						width="0"
+						height="21"
+						key="line-12"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="20"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="8"
+						y="0"
+						width="181"
+						height="18"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{drug}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="195"
+						y="0"
+						width="178"
+						height="18"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{xray}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="380"
+						y="0"
+						width="217"
+						height="18"
+						key="textField-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{lab}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="602"
+						y="0"
+						width="177"
+						height="18"
+						key="textField-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="14"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ekg}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="-1"
+						width="0"
+						height="20"
+						key="line-5"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="190"
+						y="-2"
+						width="0"
+						height="20"
+						key="line-7"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="374"
+						y="0"
+						width="0"
+						height="20"
+						key="line-9"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="597"
+						y="0"
+						width="0"
+						height="19"
+						key="line-11"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="780"
+						y="-1"
+						width="0"
+						height="20"
+						key="line-13"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="18"
+						width="781"
+						height="1"
+						key="line-14"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="50"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

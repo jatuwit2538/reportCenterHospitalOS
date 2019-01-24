@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sub_visit_daily_dt_dent" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+main.dt_name
+,main.clinic
+,count(visit_hn)
+FROM
+(
+select distinct
+f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname as dt_name
+,d_clinic.visit_clinic_description AS clinic
+,visit_hn,visit_vn
+,t_visit.t_visit_id
+,t_patient.patient_firstname ||' ' || t_patient.patient_lastname as pt_name
+,substr(t_visit.visit_begin_visit_time,1,10) as date
+,substr(t_visit.visit_begin_visit_time,12) as time
+,t_diag_icd10.diag_icd10_number
+,substring(t_patient.patient_record_date_time,1,10) as rc
+,substr(t_visit.visit_begin_visit_time,1,10) as visit
+
+
+ from t_visit inner  join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+    inner JOIN t_diag_icd10 on (t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn and diag_icd10_active='1' and t_diag_icd10.f_diag_icd10_type_id = '1')
+    inner JOIN b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+    inner JOIN b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+    inner  join b_visit_clinic d_clinic on (d_clinic.b_visit_clinic_id = b_employee.b_visit_clinic_id
+    and  d_clinic.b_visit_clinic_id  IN ('1317636542907'))
+    inner join t_person on t_person.t_person_id = b_employee.t_person_id
+    inner join f_patient_prefix on f_patient_prefix.f_patient_prefix_id = t_person.f_prefix_id
+
+where substr(t_visit.visit_begin_visit_time,1,10)  between  $P{start_date} and $P{end_date}
+
+and t_visit.f_visit_status_id <> '4') as main
+group by main.dt_name
+,main.clinic]]>
+	</queryString>
+	<field name="dt_name" class="java.lang.String"/>
+	<field name="clinic" class="java.lang.String"/>
+	<field name="count" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="374" y="0" width="101" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนผู้มารับบริการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="242" y="0" width="132" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[คลินิก]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="690a9781-e053-4f33-b9a3-6554d0707321" x="82" y="0" width="160" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รายชื่อ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dfe18f82-ed63-4a62-b924-b9baa1c31094" x="82" y="0" width="160" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="da27bc52-450c-41f2-a409-5b0a0b8090c2" x="242" y="0" width="132" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clinic}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="da27bc52-450c-41f2-a409-5b0a0b8090c2" x="374" y="0" width="101" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band/>
+	</lastPageFooter>
+	<summary>
+		<band height="45">
+			<staticText>
+				<reportElement uuid="9b591c7e-9928-4cb9-bf6c-6549fb4d7cc6" x="353" y="2" width="123" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[แพทย์.........................คน]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="13fda3b6-4b36-42fa-9632-750a149ad9f9" x="395" y="0" width="48" height="22"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="end_date">
+					<subreportParameterExpression><![CDATA[$P{end_date}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="start_date">
+					<subreportParameterExpression><![CDATA[$P{start_date}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "\\sub_visit_daily_c_dt_dent.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="c7714d1f-466f-42ff-b189-336217bc54d1" x="0" y="22" width="595" height="22"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="end_date">
+					<subreportParameterExpression><![CDATA[$P{end_date}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="start_date">
+					<subreportParameterExpression><![CDATA[$P{start_date}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "\\rp_visit_daily23125_part2.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dispense_inventory" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0089b08e-e9b3-4790-9e6d-68b5a738d076">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select b_item.item_number as item_code
+        ,b_item.item_common_name as common_name
+        ,t_patient.patient_hn as hn
+        ,f_patient_prefix.patient_prefix_description || t_patient.patient_firstname || '  ' || t_patient.patient_lastname as name
+        ,sum(t_order.order_qty) as qty
+        ,sum(t_order.order_price*t_order.order_qty) as sum_price
+from t_order
+inner join  t_visit on t_order.t_visit_id = t_visit.t_visit_id
+inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+left join f_patient_prefix on t_patient.f_patient_prefix_id = f_patient_prefix.f_patient_prefix_id
+inner join b_item on t_order.b_item_id = b_item.b_item_id
+where t_order.f_order_status_id = '5'
+        and b_item.item_active = '1'
+        and t_order.f_item_group_id = '1'
+        and t_visit.f_visit_status_id <> '4'
+        and t_patient.patient_active = '1'
+        and substr(t_order.order_dispense_date_time,1,10) between $P{start_date} and $P{end_date}
+group by b_item.item_number
+            ,common_name
+            ,t_patient.patient_firstname
+            ,t_patient.patient_lastname
+            ,f_patient_prefix.patient_prefix_description
+            ,t_patient.patient_hn
+order by common_name,t_patient.patient_firstname,t_patient.patient_lastname asc]]>
+	</queryString>
+	<field name="item_code" class="java.lang.String"/>
+	<field name="common_name" class="java.lang.String"/>
+	<field name="hn" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="qty" class="java.lang.Double"/>
+	<field name="sum_price" class="java.lang.Double"/>
+	<variable name="sum_qty" class="java.lang.Double" resetType="Group" resetGroup="item" calculation="Sum">
+		<variableExpression><![CDATA[$F{qty}]]></variableExpression>
+	</variable>
+	<variable name="sum_price" class="java.lang.Double" resetType="Group" resetGroup="item" calculation="Sum">
+		<variableExpression><![CDATA[$F{sum_price}]]></variableExpression>
+	</variable>
+	<group name="item">
+		<groupExpression><![CDATA[$F{common_name}]]></groupExpression>
+		<groupHeader>
+			<band height="22">
+				<textField>
+					<reportElement x="26" y="1" width="83" height="20" uuid="9fba64b7-223e-4b42-9b55-3f5d9deb2c00"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{item_code}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="109" y="1" width="244" height="20" uuid="7779b38a-e0ed-4151-a951-db3bacb3b966"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{common_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="22">
+				<staticText>
+					<reportElement x="353" y="1" width="57" height="20" uuid="48fe6618-066c-488b-b287-496236207222"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[รวม]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="410" y="1" width="35" height="20" uuid="18ee8201-987d-482d-9c39-5ec0fc246345"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sum_qty}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="445" y="1" width="61" height="20" uuid="655e4a55-a943-4688-a85e-935672e81f06"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sum_price}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="22" uuid="360f91b2-d575-464a-8c62-7484806b425e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายงานการจ่ายยาและเวชภัณฑ์แยกรายการ" + new java.text.SimpleDateFormat("dd MMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date})) + " ถึง " + new java.text.SimpleDateFormat("dd MMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="26" y="1" width="83" height="20" uuid="332029a8-caa7-4477-8e25-646b10e38527"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[รหัสรายการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="1" width="301" height="20" uuid="a4c883a4-877f-4aba-a7ef-1dca736a5e4d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ชื่อรายการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="1" width="45" height="20" uuid="48fe6618-066c-488b-b287-496236207222"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[จำนวน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="1" width="76" height="20" uuid="a4e04967-396d-49cd-aac2-f81b5df6e86f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[มูลค่า]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="121" y="1" width="100" height="20" uuid="4de26b1a-cbaa-408e-a4c3-4e762838c33f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="221" y="1" width="177" height="20" uuid="337f5805-8468-4fd5-9be6-72ce0955f21d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="410" y="1" width="35" height="20" uuid="18ee8201-987d-482d-9c39-5ec0fc246345"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="445" y="1" width="61" height="20" uuid="655e4a55-a943-4688-a85e-935672e81f06"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sum_price}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="259" y="3" width="296" height="20" uuid="5822823f-4bd2-4127-8e21-7eb558659775"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="12" isBold="false" isItalic="false" isUnderline="false" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd-MM-yyyy,HH:mm:ss", new java.util.Locale("th", "TH")).format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

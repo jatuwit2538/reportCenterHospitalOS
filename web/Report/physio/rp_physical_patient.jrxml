@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_ physical_patient" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dd27f380-adf5-401c-bc23-ca51e734e03b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="report_by" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+        t_patient.patient_hn as hn
+        ,t_visit.visit_vn
+        ,f_patient_prefix.patient_prefix_description||t_patient.patient_firstname||'  '||t_patient.patient_lastname as patient_name
+        ,b_person_type.description as person_type
+
+
+         ,case when person_doctor.t_person_id is not null and prefix_doctor.f_patient_prefix_id <> '000'
+                    then prefix_doctor.patient_prefix_description||person_doctor.person_firstname||'  '||person_doctor.person_lastname
+                when person_doctor.t_person_id is not null and prefix_doctor.f_patient_prefix_id = '000'
+                    then person_doctor.person_firstname||'  '||person_doctor.person_lastname
+                    else employee_doctor.employee_firstname||'  '||employee_doctor.employee_lastname
+        end  as doctor
+
+
+        ,t_physical_therapy_course.next_appointment_date
+
+
+         ,case when person_staff.t_person_id is not null and prefix_employee.f_patient_prefix_id <> '000'
+                    then prefix_employee.patient_prefix_description||person_staff.person_firstname||'  '||person_staff.person_lastname
+                when person_staff.t_person_id is not null and prefix_employee.f_patient_prefix_id = '000'
+                    then person_staff.person_firstname||'  '||person_staff.person_lastname
+                    else employee_staff.employee_firstname||'  '||employee_staff.employee_lastname
+        end  as staff
+
+        ,physical_therapy_order.order_count
+
+
+        ,employee_print.employee_name as employee_print
+
+
+from t_visit
+        inner join (select
+                                t_visit_service.t_visit_id as t_visit_id
+                        from t_visit_service
+                        where
+                                t_visit_service.b_service_point_id in (  select
+                                                                                                b_service_point.b_service_point_id
+                                                                                        from b_service_point
+                                                                                        where
+                                                                                                b_service_point.is_physical_therapy = '1')
+                        group by
+                                t_visit_service.t_visit_id ) as visit_service
+            on t_visit.t_visit_id = visit_service.t_visit_id
+
+
+
+         inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+         left join f_patient_prefix on t_patient.f_patient_prefix_id = f_patient_prefix.f_patient_prefix_id
+         inner join t_health_family on t_patient.t_health_family_id = t_health_family.t_health_family_id
+         left join b_person_type on t_health_family.b_person_type_id = b_person_type.b_person_type_id
+
+         inner join t_physical_therapy_course on  t_patient.t_patient_id= t_physical_therapy_course.t_patient_id
+
+         left join b_employee as employee_doctor on t_physical_therapy_course.doctor_id = employee_doctor.b_employee_id
+         left join t_person as person_doctor on employee_doctor.t_person_id = person_doctor.t_person_id
+         left join f_patient_prefix as prefix_doctor on person_doctor.f_prefix_id = prefix_doctor.f_patient_prefix_id
+
+        left join t_patient_appointment on t_physical_therapy_course.t_visit_id =(case when t_patient_appointment.visit_id_make_appointment is null
+                                                                                                                        then t_patient_appointment.t_visit_id
+                                                                                                                        else t_patient_appointment.visit_id_make_appointment  end)
+                                                        and t_patient_appointment.patient_appointment_active = '1'
+                                                        and t_patient_appointment.patient_appointment_servicepoint = '240000013876664119' --17.คลินิกเวชศาสตร์ฟื้นฟู
+                                                        and t_patient_appointment.patient_appointment_date = (to_char(t_physical_therapy_course.next_appointment_date,'YYYY')::int +543)
+                                                                                                                                           ||to_char(t_physical_therapy_course.next_appointment_date,'-MM-DD')
+
+        left join b_employee as employee_staff
+                        on t_patient_appointment.patient_appointment_staff = employee_staff.b_employee_id
+        left join t_person as person_staff on employee_staff.t_person_id = person_staff.t_person_id
+        left join f_patient_prefix as prefix_employee on person_staff.f_prefix_id = prefix_employee.f_patient_prefix_id
+
+        left join (select
+                            t_visit_record_id
+                            ,count(*) as order_count
+                    from t_physical_therapy_order_detail
+                    where
+                            t_physical_therapy_order_detail.status = '1'
+                    group by
+                            t_visit_record_id) as physical_therapy_order
+       on t_visit.t_visit_id = physical_therapy_order.t_visit_record_id
+
+
+         cross join (select
+                                                        b_employee.b_employee_id
+                                                        ,case when person_print.t_person_id is not null and prefix_print.f_patient_prefix_id <> '000'
+                                                                    then prefix_print.patient_prefix_description||person_print.person_firstname||'  '||person_print.person_lastname
+                                                                when person_print.t_person_id is not null and prefix_print.f_patient_prefix_id = '000'
+                                                                    then person_print.person_firstname||'  '||person_print.person_lastname
+                                                                    else b_employee.employee_firstname||'  '||b_employee.employee_lastname
+                                                        end  as employee_name
+
+                                                from b_employee as b_employee left join t_person as person_print on b_employee.t_person_id = person_print.t_person_id
+                                                         left join f_patient_prefix as prefix_print on person_print.f_prefix_id = prefix_print.f_patient_prefix_id
+                                                where
+                                                        b_employee.b_employee_id   = $P{report_by}
+                                ) as employee_print
+
+
+where
+        substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+        and t_visit.f_visit_status_id <> '4'
+
+order by
+        t_physical_therapy_course.next_appointment_date asc
+        ,patient_name asc]]>
+	</queryString>
+	<field name="hn" class="java.lang.String"/>
+	<field name="visit_vn" class="java.lang.String"/>
+	<field name="patient_name" class="java.lang.String"/>
+	<field name="person_type" class="java.lang.String"/>
+	<field name="doctor" class="java.lang.String"/>
+	<field name="next_appointment_date" class="java.sql.Date"/>
+	<field name="staff" class="java.lang.String"/>
+	<field name="order_count" class="java.lang.Long"/>
+	<field name="employee_print" class="java.lang.String"/>
+	<variable name="sum_order_count" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{order_count}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="60">
+			<staticText>
+				<reportElement uuid="3e9a7893-7190-4ae8-9f94-3206f674957d" x="0" y="0" width="555" height="28"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ศูนย์บริการสุขภาพแห่งจุฬาลงกรณ์มหาวิทยาลัย]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="290703e2-db48-40c1-8934-6be82cf1d5ea" x="0" y="28" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายงานผู้รับบริการที่ผ่านจุดบริการเวชศาสตร์ฟื้นฟูและกายภาพบำบัด  \nระหว่างวันที่ "+
+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="227ac7ae-c238-4b6a-929f-65ecae4cf7ff" x="0" y="0" width="25" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3c106c2d-ed46-4e5f-9519-b362640389db" x="70" y="0" width="101" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อ-สกุล]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b70fe8f3-3c3c-4b7a-9e35-4c646d5adfd7" x="25" y="0" width="45" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bda8e46f-694d-4b7c-bb74-07f422d9aa15" x="171" y="0" width="89" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ประเภทบุคคล]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e2e723c-d47d-4e73-a9c6-c69d9c2fd264" x="260" y="0" width="100" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[พบแพทย์เวร]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="452487a6-6ab2-42cf-8fd8-2765ef22414f" x="360" y="0" width="50" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[วันนัด]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ef5cf0c1-c34c-4247-babc-cd2ba8ad80df" x="410" y="0" width="100" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ผู้นัด]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d0ecd710-2429-4791-99c9-5b4e6a9cb9dd" x="510" y="0" width="45" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ทำกายภาพ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#,##0." isBlankWhenNull="true">
+				<reportElement uuid="8a2ac5b8-cfb2-4dee-8cab-20d65d5b3c21" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12"/>
+					<paragraph rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="84d65ff6-a35b-44a0-9d6d-b02f08de05fd" positionType="Float" stretchType="RelativeToBandHeight" x="25" y="0" width="45" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hn}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="df1c8554-e76f-4664-9d24-36e628d99a35" positionType="Float" stretchType="RelativeToBandHeight" x="70" y="0" width="101" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2f63789c-6249-41d0-829d-6969838a3540" positionType="Float" stretchType="RelativeToBandHeight" x="171" y="0" width="89" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{person_type}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="1f642892-1f99-4ce5-98bc-1c77971f8ae9" positionType="Float" stretchType="RelativeToBandHeight" x="260" y="0" width="100" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{doctor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f703cb1c-2101-43f5-9e91-136dd304733b" positionType="Float" stretchType="RelativeToBandHeight" x="410" y="0" width="100" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{staff}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="505bb80a-fee5-4544-a7c6-da07e39d5c37" positionType="Float" stretchType="RelativeToBandHeight" x="510" y="0" width="45" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{order_count}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="1f642892-1f99-4ce5-98bc-1c77971f8ae9" positionType="Float" stretchType="RelativeToBandHeight" x="360" y="0" width="50" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy", new java.util.Locale("th", "TH")).format($F{next_appointment_date})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3" x="323" y="0" width="232" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="216d58c7-f5fe-4d60-b6c9-94ece2386ea5" x="52" y="0" width="40" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9997830a-eb68-4485-a70f-9b2a445e6f1c" x="0" y="0" width="52" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า "+$V{PAGE_NUMBER}+" จาก"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a7fb9d54-5cb1-4b7e-8c28-70c285d2b24e" x="190" y="0" width="175" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employee_print} == null ? ""
+:"รายงานโดย "+ $F{employee_print}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="20">
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="505bb80a-fee5-4544-a7c6-da07e39d5c37" positionType="Float" stretchType="RelativeToBandHeight" x="510" y="0" width="45" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_order_count}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ef5cf0c1-c34c-4247-babc-cd2ba8ad80df" x="477" y="0" width="33" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

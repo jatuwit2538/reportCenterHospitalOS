@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : report.xml
+    Created on : 12 มิถุนายน 2554, 19:04 น.
+    Author     : Somprasong
+    Description:
+        Purpose of the document follows.
+-->
+<reportclinic>
+    <reportGroups>
+        <reportgroup>		
+            <name>รายงานการเงิน</name>
+            <reports>
+                <report>
+                    <name>1.รายงานผู้ป่วยที่ค้างชำระเงิน</name>
+                    <path>resources/ireport/module/menureport/finance</path>
+                    <jrxml>rp_remain_738.jrxml</jrxml>
+                </report> 
+                <report>
+                    <name>2.รายงานการเงินประจำวัน(แยกตามสิทธิการรักษา)</name>
+                    <path>resources/ireport/module/menureport/finance</path>
+                    <jrxml>rp_cash.jrxml</jrxml>
+                </report>
+				                <report>
+                    <name>3.รายงานการสรุปการเงินประจำวัน</name>
+                    <path>resources/ireport/module/menureport/finance</path>
+                    <jrxml>rp_cash_bill7318.jrxml</jrxml>
+                </report>
+            </reports>
+		</reportgroup> 
+		
+ 	<reportgroup>	
+			<name>รายงานห้องเวชระเบียน</name>
+            <reports>
+			    <report>
+                    <name>1.รายชื่อผู้ป่วยที่ผ่านจุดบริการ</name>
+                    <path>resources/ireport/module/menureport/register</path>
+                    <jrxml>rp_patient_service_point133.jrxml</jrxml>
+                </report>
+			    <report>
+                    <name>2.รายงานผู้ป่วยนอกแต่ละคลินิก</name>
+                    <path>resources/ireport/module/menureport/register</path>
+                    <jrxml>rp_patient_clinic134.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>3.รายงานตาม HN ชื่อ-สกุล ผู้ป่วยนอกที่ขาดการติดต่อเป็นระยะ5 ปี</name>
+                    <path>resources/ireport/module/menureport/register</path>
+                    <jrxml>rp_pt_over5y_1310.jrxml</jrxml>
+                </report> 
+				<report>
+                    <name>4.รายงานตาม HN ชื่อ-สกุล ผู้ป่วยนอกที่ขาดการติดต่อตามช่วงเวลาที่กำหนด</name>
+                    <path>resources/ireport/module/menureport/register</path>
+                    <jrxml>rp_pt_over_period_1310.jrxml</jrxml>
+                </report> 
+				<report>
+                    <name>5.รายงานผู้ป่วยนอนสังเกตุอาการ (ฝากนอน)</name>
+                    <path>resources/ireport/module/menureport/register</path>
+                    <jrxml>rp_observ_13141.jrxml</jrxml>
+                </report> 
+				<report>
+                    <name>6.รายงานคนไข้ Refer</name>
+                    <path>resources/ireport/module/menureport/register</path>
+                    <jrxml>rp_refer_13143.jrxml</jrxml>
+                </report> 
+				<report>
+                    <name>7.รายงานรายชื่อผู้ป่วยใหม่</name>
+                    <path>resources/ireport/module/menureport/register</path>
+                    <jrxml>rp_patient_new137_139.jrxml</jrxml>
+                </report> 
+            </reports>
+        </reportgroup> 
+		
+ 		<reportgroup>	
+			<name>รายงานหน้าห้องตรวจ</name>
+            <reports>
+			    <report>
+                    <name>1.อันดับโรคที่ผู้ป่วยเป็นมากที่สุด 10 อันดับแรก</name>
+                    <path>resources/ireport/module/menureport/screen</path>
+                    <jrxml>rp_diag_ranking_232.jrxml</jrxml>
+                </report>
+                <report>
+                    <name>2.รายชื่อผู้ป่วยนอกแยกตามแพทย์และคลีนิค</name>
+                    <path>resources/ireport/module/menureport/screen</path>
+                    <jrxml>rp_visit_doctor_clinic_234.jrxml</jrxml>
+                </report>
+                <report>
+                    <name>3.รายงานสรุปผู้ป่วยที่มารับบริการแยกตามสิทธิการรักษา</name>
+                    <path>resources/ireport/module/menureport/screen</path>
+                    <jrxml>rp_visit_count_by_plans_235.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>4.รายงานผลทางห้องปฏิบัติการ</name>
+                    <path>resources/ireport/module/menureport/screen</path>
+                    <jrxml>rp_lab_237.jrxml</jrxml>
+                </report> 
+				<report>
+                    <name>5.รายงานสถิติผู้ป่วยโรคเรื้อรัง</name>
+                    <path>resources/ireport/module/menureport/screen</path>
+                    <jrxml>rp_chronic_23124.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>6.รายงานจำนวนคนไข้แต่ละคนที่แพทย์ตรวจ</name>
+                    <path>resources/ireport/module/menureport/screen</path>
+                    <jrxml>rp_countvisit_doctor.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>7.รายงานจำนวนผู้ป่วยเก่า,ใหม่</name>
+                    <path>resources/ireport/module/menureport/screen</path>
+                    <jrxml>rp_visit_sum_233.jrxml</jrxml>
+                </report>
+
+            </reports>
+        </reportgroup> 
+		
+		
+ 		<reportgroup>	
+			<name>รายงานการนัดหมาย</name>
+            <reports>
+			    <report>
+                    <name>1.รายการนัดหมายแยกตามวัน เวลา คลินิก และแพทย์</name>
+                    <path>resources/ireport/module/menureport/appointment</path>
+                    <jrxml>rp_appointmentList_331.jrxml</jrxml>
+                </report>
+                <report>
+                    <name>2.รายงานสรุปการนัดหมายแยกตามรายชื่อแพทย์</name>
+                    <path>resources/ireport/module/menureport/appointment</path>
+                    <jrxml>rp_appointmentCount_332.jrxml</jrxml>
+                </report> 
+                <report>
+                    <name>3.รายงานสรุปการนัดหมายแยกตามวันเวลา</name>
+                    <path>resources/ireport/module/menureport/appointment</path>
+                    <jrxml>rp_appointmentClinic_334.jrxml</jrxml>
+                </report>
+                <report>
+                    <name>4.รายการนัดหมาย ทุกจุดบริการ</name>
+                    <path>resources/ireport/module/menureport/appointment</path>
+                    <jrxml>rp_appointmentList_931.jrxml</jrxml>
+                </report>
+            </reports>
+        </reportgroup>	
+	
+		
+ 		<reportgroup>	
+			<name>รายงานเภสัชกรรม</name>
+            <reports>
+			    <report>
+                    <name>1.รายการยาและเวชภัณฑ์ที่มีทั้งหมด</name>
+                    <path>resources/ireport/module/menureport/pharm</path>
+                    <jrxml>rp_all_drug_1232.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>2.รายงานปริมาณยาที่จ่าย</name>
+                    <path>resources/ireport/module/menureport/pharm</path>
+                    <jrxml>rp_dispense_12322.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>3.รายงานผู้ป่วยผ่านห้องยา</name>
+                    <path>resources/ireport/module/menureport/pharm</path>
+                    <jrxml>rp_patient_service_point_6394.jrxml</jrxml>
+                </report>				
+				<report>
+                    <name>4.รายงานยาค้างจ่าย</name>
+                    <path>resources/ireport/module/menureport/pharm</path>
+                    <jrxml>rp_not_dispens_check.jrxml</jrxml>
+                </report>
+				
+            </reports>
+        </reportgroup>	
+		
+		
+ 		<reportgroup>	
+			<name>รายงานระบบคลัง</name>
+            <reports>
+				<report>
+                    <name>1.รายการยาและเวชภัณฑ์ที่มีทั้งหมด(คลังห้องยา) </name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>item_all_cost.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>2.รายการยาและเวชภัณฑ์ที่มีทั้งหมด(คลังจ่ายยา) </name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>item_all_cost_1.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>3.รายงาน Stock แบบสรุป(คลังห้องยา)</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>stock_master_list.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>4.รายงาน Stock แบบสรุป(คลังจ่ายยา)</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>stock_master_list_1.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>5.รายงานปริมาณยาแยกรายการ</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>dispense_inventory.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>6.รายงานปริมาณยาที่จ่ายเลือกตามรายการ</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>dispense_item_inventory.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>7.รายงานยาและเวชภัณฑ์คงคลังแบบสรุป(คลังห้องยา) </name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>item_inventory.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>8.รายงานยาและเวชภัณฑ์คงคลังแบบสรุป(คลังจ่ายยา) </name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>item_inventory_1.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>9.รายการยาและเวชภัณฑ์ที่มีปริมาณคงเหลือต่ำกว่า safety level(คลังห้องยา)</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>item_under_safety.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>10.รายการยาและเวชภัณฑ์ที่มีปริมาณคงเหลือต่ำกว่า safety level(คลังห้องจ่ายยา)</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>item_under_safety_1.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>11.รายงานมูลค่าสินค้าคงคลัง(คลังห้องยา)</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>current_stock.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>12.รายงานมูลค่าสินค้าคงคลัง(คลังห้องจ่ายยา)</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>current_stock_1.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>13.รายงานความเคลื่อนไหวของยาและเวชภัณฑ์แต่ละรายการ</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>movement_inventory.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>14.รายงานความเคลื่อนไหวของยาและเวชภัณฑ์แต่ละรายการ</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>movement_inventory_1.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>15.รายงานการสั่งซื้อยาและเวชภัณฑ์ตามกลุ่มยาและเวชภัณฑ์(คลังยา))</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>purchase_drug_medical_supplies.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>16.รายงานปริมาณยาที่จ่าย</name>
+                    <path>resources/ireport/module/menureport/stock</path>
+                    <jrxml>rp_dispense_12322.jrxml</jrxml>
+                </report>
+            </reports>
+        </reportgroup>	
+		
+ 		<reportgroup>	
+			<name>รายงานห้องปฏิบัติการ</name>
+            <reports>
+			    <report>
+                    <name>1.รายงานผู้ป่วยที่ตรวจทางห้องปฏิบัติการตามช่วงเวลา</name>
+                    <path>resources/ireport/module/menureport/lab</path>
+                    <jrxml>rp_count_lab832.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>2.รายงานผู้ป่วยที่ตรวจทางห้องปฏิบัติการตามประเภทบุคคล</name>
+                    <path>resources/ireport/module/menureport/lab</path>
+                    <jrxml>rp_count_lab_pttype833.jrxml</jrxml>
+                </report>
+            </reports>
+        </reportgroup>	
+		
+	<reportgroup>	
+			<name>รายงานรังสีวิทยา</name>
+            <reports>
+			    <report>
+                    <name>1.รายงานผู้ป่วยที่ตรวจทางรังสีวิทยาตามช่วงเวลา</name>
+                    <path>resources/ireport/module/menureport/xray</path>
+                    <jrxml>rp_count_xray1131.jrxml</jrxml>
+                </report>
+			    <report>
+                    <name>2.รายงานผู้ป่วยที่ตรวจทางห้องรังสีวิทยาตามประเภทบุคคล</name>
+                    <path>resources/ireport/module/menureport/xray</path>
+                    <jrxml>rp_count_xray_pttype1132.jrxml</jrxml>
+                </report>
+            </reports>
+        </reportgroup>	
+		<reportgroup>	
+			<name>รายงานผู้ป่วยใน</name>
+            <reports>
+			    <report>
+                    <name>1.รายงานยอดผู้ป่วยในตาม ward</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_ipd.jrxml</jrxml>
+                </report>
+			    <report>
+                    <name>2.รายงานจำนวนผู้ป่วยในจำหน่ายแยกตามประเภทโรค</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_ipd_clinic.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>3.รายงานผู้ป่วยใน ตามวันที่จำหน่ายผู้ป่วยใน(IPD_DISCHARGE)</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_ipd_doctor.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>4.รายงาน 10 อันดับโรค ที่มีค่าใช้จ่ายสูง</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_ipd_icd10.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>5.รายงานการทำหัตถการผู้ป่วยใน</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_ipd_oper.jrxml</jrxml>
+                </report>
+								<report>
+                    <name>6.รายงานจำนวน Readmit รายโรคผู้ป่วยในคนครั้ง</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_ipd_readmit.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>7.รายงานรายชื่อผู้ป่วยใน จำหน่ายและวันนอน</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_ipd_stayday.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>8.รายงานจำนวนผู้ป่วยในจำหน่ายคนครั้งค่าใช้จ่าย(ทุกสิทธิ)</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_ipd_stayplan.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>9.รายงานผู้ป่วยในที่รับใหม่ และจำหน่าย</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_newipd.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>10.รายงานวันนอน แยกตามโรค</name>
+                    <path>resources/ireport/module/menureport/ipd</path>
+                    <jrxml>rp_sleep_diag.jrxml</jrxml>
+                </report>
+            </reports>
+        </reportgroup>	
+
+		<reportgroup>	
+			<name>รายงานทางสถิติ</name>
+            <reports>
+				<report>
+                    <name>1.รายงานค่าใช้จ่ายที่เกิดขึ้นจริง ตามกลุ่มรายการ </name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_stat_132.jrxml</jrxml>
+                </report> 
+				<report>
+                    <name>2.รายงานสถิติผู้รับบริการ แยกตามสิทธิการรักษา</name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_stat_visit_contract_plans.jrxml</jrxml>
+                </report>
+				<report>
+                    <name>3.รายงานสถิติการรักษาแยกตามแพทย์และกลุ่มอาการ</name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_stat_134.jrxml</jrxml>
+                </report> 
+			    <report>
+                    <name>4.รายงานสรุปจำนวนผู้รับบริการแยกตามคลินิกและแพทย์</name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_countvisit_doctor.jrxml</jrxml>
+                </report>
+			    <report>
+                    <name>5.รายงานสถิติ 10 อันดับโรคตามรหัส icd10</name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_diag_ranking_top10.jrxml</jrxml>
+                </report> 
+			    <report>
+                    <name>6.รายงานสรุประยะเวลารอคอย (ทำบัตร-รับยา)</name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_waiting_times_138.jrxml</jrxml>
+                </report> 
+
+				<report>
+                    <name>7.สถิติผู้รับบริการแยกตามคลินิก </name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_statistics_fiscal_year_sum.jrxml</jrxml>
+                </report> 
+
+				
+				<report>
+                    <name>8.สถิติผู้รับบริการจำแนกตามช่วงเวลา </name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_statistics_count_visit_times.jrxml</jrxml>
+                </report> 						
+				<report>
+                    <name>9.รายงานแสดงข้อมูลคนไข้ที่ยังไม่จำหน่ายทางการเงิน</name>
+                    <path>resources/ireport/module/menureport/statistics</path>
+                    <jrxml>rp_visit_not_financial_discharge.jrxml</jrxml>					
+                </report>				
+				
+            </reports>
+        </reportgroup>
+		<reportgroup>	
+			<name>รายงานอื่นๆ</name>
+            <reports>
+			    <report>
+                    <name>1.รายงานปิงปอง 7 สี</name>
+                    <path>resources/ireport/module/menureport/other</path>
+                    <jrxml>rp_ncd_ping_pong7.jrxml</jrxml>
+                </report>
+            </reports>
+        </reportgroup>	
+		
+    </reportGroups>
+</reportclinic>

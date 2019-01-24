@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_patient_pstype" language="groovy" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="102"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\01_ProjectSVN56\\CHU1\\WorkingDirectory\\Development\\DevDocument\\2.jrxml_รายงานหน้าห้องตรวจ\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	b_item.b_item_id,
+	b_item.item_number,
+	b_item.item_common_name,
+	b_item.item_trade_name,
+	b_item.item_nick_name,
+	b_item.item_active,
+	b_item_subgroup.b_item_subgroup_id,
+	b_item_subgroup.item_subgroup_number,
+	b_item_subgroup.item_subgroup_description,
+	b_item_subgroup.f_item_group_id,
+	b_item_billing_subgroup.b_item_billing_subgroup_id,
+	b_item_billing_subgroup.item_billing_subgroup_number,
+	b_item_billing_subgroup.item_billing_subgroup_description,
+	b_item.item_printable
+,oum.item_drug_uom_description as หน่วยใช้
+,purch.item_drug_uom_description as หน่วยจ่าย
+,b_item_drug_instruction.item_drug_instruction_description as วิธีใช้
+,b_item_drug_frequency.item_drug_frequency_description as ความถี่
+,q1.active_date,q2.item_price as ราคาขาย,q2.item_price_cost as ราคาทุน from
+
+(select b_item_id,max(item_price_active_date) as active_date from b_item_price
+group by b_item_id) as q1
+
+INNER JOIN
+
+(select b_item_id,item_price_active_date,item_price,item_price_cost from b_item_price
+group by b_item_id,item_price_active_date,item_price,item_price_cost) as q2
+
+ON
+
+q1.b_item_id = q2.b_item_id
+and q1.active_date = q2.item_price_active_date
+
+inner join b_item
+on q2.b_item_id = b_item.b_item_id
+
+INNER JOIN b_item_billing_subgroup
+		ON b_item.b_item_billing_subgroup_id = b_item_billing_subgroup.
+		b_item_billing_subgroup_id
+			INNER JOIN b_item_subgroup
+			ON b_item.b_item_subgroup_id = b_item_subgroup.b_item_subgroup_id
+LEFT JOIN b_item_drug ON b_item_drug.b_item_id = b_item.b_item_id
+LEFT JOIN b_item_drug_uom as oum on oum.b_item_drug_uom_id = b_item_drug.item_drug_use_uom
+LEFT JOIN b_item_drug_uom as purch on purch.b_item_drug_uom_id = b_item_drug.item_drug_purch_uom
+LEFT JOIN b_item_drug_instruction on b_item_drug_instruction.b_item_drug_instruction_id = b_item_drug.b_item_drug_instruction_id
+LEFT JOIN b_item_drug_frequency on b_item_drug_frequency.b_item_drug_frequency_id = b_item_drug.b_item_drug_frequency_id
+
+where b_item_subgroup.f_item_group_id IN ('1','4') --and
+ --b_item.item_active = '1'  and
+-- b_item.item_common_name like  '%ฟัน%'
+order by 	b_item_subgroup.item_subgroup_description,b_item.item_common_name]]>
+	</queryString>
+	<field name="b_item_id" class="java.lang.String"/>
+	<field name="item_number" class="java.lang.String"/>
+	<field name="item_common_name" class="java.lang.String"/>
+	<field name="item_trade_name" class="java.lang.String"/>
+	<field name="item_nick_name" class="java.lang.String"/>
+	<field name="item_active" class="java.lang.String"/>
+	<field name="b_item_subgroup_id" class="java.lang.String"/>
+	<field name="item_subgroup_number" class="java.lang.String"/>
+	<field name="item_subgroup_description" class="java.lang.String"/>
+	<field name="f_item_group_id" class="java.lang.String"/>
+	<field name="b_item_billing_subgroup_id" class="java.lang.String"/>
+	<field name="item_billing_subgroup_number" class="java.lang.String"/>
+	<field name="item_billing_subgroup_description" class="java.lang.String"/>
+	<field name="item_printable" class="java.lang.String"/>
+	<field name="หน่วยใช้" class="java.lang.String"/>
+	<field name="หน่วยจ่าย" class="java.lang.String"/>
+	<field name="วิธีใช้" class="java.lang.String"/>
+	<field name="ความถี่" class="java.lang.String"/>
+	<field name="active_date" class="java.lang.String"/>
+	<field name="ราคาขาย" class="java.lang.Double"/>
+	<field name="ราคาทุน" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="29">
+			<staticText>
+				<reportElement x="0" y="2" width="575" height="22" uuid="0d364763-71c6-4470-a053-d6518997478c"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รายการยาและเวชภัณฑ์ที่มีทั้งหมด]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement x="155" y="0" width="112" height="38" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อทางการค้า]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="267" y="0" width="118" height="38" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อทั่วไป]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="29" y="0" width="126" height="38" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อสามัญ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="0" width="48" height="38" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ราคาทุน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="433" y="0" width="50" height="38" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ราคาขาย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="483" y="0" width="92" height="38" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ประเภท]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="29" height="38" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField pattern="#,##0">
+				<reportElement x="29" y="0" width="126" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_common_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="155" y="0" width="112" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_trade_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="267" y="0" width="118" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_nick_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="385" y="0" width="48" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ราคาทุน}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="433" y="0" width="50" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ราคาขาย}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="483" y="0" width="92" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_subgroup_description}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="0" y="0" width="29" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="321" y="0" width="254" height="20" uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="47" height="20" uuid="1f1f2f8c-b6bf-4d0f-8e52-61429596dcb9"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="49" y="0" width="40" height="20" uuid="04bc90c9-cdae-48eb-bd67-f48032722a9c"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="21"/>
+	</summary>
+</jasperReport>

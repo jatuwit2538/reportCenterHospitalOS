@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="รายงานการทำหัตถการผู้ป่วยใน" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="629b7024-8b49-4b70-83ca-0fea2863915b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String"/>
+	<parameter name="end_date" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="report_by" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+t_order.order_common_name as common_name
+,count(distinct t_order.t_order_id) as t_order_id
+,b_site.site_name as site_name
+
+from t_visit inner join t_order on t_visit.t_visit_id = t_order.t_visit_id
+,b_site
+
+where substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+and t_visit.f_visit_status_id <> '4'
+and t_order.f_item_group_id ='5'
+and  (t_order.f_order_status_id = '2'  OR t_order.f_order_status_id = '5')
+
+group by t_order.order_common_name,b_site.site_name]]>
+	</queryString>
+	<field name="common_name" class="java.lang.String"/>
+	<field name="t_order_id" class="java.lang.Long"/>
+	<field name="site_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="118" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1cbd620f-20bf-4de1-8245-3647079ba717" x="0" y="40" width="555" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="24" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รายงานการทำหัตถการผู้ป่วยใน]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="664c6674-2524-48af-9793-926405d082e6" x="137" y="71" width="285" height="25"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="18" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{site_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement uuid="01dff49d-83ae-42df-9967-22e236c22246" x="0" y="96" width="554" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["จากวันที่"+"  "+
+$P{start_date}.substring( 8, 10 )+
+" "+(($P{start_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{start_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{start_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{start_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{start_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{start_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{start_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{start_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{start_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{start_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{start_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{start_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{start_date}.substring( 5, 7 ))+
+" "+$P{start_date}.substring( 0, 4 )+
+"  "+"ถึงวันที่"+"  "+
+$P{end_date}.substring( 8, 10 )+
+" "+(($P{end_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{end_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{end_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{end_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{end_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{end_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{end_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{end_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{end_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{end_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{end_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{end_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{end_date}.substring( 5, 7 ))+
+" "+$P{end_date}.substring( 0, 4 )]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="85eea51e-58c9-44e0-97e7-30453a872431" x="350" y="0" width="205" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนครั้ง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="73654ec1-8a35-4e5b-98b4-4736989a4cbe" x="0" y="0" width="351" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รายการให้บริการ]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="4ca34b06-d770-45da-8531-d2cd323a436e" x="0" y="0" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="283dee00-99fc-4c67-91d3-9eea5a3201c7" x="0" y="0" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="95217397-9a5f-468e-b7b3-c0bffc8c945a" x="350" y="1" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="443c3523-53de-4f7d-85b2-cde9e3ecc799" x="554" y="1" width="1" height="19"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="26c53dbb-b771-4e6a-a3af-63a039412454" x="43" y="0" width="307" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{common_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c12cfd36-11f9-4614-9d39-49b885d5f302" x="350" y="0" width="205" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{t_order_id}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="32d9990f-a3b5-4a93-a4a2-675da2e2fc68" x="0" y="-1" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="6a6ad569-4de2-4320-a147-0d1183d4de37" x="0" y="19" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="a68b686b-f2cb-4b5a-9626-d825602cd62f" x="0" y="0" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="74ad3c80-700d-4b4a-9eed-afcdfae7058b" x="350" y="0" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="0d4ee227-171e-464c-953c-0d1a2d826a2a" x="554" y="0" width="1" height="19"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement uuid="ce8a180d-a95e-4290-9ee1-4c1e60a759c3" x="426" y="4" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="48c8e808-f6e6-4234-8bd1-244f442b0af6" x="506" y="4" width="40" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="db91609c-687f-4f2d-8946-1aaf709991ab" x="154" y="5" width="257" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{report_by}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement uuid="669e5381-8c3e-4a51-8cce-8d65f77dab7f" x="1" y="5" width="153" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

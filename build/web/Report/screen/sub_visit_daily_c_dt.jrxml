@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sub1_1" language="groovy" pageWidth="60" pageHeight="23" columnWidth="60" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT count(doc.dt_name) as c_dt
+from
+(select distinct
+f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname as dt_name
+,d_clinic.visit_clinic_description AS clinic
+ from t_visit inner  join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+    inner JOIN t_diag_icd10 on (t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn and diag_icd10_active='1' and t_diag_icd10.f_diag_icd10_type_id = '1')
+    inner JOIN b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+    inner JOIN b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+    left  join b_visit_clinic d_clinic on d_clinic.b_visit_clinic_id = b_employee.b_visit_clinic_id
+    inner join t_person on t_person.t_person_id = b_employee.t_person_id
+    inner join f_patient_prefix on f_patient_prefix.f_patient_prefix_id = t_person.f_prefix_id
+
+where substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+
+and t_visit.f_visit_status_id <> '4'
+and f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname not ilike '%พยาบาล%'
+and f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname not ilike '%กายภาพ%'
+and d_clinic.b_visit_clinic_id not in ('131000019122769572','1317636542907')
+order by dt_name,clinic) as doc]]>
+	</queryString>
+	<field name="c_dt" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="23">
+			<textField pattern="#,##0">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="0" y="0" width="58" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{c_dt}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<lastPageFooter>
+		<band/>
+	</lastPageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

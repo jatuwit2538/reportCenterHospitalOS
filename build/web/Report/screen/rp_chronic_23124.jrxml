@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_chronic_23124" language="groovy" pageWidth="595" pageHeight="842" columnWidth="527" leftMargin="34" rightMargin="34" topMargin="25" bottomMargin="25" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="icd" class="java.lang.String">
+		<defaultValueExpression><![CDATA[select b_icd10_id,icd10_number  from b_icd10]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+        1 as chronic_id
+        ,'E10-E14' as c_code
+        ,'เบาหวาน (DM)' as chronic
+        ,count(distinct q1.patient_id) as new
+        ,count(distinct q2.patient_id) as old
+from
+(select
+        t_patient.t_patient_id as patient_id
+
+from
+        t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and (t_diag_icd10.diag_icd10_number >'E09' And t_diag_icd10.diag_icd10_number <'E15')
+        left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) = 1) as q1
+
+,
+
+(select
+        t_patient.t_patient_id as patient_id
+     ,count(t_diag_icd10.t_diag_icd10_id) as count_diag_icd10
+from
+          t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and (t_diag_icd10.diag_icd10_number >'E09' And t_diag_icd10.diag_icd10_number <'E15')
+       left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) > 1) as q2
+
+
+union
+
+select
+        2 as chronic_id
+        ,'I10' as c_code
+        ,'ความดัน (HT) ' as chronic
+        ,count(distinct q3.patient_id) as new_ht
+        ,count(distinct q4.patient_id) old_ht
+from
+(
+select
+        t_patient.t_patient_id as patient_id
+
+from
+        t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and (t_diag_icd10.diag_icd10_number ='I10')
+        left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) = 1) as q3
+
+,
+
+(select
+        t_patient.t_patient_id as patient_id
+     ,count(t_diag_icd10.t_diag_icd10_id) as count_diag_icd10
+from
+          t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and (t_diag_icd10.diag_icd10_number ='I10')
+       left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) > 1) as q4
+
+union
+select
+        3 as chronic_id
+        ,'E78' as c_code
+        ,'ไขมันในเลือดสูง (DLD)' as chronic
+        ,count(distinct q3_1.patient_id) as new
+        ,count(distinct q4_1.patient_id) as old
+from
+(
+select
+        t_patient.t_patient_id as patient_id
+
+from
+        t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and     (t_diag_icd10.diag_icd10_number like 'E78%')
+        left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) = 1) as q3_1
+
+,
+
+(select
+        t_patient.t_patient_id as patient_id
+     ,count(t_diag_icd10.t_diag_icd10_id) as count_diag_icd10
+from
+          t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and     (t_diag_icd10.diag_icd10_number like 'E78%'  )
+       left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) > 1) as q4_1
+
+union
+
+select
+        4 as chronic_id
+        ,'I20-I25' as c_code
+        ,'หัวใจขาดเลือด (IHD) ' as chronic
+        ,count(distinct q3.patient_id) as new
+        ,count(distinct q4.patient_id) as old
+from
+(
+select
+        t_patient.t_patient_id as patient_id
+
+from
+        t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and     (t_diag_icd10.diag_icd10_number like 'I20%'
+    or t_diag_icd10.diag_icd10_number like 'I21%'
+    or t_diag_icd10.diag_icd10_number like 'I22%'
+    or t_diag_icd10.diag_icd10_number like 'I23%'
+     or t_diag_icd10.diag_icd10_number like 'I24%'
+     or t_diag_icd10.diag_icd10_number like 'I25%'
+    )
+        left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) = 1) as q3
+
+,
+
+(select
+        t_patient.t_patient_id as patient_id
+     ,count(t_diag_icd10.t_diag_icd10_id) as count_diag_icd10
+from
+          t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and     (t_diag_icd10.diag_icd10_number like 'I20%'
+    or t_diag_icd10.diag_icd10_number like 'I21%'
+    or t_diag_icd10.diag_icd10_number like 'I22%'
+    or t_diag_icd10.diag_icd10_number like 'I23%'
+     or t_diag_icd10.diag_icd10_number like 'I24%'
+     or t_diag_icd10.diag_icd10_number like 'I25%'
+    )
+       left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) > 1) as q4
+
+union
+
+select
+        5 as chronic_id
+        ,'J44' as c_code
+        ,'ปอดอุดกั้นเรื้อรัง (COPD)' as chronic
+        ,count(distinct q3.patient_id) as new
+        ,count(distinct q4.patient_id) as old
+from
+(
+select
+        t_patient.t_patient_id as patient_id
+
+from
+        t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and (t_diag_icd10.diag_icd10_number in ('J44.0','J44.1','J44.8','J44.9'))
+        left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) = 1) as q3
+
+,
+
+(select
+        t_patient.t_patient_id as patient_id
+     ,count(t_diag_icd10.t_diag_icd10_id) as count_diag_icd10
+from
+          t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and (t_diag_icd10.diag_icd10_number in ('J44.0','J44.1','J44.8','J44.9'))
+       left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) > 1) as q4
+
+union
+
+select
+        6 as chronic_id
+        ,'I60-I69' as c_code
+        ,'หลอดเลือดสมอง (STORKE)' as chronic
+        ,count(distinct q3.patient_id) as new
+        ,count(distinct q4.patient_id) as old
+from
+(
+select
+        t_patient.t_patient_id as patient_id
+
+from
+        t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and     (t_diag_icd10.diag_icd10_number like 'I60%'
+    or t_diag_icd10.diag_icd10_number like 'I61%'
+    or t_diag_icd10.diag_icd10_number like 'I62%'
+    or t_diag_icd10.diag_icd10_number like 'I63%'
+    or t_diag_icd10.diag_icd10_number like 'I64%'
+    or t_diag_icd10.diag_icd10_number like 'I65%'
+    or t_diag_icd10.diag_icd10_number like 'I66%'
+    or t_diag_icd10.diag_icd10_number like 'I67%'
+    or t_diag_icd10.diag_icd10_number like 'I68%'
+    or t_diag_icd10.diag_icd10_number like 'I69%'
+    )
+        left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) = 1) as q3
+
+,
+
+(select
+        t_patient.t_patient_id as patient_id
+     ,count(t_diag_icd10.t_diag_icd10_id) as count_diag_icd10
+from
+          t_visit inner join t_diag_icd10 on t_visit.t_visit_id = t_diag_icd10.diag_icd10_vn
+                                and     (t_diag_icd10.diag_icd10_number like 'I60%'
+    or t_diag_icd10.diag_icd10_number like 'I61%'
+    or t_diag_icd10.diag_icd10_number like 'I62%'
+    or t_diag_icd10.diag_icd10_number like 'I63%'
+    or t_diag_icd10.diag_icd10_number like 'I64%'
+    or t_diag_icd10.diag_icd10_number like 'I65%'
+    or t_diag_icd10.diag_icd10_number like 'I66%'
+    or t_diag_icd10.diag_icd10_number like 'I67%'
+    or t_diag_icd10.diag_icd10_number like 'I68%'
+    or t_diag_icd10.diag_icd10_number like 'I69%'
+    )
+       left join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        cross join b_site
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_diag_icd10.diag_icd10_active  = '1'
+and substr(t_visit.visit_begin_visit_time,1,10) between  $P{start_date} and $P{end_date}
+and b_icd1_id = $P{icd}
+
+group by
+        t_patient.t_patient_id
+having count(t_diag_icd10.t_diag_icd10_id) > 1) as q4
+
+order by
+        chronic_id asc]]>
+	</queryString>
+	<field name="chronic_id" class="java.lang.Integer"/>
+	<field name="c_code" class="java.lang.String"/>
+	<field name="chronic" class="java.lang.String"/>
+	<field name="new" class="java.lang.Long"/>
+	<field name="old" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="31">
+			<textField>
+				<reportElement x="-1" y="0" width="527" height="20" uuid="290703e2-db48-40c1-8934-6be82cf1d5ea"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายงานจำนวนผู้ป่วยโรคเรื้อรัง  ระหว่างวันที่ "+
+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="53" y="11" width="100" height="20" uuid="4ef7f977-d6c6-416e-b16a-cdd085e19472"/>
+				<textFieldExpression><![CDATA[$P{icd}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="119" y="0" width="173" height="20" uuid="9b591c7e-9928-4cb9-bf6c-6549fb4d7cc6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[กลุ่มโรค]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="0" width="70" height="20" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[คนไข้เก่า]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="0" width="70" height="20" uuid="690a9781-e053-4f33-b9a3-6554d0707321"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[คนไข้ใหม่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="0" width="36" height="20" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ลำดับ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="53" y="0" width="66" height="20" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[รหัสโรค]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="432" y="0" width="70" height="20" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField pattern="#,##0">
+				<reportElement x="292" y="0" width="70" height="20" uuid="0d5e4694-3a66-4f34-964a-9ea5c8f29728"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{new}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="119" y="0" width="173" height="20" uuid="0d5e4694-3a66-4f34-964a-9ea5c8f29728"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{chronic}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="17" y="0" width="36" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{chronic_id}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="53" y="0" width="66" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{c_code}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="432" y="0" width="70" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{old}+$F{new}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="362" y="0" width="70" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{old}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="271" y="0" width="254" height="20" uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

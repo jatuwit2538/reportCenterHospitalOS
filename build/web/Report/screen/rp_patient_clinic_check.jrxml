@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_patient_service_point" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.3636363636363635"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct
+visit_hn,visit_vn
+,pt_prefix.patient_prefix_description ||t_patient.patient_firstname ||' ' || t_patient.patient_lastname as pt_name
+,substr(t_visit.visit_begin_visit_time,1,10) as date
+,b_visit_clinic.visit_clinic_description as clinic_dx
+,f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname as dt_name
+
+
+ from t_visit inner  join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+ inner join f_patient_prefix pt_prefix on pt_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+    inner JOIN t_diag_icd10 on (t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn and diag_icd10_active='1' and t_diag_icd10.f_diag_icd10_type_id = '1')
+    inner JOIN b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+    inner JOIN b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+    inner  join b_visit_clinic d_clinic on (d_clinic.b_visit_clinic_id = b_employee.b_visit_clinic_id
+
+)
+    inner join t_person on t_person.t_person_id = b_employee.t_person_id
+    inner join f_patient_prefix on f_patient_prefix.f_patient_prefix_id = t_person.f_prefix_id
+where substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+   and  (d_clinic.b_visit_clinic_id IN ('1310000000011','1318984478429','1313113216096')
+or b_visit_clinic.b_visit_clinic_id IN ('1310000000011','1318984478429','1313113216096'))
+and t_visit.f_visit_status_id <> '4' and t_patient.patient_active = '1'
+order by date,clinic_dx,dt_name]]>
+	</queryString>
+	<field name="visit_hn" class="java.lang.String"/>
+	<field name="visit_vn" class="java.lang.String"/>
+	<field name="pt_name" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="clinic_dx" class="java.lang.String"/>
+	<field name="dt_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="290703e2-db48-40c1-8934-6be82cf1d5ea" x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายงานผู้ป่วยนอก  ระหว่างวันที่ "+
+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9b591c7e-9928-4cb9-bf6c-6549fb4d7cc6" x="44" y="0" width="60" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="690a9781-e053-4f33-b9a3-6554d0707321" x="104" y="0" width="62" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="166" y="0" width="135" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อ-สกุล]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="300" y="1" width="95" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[วันที่รับบริการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="395" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[คลินิก]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="465" y="0" width="90" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[แพทย์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="9" y="0" width="35" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ลำดับ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="12a1a40f-a4bd-4406-9940-25864635cb18" x="44" y="1" width="60" height="18"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{visit_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="0d5e4694-3a66-4f34-964a-9ea5c8f29728" x="104" y="0" width="62" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{visit_vn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="166" y="0" width="134" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pt_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="53cef0f8-a88d-471d-b39c-da6160e454c4" x="300" y="1" width="95" height="18"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="9" y="1" width="35" height="18"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="53cef0f8-a88d-471d-b39c-da6160e454c4" x="395" y="2" width="70" height="18"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clinic_dx}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="53cef0f8-a88d-471d-b39c-da6160e454c4" x="465" y="2" width="90" height="18"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3" x="273" y="0" width="254" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="20"/>
+	</summary>
+</jasperReport>

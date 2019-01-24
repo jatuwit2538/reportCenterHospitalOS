@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="request_backlog" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82b9cc68-d8ab-415d-af5a-acdb52d312af">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="128"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select
+        q.request_number
+        ,q.distributor
+        ,q.req_order_date
+        ,sum(q.cost::float) as cost
+from
+        (select stock_order.purchasing_request_number as request_number
+                 ,case when distributor.distributor_name is null then 'ไม่ระบุ' else distributor.distributor_name end as distributor
+                 ,case when stock_request_order.req_order_date_time = '' then ''
+                        else substr(stock_request_order.req_order_date_time,9,2) || '-' || substr(stock_request_order.req_order_date_time,6,2) || '-' ||
+                        (cast(substr(stock_request_order.req_order_date_time,1,4) as numeric) + 543) end as req_order_date
+                 ,stock_request_order.cost_purchase::float as cost
+        from stock_order
+        inner join stock_request_order on stock_order.purchasing_request_number = stock_request_order.stock_request_order_number
+        left join distributor on stock_order.distributor_id = distributor.distributor_id
+        where stock_order.purchasing_offer_number = ''
+        and stock_request_order.stock_id = '1'
+        group by request_number,distributor,req_order_date,cost
+        ) as q
+group by q.request_number
+        ,q.distributor
+        ,q.req_order_date
+order by q.request_number]]>
+	</queryString>
+	<field name="request_number" class="java.lang.String"/>
+	<field name="distributor" class="java.lang.String"/>
+	<field name="req_order_date" class="java.lang.String"/>
+	<field name="cost" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9ffd123e-c875-4413-8a08-116403c8ecb6" x="95" y="32" width="365" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รายงานใบขอซื้อค้างส่ง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ffd123e-c875-4413-8a08-116403c8ecb6" x="129" y="10" width="296" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ศูนย์บริการสุขภาพแห่งจุฬาลงกรณ์มหาวิทยาลัย]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="87fb950d-2197-4bcb-b2c9-4e1418a392d2" x="15" y="1" width="100" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รหัสใบขอซื้อ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="75eca848-becf-459c-a180-9fdab0148696" x="126" y="1" width="192" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อผู้ผลิตหรือจำหน่าย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a24a410-d741-4b99-81b7-2dc1c50ccae1" x="318" y="1" width="122" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[วันที่ออกเอกสาร]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9996f2dd-668f-4d1a-badb-168dd4bd2adb" x="440" y="1" width="100" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนเงิน]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement uuid="cc6ae6bd-f01f-48da-8b52-ffb9b25e2492" x="15" y="1" width="100" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{request_number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8030f7fb-755f-46c3-aa8b-c7e44189c5f7" x="126" y="1" width="192" height="22"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{distributor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="405df3ea-5459-4af6-bf72-8f35a61d0822" x="318" y="1" width="122" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{req_order_date}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="3d5afd27-0c92-474b-add3-6e9a459a2997" x="440" y="1" width="72" height="22"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cost}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement uuid="5822823f-4bd2-4127-8e21-7eb558659775" x="259" y="3" width="296" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="12" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd-MM-yyyy,HH:mm:ss", new java.util.Locale("th", "TH")).format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

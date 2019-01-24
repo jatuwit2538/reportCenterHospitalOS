@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ผู้ป่วยบัตรทอง" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f1af8918-abc7-4a16-be92-ef1a9be68fa5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String"/>
+	<parameter name="end_date" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+        substr(t_visit.visit_begin_visit_time,9,2)||'/'||substr(t_visit.visit_begin_visit_time,6,2)||'/'||substr(t_visit.visit_begin_visit_time,1,4) as datevisit
+        ,t_patient.patient_hn as HN
+        --,f_patient_prefix.patient_prefix_description as คำนำหน้า
+        --,t_patient.patient_firstname as ชื่อ
+        --,t_patient.patient_lastname as สกุล
+        ,concat(f_patient_prefix.patient_prefix_description,'',t_patient.patient_firstname,' ',t_patient.patient_lastname) as name
+        ,t_patient.patient_pid||'  ' as cardid        ,t_visit_payment.visit_payment_card_number as card_number
+        ,replace(t_visit.visit_dx,'\n' , ' ') as dx
+        ,t_billing.billing_total as billing
+
+from
+        t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        left join f_patient_prefix on f_patient_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+        left join t_visit_payment on t_visit_payment.t_visit_id = t_visit.t_visit_id
+        left join t_billing on t_billing.t_visit_id = t_visit.t_visit_id
+
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_visit_payment.b_contract_plans_id ='212149284364294805' -- ไม่เสียค่าธรรมเนียม 30 ใน CUP
+        and t_visit_payment.visit_payment_active ='1'
+        and t_visit_payment.visit_payment_priority ='0'
+        and t_billing.billing_active = '1'
+        and substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+order by
+        substr(t_visit.visit_begin_visit_time,1,10) asc
+        ,t_visit.visit_vn asc]]>
+	</queryString>
+	<field name="datevisit" class="java.lang.String"/>
+	<field name="hn" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="cardid" class="java.lang.String"/>
+	<field name="card_number" class="java.lang.String"/>
+	<field name="dx" class="java.lang.String"/>
+	<field name="billing" class="java.lang.Double"/>
+	<variable name="total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{billing}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d9a42554-5d1b-411b-a2fa-90342ee6b719" x="0" y="23" width="555" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รายงานรายชื่อผู้ป่วย สิทธิบัตรทอง]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="af9c3220-e890-458b-af48-657a306fdfc5" key="textField-1" x="0" y="54" width="555" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["จากวันที่"+"  "+
+$P{start_date}.substring( 8, 10 )+
+" "+(($P{start_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{start_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{start_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{start_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{start_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{start_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{start_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{start_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{start_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{start_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{start_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{start_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{start_date}.substring( 5, 7 ))+
+" "+$P{start_date}.substring( 0, 4 )+
+"  "+"ถึงวันที่"+"  "+
+$P{end_date}.substring( 8, 10 )+
+" "+(($P{end_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{end_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{end_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{end_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{end_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{end_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{end_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{end_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{end_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{end_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{end_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{end_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{end_date}.substring( 5, 7 ))+
+" "+$P{end_date}.substring( 0, 4 )]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7f2c8798-3c1e-4b63-be94-191b67d25fd0" x="0" y="0" width="64" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[วันที่รับบริการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0aae2493-b34f-4365-abce-51c0e69ea2b9" x="209" y="0" width="74" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[เลขบัตรประชาชน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4717fc75-5b57-4793-9021-735ffdced6a9" x="282" y="0" width="73" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[เลขที่บัตรทอง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="447d6c0a-b29d-4542-9850-582c099e4266" x="504" y="0" width="49" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ค่าใช้จ่าย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e8ccf12-05d2-40d3-bee3-1b0dd657b98f" x="355" y="0" width="150" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[dx]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f4c8cd93-9811-4d39-974d-0eb767f82228" x="111" y="0" width="101" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อนามสกุล]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1d9ed25b-0b57-4fbe-9273-2991cc784561" x="64" y="0" width="47" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[hn]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="6f0c7631-c913-46a2-ae15-f22e1342f47d" x="0" y="0" width="64" height="20"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{datevisit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="878232da-a790-4626-96d5-8795d5dd9c82" x="64" y="0" width="47" height="20"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="45e0e95d-d7c0-48af-a5c6-e1f8e192cd10" x="210" y="0" width="72" height="20"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cardid}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cbfd0500-812f-47f7-b4fb-d09e9d192a5d" x="282" y="0" width="73" height="20"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{card_number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="549738d0-d1ce-4984-a69f-f7e3cee4993a" x="504" y="0" width="49" height="20"/>
+				<box leftPadding="2" rightPadding="2">
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{billing}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b5f7bc81-2f18-4d3b-9c6a-06e1cc674b8a" x="355" y="0" width="149" height="20"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dx}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d1f865d5-8b1e-4e86-ba5d-0971348f0781" x="111" y="0" width="99" height="20"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="27443e3f-9e02-4ec3-8a86-be5d4dc57063" x="473" y="0" width="82" height="20"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f37cf3da-ec5d-4023-98d6-02466f2595c9" x="373" y="0" width="100" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รวมค่าใช้จ่ายทั้งหมด]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="visit_icd9" pageWidth="311" pageHeight="586" columnWidth="311" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2a2b52dc-2385-429d-98eb-f511286afbc2">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="start_date" class="java.lang.String"/>
+	<parameter name="end_date" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+b_site.site_full_name AS site_name
+,b_visit_clinic.visit_clinic_description as clinic
+,case when (sum(q1.s_sold)  > 0 ) then (sum(q1.s_sold)) else 0 end AS s_sold
+,case when (sum(q1.s_sold)  > 0 ) then (sum(q1.s_sold)) else 0 end AS total
+
+FROM b_site,b_visit_clinic
+
+LEFT JOIN
+(select
+--t_visit.b_visit_clinic_id AS b_visit_clinic_id
+--,b_visit_clinic.visit_clinic_description
+t_visit.t_visit_id AS t_visit
+, t_diag_icd9.b_visit_clinic_id AS b_visit_clinic_id
+,count( distinct CASE  WHEN ((t_health_family.f_person_rank_id ='4')
+ AND ( t_patient.f_sex_id='1'OR  t_patient.f_sex_id='2'))
+THEN  t_visit.t_visit_id  ELSE null  END) AS s_sold
+
+FROM
+
+ t_patient
+INNER JOIN t_visit ON t_patient.t_patient_id = t_visit.t_patient_id
+inner join t_health_family on t_patient.t_health_family_id = t_health_family.t_health_family_id
+
+INNER JOIN t_diag_icd9 ON t_visit.t_visit_id = t_diag_icd9.diag_icd9_vn
+
+WHERE substring(t_visit.visit_financial_discharge_time,1,10) Between $P{start_date} AND $P{end_date}
+and t_visit.f_visit_type_id = '0'
+and t_health_family.f_person_rank_id ='4'
+group by
+t_visit.t_visit_id
+,t_diag_icd9.b_visit_clinic_id
+
+)AS q1
+
+
+ON b_visit_clinic.b_visit_clinic_id=q1.b_visit_clinic_id
+where b_visit_clinic.b_visit_clinic_id in ('1313113216096','1316934835220','1310000000007','1310000000006','1317636542907')
+
+
+group by
+b_site.site_full_name
+,b_visit_clinic.visit_clinic_description
+,b_visit_clinic.b_visit_clinic_id
+
+order by
+b_visit_clinic .b_visit_clinic_id asc]]>
+	</queryString>
+	<field name="site_name" class="java.lang.String"/>
+	<field name="clinic" class="java.lang.String"/>
+	<field name="s_sold" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<variable name="totalsold" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{s_sold}]]></variableExpression>
+	</variable>
+	<variable name="totall" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[($F{total})==null?Long.valueOf("0"):$F{total}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ddf6ec85-14ad-43de-9618-28bfd455319f" key="staticText-1" x="0" y="0" width="117" height="21"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  ๔. ผู้ป่วยที่ต้องผ่าตัด]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7111e223-3ba3-42f1-94ab-cdc39d0d76b7" key="staticText-3" x="1" y="21" width="190" height="21"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[จำแนกตามประเภท]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5c4856a1-2741-4cc8-b376-66b58e5b6c93" key="staticText-7" x="191" y="21" width="60" height="21"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[จำนวน]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="81ffe35e-8747-407c-8802-85b06e71963a" key="textField" x="1" y="0" width="190" height="21"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["       "+$F{clinic}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="92f63345-d6c7-486f-b272-fffe4683df92" key="textField" x="191" y="0" width="60" height="21"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.valueOf(new java.text.DecimalFormat("#,##0").format($F{s_sold}))
+.replaceAll("1","๑")
+.replaceAll("2","๒")
+.replaceAll("3","๓")
+.replaceAll("4","๔")
+.replaceAll("5","๕")
+.replaceAll("6","๖")
+.replaceAll("7","๗")
+.replaceAll("8","๘")
+.replaceAll("9","๙")
+.replaceAll("0","๐")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="21" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="49fc1294-8d72-4283-87e1-90652712318b" key="textField" x="191" y="0" width="60" height="21"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.valueOf(new java.text.DecimalFormat("#,##0").format($V{totall}))
+.replaceAll("1","๑")
+.replaceAll("2","๒")
+.replaceAll("3","๓")
+.replaceAll("4","๔")
+.replaceAll("5","๕")
+.replaceAll("6","๖")
+.replaceAll("7","๗")
+.replaceAll("8","๘")
+.replaceAll("9","๙")
+.replaceAll("0","๐")]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

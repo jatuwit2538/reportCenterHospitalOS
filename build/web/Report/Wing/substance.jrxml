@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="substance" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2cdff562-9656-4e73-849c-5adea974d6b7">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="356"/>
+	<property name="ireport.y" value="5"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+        b_site.site_full_name as site_full_name
+        ,b_site.site_house || ' แขวง' || site_tambon.address_description || ' ' || site_amphur.address_description || ' ' || site_changwat.address_description as site_address
+        ,substr(t_visit.visit_begin_visit_time,1,10) as visit_date
+        ,t_order.order_common_name as drug
+        ,f_patient_prefix.patient_prefix_description || t_patient.patient_firstname||' '||t_patient.patient_lastname as name
+        ,t_visit.visit_patient_age as age
+        ,case when t_patient.patient_house <> '' then t_patient.patient_house else '' end
+                || case when t_patient.patient_moo <>'' then ' ม.'||t_patient.patient_moo else '' end
+               || case when t_patient.patient_road <>'' then ' ถ.'||t_patient.patient_road else '' end
+               || case when t_patient.patient_tambon <>'' then ' ต.'||tambon.address_description else '' end
+               || case when t_patient.patient_amphur <>'' then ' อ.'||amphur.address_description else '' end
+                || case when t_patient.patient_changwat <> '' then ' '|| changwat.address_description else '' end
+                as address
+        ,'' as receipt
+        ,sum(t_order.order_qty) as dispense
+        ,'' as balance
+        ,case when b_employee.employee_firstname is null and b_employee.employee_lastname is null
+                then t_person.person_firstname || ' ' || t_person.person_lastname
+                else b_employee.employee_firstname || ' ' || b_employee.employee_lastname
+                end as doctor
+
+from t_visit
+        inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+        left join f_patient_prefix on t_patient.f_patient_prefix_id = f_patient_prefix.f_patient_prefix_id
+        inner join t_order on t_visit.t_visit_id = t_order.t_visit_id
+                 and ( t_order.order_common_name ilike '%Pseudoe%')
+                 and t_order.f_order_status_id not in  ('0','3')
+        left join f_address as tambon on t_patient.patient_tambon = tambon.f_address_id
+        left join f_address as amphur on t_patient.patient_amphur = amphur.f_address_id
+        left join f_address as changwat on t_patient.patient_changwat = changwat.f_address_id
+        left join b_employee on t_order.order_staff_order = b_employee.b_employee_id
+                and b_employee.employee_active = '1'
+        left join t_person on b_employee.t_person_id = t_person.t_person_id
+                and t_person.active = '1'
+        cross join b_site
+        left join f_address as site_tambon on b_site.site_tambon = site_tambon.f_address_id
+        left join f_address as site_amphur on b_site.site_amphur = site_amphur.f_address_id
+        left join f_address as site_changwat on b_site.site_changwat = site_changwat.f_address_id
+
+where substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+	    and t_visit.f_visit_status_id <> '4'
+       and t_patient.patient_active = '1'
+
+group by site_address,site_full_name,visit_date ,drug ,name ,age ,address ,doctor
+
+order by visit_date ,drug ,name]]>
+	</queryString>
+	<field name="site_full_name" class="java.lang.String"/>
+	<field name="site_address" class="java.lang.String"/>
+	<field name="visit_date" class="java.lang.String"/>
+	<field name="drug" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="age" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="receipt" class="java.lang.String"/>
+	<field name="dispense" class="java.lang.Double"/>
+	<field name="balance" class="java.lang.String"/>
+	<field name="doctor" class="java.lang.String"/>
+	<background>
+		<band height="555" splitType="Stretch">
+			<line>
+				<reportElement uuid="7db41947-4f15-4c02-939a-ac7dd420313b" x="0" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="b38a32d2-37e3-440c-ae52-9a9842181950" x="75" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="2349637e-782c-402f-8eed-b5e17efb88ea" x="178" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="e2c83820-86e2-460b-be21-be04a81ae1e9" x="241" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="aadfe572-ff89-4fa9-927c-17a4d25de399" x="322" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="352dad67-e840-44f0-9b08-681730fcf15f" x="394" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="a10688c5-33e6-4d8c-925e-71b64f003eda" x="428" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="8962d8dc-cf62-4f85-a860-9174142ecf1b" x="549" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="8bf83566-43c1-4505-9662-9f529558c3bb" x="802" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="d935e62b-8bee-4ed8-94f5-232cf31f01b1" x="596" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="49ddbcfb-f328-4ebe-acf3-4899f07a347f" x="643" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="61a83520-83be-410a-8f49-068b7921305e" x="690" y="137" width="1" height="418"/>
+			</line>
+			<line>
+				<reportElement uuid="deb4e01d-d401-47e8-8e21-e2634f650f4a" x="1" y="554" width="802" height="1"/>
+			</line>
+		</band>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement uuid="61176ac6-0145-4acb-b3d4-c6448246ad94" x="168" y="21" width="466" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ชื่อผู้รับอนุญาต " + $F{doctor} + "   สถานที่ชื่อ " + $F{site_full_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1d3f3d20-68cf-4ddb-aa08-6a2cd8db7838" x="168" y="43" width="466" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["อยู่เลขที่ " + $F{site_address}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5144a2ea-cd7b-423c-8755-dd2301e34b4a" x="1" y="60" width="57" height="19"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[แบบ บ.จ. ๘]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f95a436-f723-4edd-be1e-414f3b4f090f" x="240" y="0" width="323" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[บัญชีรับ - จ่ายวัตถุออกฤทธิ์ที่มีไว้ในครอบครอง]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="60" splitType="Stretch">
+			<line>
+				<reportElement uuid="ad13cdff-4773-436c-bee3-1de21b19abd7" x="0" y="0" width="802" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="ccc1f165-ecd9-4457-98fc-431802511e2b" x="0" y="59" width="802" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="9c286fc1-305a-49f5-9081-4088dbb8a700" x="0" y="0" width="1" height="60"/>
+			</line>
+			<staticText>
+				<reportElement uuid="6e91850d-5fc2-4ae7-983b-a1c24f34cead" x="1" y="20" width="74" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[วัน เดือน ปี]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="1bd25539-6812-40e8-abd6-1e52dc91f75d" x="75" y="0" width="1" height="60"/>
+			</line>
+			<staticText>
+				<reportElement uuid="e7b8ede5-38a0-4348-baea-71d942ffe9b9" x="76" y="20" width="102" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อวัตถุออกฤทธิ์]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="d684d352-fd57-4c41-ba3c-3a76f65ab3c7" x="178" y="0" width="1" height="60"/>
+			</line>
+			<staticText>
+				<reportElement uuid="0aa94547-4924-477c-9e4d-c4e98b512c64" x="179" y="1" width="62" height="58"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[เลขที่/อักษร
+ครั้งที่พิมพ์]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="2f5acb10-4c90-4e45-b1a6-7a141ef7c6bd" x="241" y="0" width="1" height="60"/>
+			</line>
+			<staticText>
+				<reportElement uuid="ec98286c-f6e8-465d-96a3-47abcfd1602c" x="691" y="20" width="111" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ผู้รับใบอนุญาต]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="78a5869a-b1c5-4234-8a1a-00c58f3933f1" x="322" y="0" width="1" height="60"/>
+			</line>
+			<staticText>
+				<reportElement uuid="ad384fda-d7e4-4266-a743-c75cce32cae9" x="323" y="39" width="71" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อผู้รับยา]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="bda94a92-8df4-4946-9b42-616848aa56d0" x="394" y="39" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement uuid="d2657c24-28cc-4d14-ab7c-59ada31fb3c3" x="323" y="38" width="226" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="69e26a64-22cc-43b0-a3ee-4baf4484ef3b" x="395" y="39" width="33" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[อายุ]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ee0fe1f2-36b1-495c-9a38-c799d031c01a" x="428" y="38" width="1" height="21"/>
+			</line>
+			<staticText>
+				<reportElement uuid="5c732e3f-a7d9-4aeb-8b2a-d7a7066ea967" x="429" y="39" width="120" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ที่อยู่]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="8a0e990e-6d01-41d4-bc07-a3226178a0f8" x="549" y="0" width="1" height="60"/>
+			</line>
+			<line>
+				<reportElement uuid="7e70f4cf-b2e2-4d97-97a7-17c5d685101b" x="802" y="0" width="1" height="60"/>
+			</line>
+			<staticText>
+				<reportElement uuid="30a4ad26-7bfe-44a6-8417-4347027994a3" x="550" y="39" width="46" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รับ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6ffa6e6f-729f-4273-b017-9eba051f516f" x="597" y="39" width="46" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[จ่าย]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="6251a008-0ce6-4e5b-806f-398d335153fd" x="596" y="39" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement uuid="39e61908-3e33-465d-922c-f55544285f4f" x="643" y="39" width="1" height="21"/>
+			</line>
+			<staticText>
+				<reportElement uuid="07f11b32-4795-42b3-b740-a91abaa85ee4" x="644" y="39" width="46" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[คงเหลือ]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="18c861ab-1b0f-4529-8cbb-e687370cf3bf" x="690" y="0" width="1" height="60"/>
+			</line>
+			<line>
+				<reportElement uuid="05583451-077f-4069-8a66-70e92c3c9017" x="550" y="38" width="140" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="9ae09055-f42c-43b5-b579-bb93c148c639" x="242" y="20" width="80" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ได้มาจาก]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fde3f914-6746-426a-ae00-c51fe41a86e8" x="323" y="1" width="226" height="37"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[จ่ายไปให้]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e9c0934f-e7cc-477f-ab53-63ccf51da841" x="550" y="1" width="140" height="38"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ปริมาณวัตถุออกฤทธิ์
+(หน่วยเป็น เม็ด)]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="97024469-36f3-491d-a926-fe23330ed6fb" x="431" y="0" width="118" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d923a5ed-8c76-44ce-a784-eee1357e267d" isPrintRepeatedValues="false" x="1" y="0" width="74" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + new java.text.SimpleDateFormat("dd MMMM yy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($F{visit_date}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="041122ab-31f4-4979-94f3-26d311d0a0b0" isPrintRepeatedValues="false" x="76" y="0" width="102" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $F{drug}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7337b3a5-1547-4040-b32b-6a2451b5656a" x="323" y="0" width="71" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e259bf99-9f3c-4f20-9c0d-057a57cb7210" x="395" y="0" width="33" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{age} + " "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="71afc885-72eb-4b05-b1b5-02ebf70a1d68" x="597" y="0" width="46" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dispense} + " "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c6a4d75b-9991-4987-9197-4329f17dab9d" isPrintRepeatedValues="false" x="691" y="0" width="111" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $F{doctor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

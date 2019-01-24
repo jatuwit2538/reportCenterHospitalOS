@@ -1,0 +1,1543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_patient_service_point" language="groovy" pageWidth="595" pageHeight="842" columnWidth="539" leftMargin="28" rightMargin="28" topMargin="28" bottomMargin="28" isSummaryNewPage="true" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Dataset_operative" uuid="8fd39908-b416-45c8-91d1-ed49b38fc7c6">
+		<parameter name="start_date" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="end_date" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select order_common_name,sum(order_qty)
+from t_visit
+inner join t_order on t_visit.t_visit_id = t_order.t_visit_id
+where
+t_visit.f_visit_status_id <> '4'
+and t_order.f_order_status_id not in ('0','3')
+and t_order.b_item_subgroup_id in ('1300000000011')
+and t_order.b_item_id not in ('174000010081300619','174000011167419125')
+and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+group by order_common_name]]>
+		</queryString>
+		<field name="order_common_name" class="java.lang.String"/>
+		<field name="sum" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Dataset_physio" uuid="e046bf74-d325-4994-bfa5-302cc885d617">
+		<parameter name="start_date" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="end_date" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+        *
+from
+       (SELECT
+                        item_number as code
+                        ,t_order.order_common_name as name
+                        ,count(distinct t_visit.visit_hn) as counts
+
+
+        FROM     t_patient INNER JOIN t_visit ON t_patient.t_patient_id = t_visit.t_patient_id
+                           INNER JOIN f_patient_prefix ON t_patient.f_patient_prefix_id = f_patient_prefix.f_patient_prefix_id
+                           INNER JOIN t_order on t_order.t_visit_id = t_visit.t_visit_id
+                           INNER JOIN b_item on b_item.b_item_id =t_order.b_item_id
+                           INNER JOIN t_health_family on t_health_family.t_health_family_id = t_patient.t_health_family_id
+                            LEFT JOIN f_patient_occupation on t_patient.f_patient_occupation_id = f_patient_occupation.f_patient_occupation_id
+
+        WHERE
+        b_item.item_number like '56%'
+        and item_active = '1'
+        and t_order.f_order_status_id not in ('0','3')
+        and t_visit.f_visit_status_id <> '4'
+        and substring(t_visit.visit_begin_visit_time,1,10) Between $P{start_date} and $P{end_date}
+        GROUP BY name, b_item.item_number
+        ORDER BY b_item.item_number) as q
+
+        ,(SELECT
+        count(distinct case when b_person_type.description like '%ข้าราชการ%' then t_visit.visit_hn else null end )as  type1
+        ,count(distinct case when b_person_type.description like '%นิสิต%' then t_visit.visit_hn else null end )as  type2
+        ,count(distinct case when b_person_type.description like '%บุคลากร%' then t_visit.visit_hn else null end )as  type3
+        ,count(distinct case when (b_person_type.description not like '%ข้าราชการ%' or  b_person_type.description not like '%นิสิต%'  or b_person_type.description not like '%บุคลากร%')
+        then  t_visit.visit_hn else null end )as  type4
+        FROM     t_patient INNER JOIN t_visit ON t_patient.t_patient_id = t_visit.t_patient_id
+                           INNER JOIN f_patient_prefix ON t_patient.f_patient_prefix_id = f_patient_prefix.f_patient_prefix_id
+                           INNER JOIN t_order on t_order.t_visit_id = t_visit.t_visit_id
+                           INNER JOIN b_item on b_item.b_item_id =t_order.b_item_id
+                           INNER JOIN t_health_family on t_health_family.t_health_family_id = t_patient.t_health_family_id
+                            LEFT JOIN f_patient_occupation on t_patient.f_patient_occupation_id = f_patient_occupation.f_patient_occupation_id
+                           LEFT JOIN b_person_type on t_health_family.b_person_type_id = b_person_type.b_person_type_id
+        WHERE
+        b_item.item_number like '56%'
+        and item_active = '1'
+        and t_visit.f_visit_status_id <> '4'
+        and t_order.f_order_status_id not in ('0','3')
+        and substring(t_visit.visit_begin_visit_time,1,10) Between $P{start_date} and $P{end_date}) as q2
+
+ ORDER BY
+        code asc]]>
+		</queryString>
+		<field name="code" class="java.lang.String"/>
+		<field name="name" class="java.lang.String"/>
+		<field name="counts" class="java.lang.Long"/>
+		<field name="type1" class="java.lang.Long"/>
+		<field name="type2" class="java.lang.Long"/>
+		<field name="type3" class="java.lang.Long"/>
+		<field name="type4" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+            *
+from
+        (select
+                count( distinct t_visit.visit_hn) as new_pt_hn
+                ,count( distinct t_visit.visit_vn) as new_pt_vn
+        from
+                t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                inner join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+                and substr(t_patient.patient_record_date_time,1,10) between $P{start_date} and $P{end_date}) as new_pt
+
+        ,(select
+                count( distinct t_visit.visit_hn) as old_pt_hn
+                ,count( distinct t_visit.visit_vn) as old_pt_vn
+        from
+                t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                inner join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+                and substr(t_patient.patient_record_date_time,1,10) < $P{start_date} ) as old_pt
+
+        ,(select
+                  count( distinct t_patient_appointment.t_patient_appointment_id) as all_app
+        from t_patient inner join t_patient_appointment on t_patient.t_patient_id = t_patient_appointment.t_patient_id
+                inner join f_appointment_status on t_patient_appointment.patient_appointment_status = f_appointment_status.f_appointment_status_id
+                left join t_visit on t_patient.t_patient_id = t_visit.t_patient_id
+                                        and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+        where  t_patient_appointment.patient_appointment_active = '1'
+                    and t_patient_appointment.patient_appointment_date between $P{start_date} and $P{end_date}
+                    and t_patient_appointment.patient_appointment_servicepoint not in ('240000014167391827')) as all_app
+
+        ,(select
+                  count( distinct t_patient_appointment.t_patient_appointment_id) as appear_app
+        from t_patient inner join t_patient_appointment on t_patient.t_patient_id = t_patient_appointment.t_patient_id
+                inner join f_appointment_status on t_patient_appointment.patient_appointment_status = f_appointment_status.f_appointment_status_id
+                left join t_visit on t_patient.t_patient_id = t_visit.t_patient_id
+                                        and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+        where  t_patient_appointment.patient_appointment_active = '1'
+                    and t_patient_appointment.patient_appointment_date between $P{start_date} and $P{end_date}
+                    and f_appointment_status.f_appointment_status_id in ('1','4','5','6')
+                    and t_patient_appointment.patient_appointment_servicepoint not in ('240000014167391827')) as appear_app
+
+        ,(select
+                  count( distinct t_patient_appointment.t_patient_appointment_id) as no_appear_app
+        from t_patient inner join t_patient_appointment on t_patient.t_patient_id = t_patient_appointment.t_patient_id
+                inner join f_appointment_status on t_patient_appointment.patient_appointment_status = f_appointment_status.f_appointment_status_id
+                left join t_visit on t_patient.t_patient_id = t_visit.t_patient_id
+                                        and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+        where  t_patient_appointment.patient_appointment_active = '1'
+                    and t_patient_appointment.patient_appointment_date between $P{start_date} and $P{end_date}
+                    and f_appointment_status.f_appointment_status_id in ('0','2','3')
+                    and t_patient_appointment.patient_appointment_servicepoint not in ('240000014167391827')) as no_appear_app
+
+        ,(select
+                 count(distinct t_visit.visit_hn) as med_hn
+                ,count( distinct t_visit.visit_vn) as med_vn
+
+        from t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                inner join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+                                                    and  b_visit_clinic.b_visit_clinic_id in ('1313085667988')
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}) as c_med
+
+
+        ,(select
+                 count(distinct t_visit.visit_hn) as dent_hn
+                ,count( distinct t_visit.visit_vn) as dent_vn
+
+        from t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                inner join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+                                                    and  b_visit_clinic.b_visit_clinic_id in ('1317636542907')
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}) as c_dent
+
+        ,(select
+                 count(distinct t_visit.visit_hn) as physio_hn
+                ,count( distinct t_visit.visit_vn) as physio_vn
+
+        from t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                inner join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+                                                    and  b_visit_clinic.b_visit_clinic_id in ('131000019122769572')
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}) as c_physio
+
+        ,(select
+                 count(distinct t_visit.visit_hn) as spec_hn
+                ,count( distinct t_visit.visit_vn) as spec_vn
+
+        from t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                inner join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+                                                    and  b_visit_clinic.b_visit_clinic_id not in  ('1313085667988','1317636542907','131000019122769572')
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}) as c_spec
+
+        ,(select
+                 count(distinct t_visit.visit_hn) as not_spec_hn
+                 ,count( distinct t_visit.visit_vn) as not_spec_vn
+
+        from t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                left join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+                and b_visit_clinic.b_visit_clinic_id is null ) as not_spec
+
+        ,(select
+                count ( distinct case when substr(t_visit.visit_begin_visit_time,12,5) <= '09:30' then t_visit.visit_hn else null end) as time_1_hn
+                ,count ( distinct case when substr(t_visit.visit_begin_visit_time,12,5) <= '09:30' then t_visit.visit_vn else null end) as time_1_vn
+
+                ,count ( distinct case when substr(t_visit.visit_begin_visit_time,12,5) between '09:31' and   '11:30'then t_visit.visit_hn else null end) as time_2_hn
+                ,count ( distinct case when substr(t_visit.visit_begin_visit_time,12,5) between '09:31' and   '11:30'then t_visit.visit_vn else null end) as time_2_vn
+
+                ,count ( distinct case when substr(t_visit.visit_begin_visit_time,12,5) between '11:31' and   '13:30'then t_visit.visit_hn else null end) as time_3_hn
+                ,count ( distinct case when substr(t_visit.visit_begin_visit_time,12,5) between '11:31' and   '13:30'then t_visit.visit_vn else null end) as time_3_vn
+
+                ,count ( distinct case when substr(t_visit.visit_begin_visit_time,12,5) >=   '13:31'then t_visit.visit_hn else null end) as time_4_hn
+                ,count ( distinct case when substr(t_visit.visit_begin_visit_time,12,5) >=   '13:31'then t_visit.visit_vn else null end) as time_4_vn
+
+        from t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                and diag_icd10_active='1'
+                                                and t_diag_icd10.f_diag_icd10_type_id = '1'
+                inner join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+                left join b_visit_clinic d_clinic on d_clinic.b_visit_clinic_id = b_employee.b_visit_clinic_id
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}) as times
+
+         ,(select
+                count( distinct case when b_visit_clinic.b_visit_clinic_id in ('1317636542907','131000019122769572')
+                                                then null else f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname end ) as count_doctor
+                ,count( distinct case when b_visit_clinic.b_visit_clinic_id in ('1317636542907','131000019122769572')
+                                                then f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname else null end ) as count_doctor_dent
+
+        from
+                t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                left join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+                inner join t_person on t_person.t_person_id = b_employee.t_person_id
+                inner join f_patient_prefix on f_patient_prefix.f_patient_prefix_id = t_person.f_prefix_id
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date} ) as count_doctor
+
+
+         ,(select
+                case when b_visit_clinic.b_visit_clinic_id in ('1317636542907','131000019122769572') then 2 else 1 end as service_group_doctor --1 แพทย์ 2 ทันตแพทย์
+                ,f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname as service_doctor_name
+                ,b_visit_clinic.visit_clinic_description AS service_clinic
+                ,count( distinct t_visit.visit_hn) as service_hn
+                ,count( distinct t_visit.visit_vn) as service_vn
+        from
+                t_visit inner join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+                inner join t_diag_icd10 on t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn
+                                                    and diag_icd10_active='1'
+                                                    and t_diag_icd10.f_diag_icd10_type_id = '1'
+                left join b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+
+                inner join b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+                inner join t_person on t_person.t_person_id = b_employee.t_person_id
+                inner join f_patient_prefix on f_patient_prefix.f_patient_prefix_id = t_person.f_prefix_id
+        where
+                t_visit.f_visit_status_id <> '4'
+                and substr(t_visit.visit_begin_visit_time,1,10)  between $P{start_date} and $P{end_date}
+        group by
+                service_group_doctor
+                ,service_doctor_name
+                ,service_clinic
+
+        order by
+                service_group_doctor asc
+                ,service_vn desc) as doctor_service
+
+order by
+        doctor_service.service_group_doctor asc
+        ,doctor_service.service_hn desc]]>
+	</queryString>
+	<field name="new_pt_hn" class="java.lang.Long"/>
+	<field name="new_pt_vn" class="java.lang.Long"/>
+	<field name="old_pt_hn" class="java.lang.Long"/>
+	<field name="old_pt_vn" class="java.lang.Long"/>
+	<field name="all_app" class="java.lang.Long"/>
+	<field name="appear_app" class="java.lang.Long"/>
+	<field name="no_appear_app" class="java.lang.Long"/>
+	<field name="med_hn" class="java.lang.Long"/>
+	<field name="med_vn" class="java.lang.Long"/>
+	<field name="dent_hn" class="java.lang.Long"/>
+	<field name="dent_vn" class="java.lang.Long"/>
+	<field name="physio_hn" class="java.lang.Long"/>
+	<field name="physio_vn" class="java.lang.Long"/>
+	<field name="spec_hn" class="java.lang.Long"/>
+	<field name="spec_vn" class="java.lang.Long"/>
+	<field name="not_spec_hn" class="java.lang.Long"/>
+	<field name="not_spec_vn" class="java.lang.Long"/>
+	<field name="time_1_hn" class="java.lang.Long"/>
+	<field name="time_1_vn" class="java.lang.Long"/>
+	<field name="time_2_hn" class="java.lang.Long"/>
+	<field name="time_2_vn" class="java.lang.Long"/>
+	<field name="time_3_hn" class="java.lang.Long"/>
+	<field name="time_3_vn" class="java.lang.Long"/>
+	<field name="time_4_hn" class="java.lang.Long"/>
+	<field name="time_4_vn" class="java.lang.Long"/>
+	<field name="count_doctor" class="java.lang.Long"/>
+	<field name="count_doctor_dent" class="java.lang.Long"/>
+	<field name="service_group_doctor" class="java.lang.Integer"/>
+	<field name="service_doctor_name" class="java.lang.String"/>
+	<field name="service_clinic" class="java.lang.String"/>
+	<field name="service_hn" class="java.lang.Long"/>
+	<field name="service_vn" class="java.lang.Long"/>
+	<variable name="count_doctor" class="java.lang.Number" resetType="Group" resetGroup="group_doctor" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{service_doctor_name}]]></variableExpression>
+	</variable>
+	<variable name="sum" class="java.lang.String">
+		<variableExpression><![CDATA[$F{new_pt_hn}+$F{old_pt_hn}]]></variableExpression>
+	</variable>
+	<group name="group_doctor" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{service_group_doctor}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<staticText>
+					<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="371" y="0" width="101" height="20"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[จำนวนผู้มารับบริการ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="690a9781-e053-4f33-b9a3-6554d0707321" x="79" y="0" width="160" height="20"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[รายชื่อ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="239" y="0" width="132" height="20"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[คลินิก]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement uuid="9b591c7e-9928-4cb9-bf6c-6549fb4d7cc6" x="371" y="0" width="101" height="20"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[แพทย์.........................คน]]></text>
+				</staticText>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="da27bc52-450c-41f2-a409-5b0a0b8090c2" x="371" y="0" width="101" height="20"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="TH SarabunPSK" size="14"/>
+						<paragraph leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{count_doctor}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="786" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3" x="285" y="766" width="254" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+		</band>
+	</background>
+	<title>
+		<band height="300" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9b591c7e-9928-4cb9-bf6c-6549fb4d7cc6" x="31" y="252" width="500" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[08.00-09.30....................ราย   09.30-11.30....................ราย   11.30-13.30....................ราย   13.30-15.30....................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="73" y="127" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ผู้ป่วยใหม่...................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="210" y="127" width="136" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ผู้ป่วยเก่า...................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="346" y="127" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[รวม..............................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="73" y="147" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[นัด...............................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="210" y="147" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[มาตามนัด..................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="346" y="147" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ไม่มาตามนัด...............................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="690a9781-e053-4f33-b9a3-6554d0707321" x="162" y="74" width="110" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[เฉพาะทาง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6fb50b85-8ca0-4510-a1f8-253ac60ca488" x="382" y="74" width="110" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[กายภาพ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="272" y="74" width="110" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ทันตกรรม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9b591c7e-9928-4cb9-bf6c-6549fb4d7cc6" x="52" y="74" width="110" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[อายุรกรรม]]></text>
+			</staticText>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="65fd6273-9e30-406b-ac5b-b3e4770461a2" x="303" y="25" width="55" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{new_pt_hn} == null || $F{old_pt_hn} == null ? null
+:$F{new_pt_hn}+$F{old_pt_hn}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="0" y="49" width="93" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[แบ่งตามแผนก]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="290703e2-db48-40c1-8934-6be82cf1d5ea" x="0" y="0" width="539" height="25"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายงานประจำวัน ฝ่ายบริการ  ระหว่างวันที่ "+
+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="52" y="94" width="110" height="20"/>
+				<box>
+					<pen lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{med_hn} == null || $F{not_spec_hn} == null ? null
+: $F{med_hn}+$F{not_spec_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="162" y="94" width="110" height="20"/>
+				<box>
+					<pen lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{spec_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="272" y="94" width="110" height="20"/>
+				<box>
+					<pen lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dent_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="382" y="94" width="110" height="20"/>
+				<box>
+					<pen lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{physio_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="31380276-69a6-4fa9-b2a6-66ffcb35c870" x="123" y="125" width="47" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{new_pt_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="31380276-69a6-4fa9-b2a6-66ffcb35c870" x="248" y="125" width="47" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{old_pt_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="31380276-69a6-4fa9-b2a6-66ffcb35c870" x="397" y="125" width="47" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{new_pt_hn} == null || $F{old_pt_hn} == null ? null
+:$F{new_pt_hn}+$F{old_pt_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="31380276-69a6-4fa9-b2a6-66ffcb35c870" x="123" y="145" width="47" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{all_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="31380276-69a6-4fa9-b2a6-66ffcb35c870" x="397" y="145" width="47" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{no_appear_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="31380276-69a6-4fa9-b2a6-66ffcb35c870" x="248" y="145" width="47" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{appear_app}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="346" y="167" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ห้องสังเกตอาการ......................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="73" y="167" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ส่ง Refer....................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="210" y="167" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ทำ EKG......................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="73" y="187" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[หัตถการ......................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="210" y="187" width="223" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ทีมพยาบาล รับ-ส่ง ผู้ป่วยฉุกเฉิน.....................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="73" y="205" width="137" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Over time.................................ราย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="0" y="232" width="175" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนผู้รับบริการแต่ละช่วงเวลา]]></text>
+			</staticText>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="81" y="250" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{time_1_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="427" y="250" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{time_4_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="198" y="250" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{time_2_hn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="311" y="250" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{time_3_hn}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="0" y="276" width="93" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[บุคลากรให้บริการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="11af5fbd-fd84-497b-9b94-41b44cdc0625" x="143" y="25" width="160" height="24"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนผู้มารับบริการ รวมทั้งหมด ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="11af5fbd-fd84-497b-9b94-41b44cdc0625" x="358" y="25" width="31" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ราย]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dfe18f82-ed63-4a62-b924-b9baa1c31094" x="79" y="0" width="160" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{service_doctor_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="da27bc52-450c-41f2-a409-5b0a0b8090c2" x="239" y="0" width="132" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{service_clinic}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="da27bc52-450c-41f2-a409-5b0a0b8090c2" x="371" y="0" width="101" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{service_hn}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="71" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="11" y="26" width="516" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[นักกายภาพ............คน     ผู้ช่วยนักกายภาพ............คน    เจ้าหน้าที่เวชสถิติ........คน     เจ้าหน้าที่ธุรการ..........คน      คนงาน..........คน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="11" y="6" width="516" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[แพทย์...............คน	ทันตแพทย์...............คน          พยาบาล..........คน	ผู้ช่วยพยาบาล............คน 	ผู้ช่วยทันตแพทย์................คน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87470697-7c7b-4ec9-9588-9577fdf690c1" x="11" y="46" width="93" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[อื่นๆ.........คน]]></text>
+			</staticText>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="27" y="4" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count_doctor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="123" y="4" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count_doctor_dent}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="786">
+			<staticText>
+				<reportElement uuid="0d364763-71c6-4470-a053-d6518997478c" x="0" y="0" width="539" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[บันทึกกิจกรรม]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="290703e2-db48-40c1-8934-6be82cf1d5ea" x="0" y="25" width="539" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ระหว่างวันที่ "+
+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement uuid="e8ab7ba4-3363-40d8-9d3d-ee66b4b72787" key="table 1" x="0" y="51" width="268" height="552"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="Dataset_operative" uuid="a8e30a0f-644a-4854-86cd-afe42f737054">
+						<datasetParameter name="start_date">
+							<datasetParameterExpression><![CDATA[$P{start_date}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="end_date">
+							<datasetParameterExpression><![CDATA[$P{end_date}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:columnGroup uuid="c61b2555-7663-43a7-9383-3cdc3656a206" width="267">
+						<jr:tableHeader height="20" rowSpan="1">
+							<staticText>
+								<reportElement uuid="31ba5775-c99c-4891-9776-6c3b348a477e" x="0" y="0" width="267" height="20"/>
+								<box>
+									<topPen lineWidth="0.5" lineColor="#666666"/>
+									<leftPen lineWidth="0.5" lineColor="#666666"/>
+									<bottomPen lineWidth="0.5" lineColor="#666666"/>
+									<rightPen lineWidth="0.5" lineColor="#666666"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+								</textElement>
+								<text><![CDATA[หัตถการ]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:columnGroup uuid="b5d1e46c-e356-47b3-b312-3325c14abcbd" width="220">
+							<jr:tableFooter height="80" rowSpan="1">
+								<staticText>
+									<reportElement uuid="13831c9a-a191-4088-9c60-8aebdb7337fc" x="0" y="0" width="220" height="20"/>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK" size="14"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[ข้าราชการ]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="7a2f471a-5593-4164-9bf5-1d99e886261a" x="0" y="20" width="220" height="20"/>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK" size="14"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[นิสิต]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="6e2bc4b1-44ad-49ec-96d4-5705cfcec660" x="0" y="40" width="220" height="20"/>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK" size="14"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[บุคลากร]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="95d48876-cb13-4c47-844f-0fe9e0ff718e" x="0" y="60" width="220" height="20"/>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK" size="14"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[ทั่วไป]]></text>
+								</staticText>
+							</jr:tableFooter>
+							<jr:column uuid="0e70c600-238f-4408-bc11-4e62bec0541d" width="49">
+								<jr:columnHeader height="20" rowSpan="1">
+									<staticText>
+										<reportElement uuid="5c5d264d-bcb7-4ce2-8b4f-ab7ab2663329" x="0" y="0" width="49" height="20"/>
+										<box>
+											<topPen lineWidth="0.5" lineColor="#666666"/>
+											<leftPen lineWidth="0.5" lineColor="#666666"/>
+											<bottomPen lineWidth="0.5" lineColor="#666666"/>
+											<rightPen lineWidth="0.5" lineColor="#666666"/>
+										</box>
+										<textElement textAlignment="Center">
+											<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+										</textElement>
+										<text><![CDATA[ลำดับ]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell height="20" rowSpan="1">
+									<textField isStretchWithOverflow="true" pattern="#,##0." isBlankWhenNull="true">
+										<reportElement uuid="38cde89a-4806-4993-92cc-cc7e82bd0154" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="49" height="20"/>
+										<box>
+											<topPen lineWidth="0.5" lineColor="#666666"/>
+											<leftPen lineWidth="0.5" lineColor="#666666"/>
+											<bottomPen lineWidth="0.5" lineColor="#666666"/>
+											<rightPen lineWidth="0.5" lineColor="#666666"/>
+										</box>
+										<textElement textAlignment="Center">
+											<font fontName="TH SarabunPSK" size="14"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column uuid="ab4bda85-eacc-487f-b676-c44b69611b3d" width="171">
+								<jr:columnHeader height="20" rowSpan="1">
+									<staticText>
+										<reportElement uuid="812e3d8c-aebd-49be-bbf6-8e52edba7577" x="0" y="0" width="171" height="20"/>
+										<box>
+											<topPen lineWidth="0.5" lineColor="#666666"/>
+											<leftPen lineWidth="0.5" lineColor="#666666"/>
+											<bottomPen lineWidth="0.5" lineColor="#666666"/>
+											<rightPen lineWidth="0.5" lineColor="#666666"/>
+										</box>
+										<textElement textAlignment="Center">
+											<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+										</textElement>
+										<text><![CDATA[รายการหัตถการ]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell height="20" rowSpan="1">
+									<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+										<reportElement uuid="92860c11-f480-4098-b858-82c22f784bf3" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="171" height="20"/>
+										<box>
+											<topPen lineWidth="0.5" lineColor="#666666"/>
+											<leftPen lineWidth="0.5" lineColor="#666666"/>
+											<bottomPen lineWidth="0.5" lineColor="#666666"/>
+											<rightPen lineWidth="0.5" lineColor="#666666"/>
+										</box>
+										<textElement>
+											<font fontName="TH SarabunPSK" size="14"/>
+											<paragraph leftIndent="2" rightIndent="2"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{order_common_name}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+						<jr:column uuid="2aa5057a-d486-4156-a59a-50f6c43beb7d" width="47">
+							<jr:tableFooter height="80" rowSpan="1">
+								<staticText>
+									<reportElement uuid="3ff4165a-c7f5-492b-af67-f4588eb044f4" x="0" y="0" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="0c63bb83-f745-409d-baab-604a590424c6" x="0" y="20" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="d3c5a3c3-3498-4eac-90fa-fa3a0b81675e" x="0" y="40" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="47e4329e-0dac-4b24-a7c7-b99a22157eab" x="0" y="60" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[]]></text>
+								</staticText>
+							</jr:tableFooter>
+							<jr:columnHeader height="20" rowSpan="1">
+								<staticText>
+									<reportElement uuid="0a16557a-2615-4fee-a80b-8141ce470665" x="0" y="0" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Center">
+										<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+									</textElement>
+									<text><![CDATA[จำนวน]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+									<reportElement uuid="566f8d42-8ff7-42be-b04b-e55ba06cca32" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Center">
+										<font fontName="TH SarabunPSK" size="14"/>
+									</textElement>
+									<textFieldExpression><![CDATA[]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement uuid="0d364763-71c6-4470-a053-d6518997478c" x="0" y="603" width="539" height="133"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[รายงานเหตุการณ์ .................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0d364763-71c6-4470-a053-d6518997478c" x="0" y="736" width="539" height="26"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="false"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[ผู้บันทึก .................................................]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="e8ab7ba4-3363-40d8-9d3d-ee66b4b72787" key="table 1" x="272" y="51" width="268" height="552"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="Dataset_physio" uuid="a8e30a0f-644a-4854-86cd-afe42f737054">
+						<datasetParameter name="start_date">
+							<datasetParameterExpression><![CDATA[$P{start_date}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="end_date">
+							<datasetParameterExpression><![CDATA[$P{end_date}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:columnGroup uuid="c61b2555-7663-43a7-9383-3cdc3656a206" width="267">
+						<jr:tableHeader height="20" rowSpan="1">
+							<staticText>
+								<reportElement uuid="31ba5775-c99c-4891-9776-6c3b348a477e" x="0" y="0" width="267" height="20"/>
+								<box>
+									<topPen lineWidth="0.5" lineColor="#666666"/>
+									<leftPen lineWidth="0.5" lineColor="#666666"/>
+									<bottomPen lineWidth="0.5" lineColor="#666666"/>
+									<rightPen lineWidth="0.5" lineColor="#666666"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+								</textElement>
+								<text><![CDATA[กายภาพบำบัด]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:columnGroup uuid="b5d1e46c-e356-47b3-b312-3325c14abcbd" width="220">
+							<jr:tableFooter height="80" rowSpan="1">
+								<staticText>
+									<reportElement uuid="13831c9a-a191-4088-9c60-8aebdb7337fc" x="0" y="0" width="220" height="20"/>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK" size="14"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[ข้าราชการ]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="7a2f471a-5593-4164-9bf5-1d99e886261a" x="0" y="20" width="220" height="20"/>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK" size="14"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[นิสิต]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="6e2bc4b1-44ad-49ec-96d4-5705cfcec660" x="0" y="40" width="220" height="20"/>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK" size="14"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[บุคลากร]]></text>
+								</staticText>
+								<staticText>
+									<reportElement uuid="95d48876-cb13-4c47-844f-0fe9e0ff718e" x="0" y="60" width="220" height="20"/>
+									<textElement textAlignment="Right">
+										<font fontName="TH SarabunPSK" size="14"/>
+										<paragraph rightIndent="10"/>
+									</textElement>
+									<text><![CDATA[ทั่วไป]]></text>
+								</staticText>
+							</jr:tableFooter>
+							<jr:column uuid="0e70c600-238f-4408-bc11-4e62bec0541d" width="49">
+								<jr:columnHeader height="20" rowSpan="1">
+									<staticText>
+										<reportElement uuid="5c5d264d-bcb7-4ce2-8b4f-ab7ab2663329" x="0" y="0" width="49" height="20"/>
+										<box>
+											<topPen lineWidth="0.5" lineColor="#666666"/>
+											<leftPen lineWidth="0.5" lineColor="#666666"/>
+											<bottomPen lineWidth="0.5" lineColor="#666666"/>
+											<rightPen lineWidth="0.5" lineColor="#666666"/>
+										</box>
+										<textElement textAlignment="Center">
+											<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+										</textElement>
+										<text><![CDATA[ลำดับ]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell height="20" rowSpan="1">
+									<textField isStretchWithOverflow="true" pattern="#,##0." isBlankWhenNull="true">
+										<reportElement uuid="38cde89a-4806-4993-92cc-cc7e82bd0154" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="49" height="20"/>
+										<box>
+											<topPen lineWidth="0.5" lineColor="#666666"/>
+											<leftPen lineWidth="0.5" lineColor="#666666"/>
+											<bottomPen lineWidth="0.5" lineColor="#666666"/>
+											<rightPen lineWidth="0.5" lineColor="#666666"/>
+										</box>
+										<textElement textAlignment="Center">
+											<font fontName="TH SarabunPSK" size="14"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column uuid="ab4bda85-eacc-487f-b676-c44b69611b3d" width="171">
+								<jr:columnHeader height="20" rowSpan="1">
+									<staticText>
+										<reportElement uuid="812e3d8c-aebd-49be-bbf6-8e52edba7577" x="0" y="0" width="171" height="20"/>
+										<box>
+											<topPen lineWidth="0.5" lineColor="#666666"/>
+											<leftPen lineWidth="0.5" lineColor="#666666"/>
+											<bottomPen lineWidth="0.5" lineColor="#666666"/>
+											<rightPen lineWidth="0.5" lineColor="#666666"/>
+										</box>
+										<textElement textAlignment="Center">
+											<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+										</textElement>
+										<text><![CDATA[รายการกายภาพบำบัด]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell height="20" rowSpan="1">
+									<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+										<reportElement uuid="92860c11-f480-4098-b858-82c22f784bf3" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="171" height="20"/>
+										<box>
+											<topPen lineWidth="0.5" lineColor="#666666"/>
+											<leftPen lineWidth="0.5" lineColor="#666666"/>
+											<bottomPen lineWidth="0.5" lineColor="#666666"/>
+											<rightPen lineWidth="0.5" lineColor="#666666"/>
+										</box>
+										<textElement>
+											<font fontName="TH SarabunPSK" size="14"/>
+											<paragraph leftIndent="2" rightIndent="2"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+						<jr:column uuid="2aa5057a-d486-4156-a59a-50f6c43beb7d" width="47">
+							<jr:tableFooter height="80" rowSpan="1">
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement uuid="1681b04b-585b-4fa0-839e-da2a71696777" x="0" y="0" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Center">
+										<font fontName="TH SarabunPSK" size="14"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{type1}]]></textFieldExpression>
+								</textField>
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement uuid="964b00c1-2389-4467-addf-d6d9fba93692" x="0" y="20" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Center">
+										<font fontName="TH SarabunPSK" size="14"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{type2}]]></textFieldExpression>
+								</textField>
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement uuid="5ecbf88b-28dd-4a4d-8fbe-3463677f4258" x="0" y="40" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Center">
+										<font fontName="TH SarabunPSK" size="14"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{type3}]]></textFieldExpression>
+								</textField>
+								<textField pattern="#,##0" isBlankWhenNull="true">
+									<reportElement uuid="fbac36cb-5457-4583-9b2e-1a74b6e18d41" x="0" y="60" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Center">
+										<font fontName="TH SarabunPSK" size="14"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{type4}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:columnHeader height="20" rowSpan="1">
+								<staticText>
+									<reportElement uuid="0a16557a-2615-4fee-a80b-8141ce470665" x="0" y="0" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Center">
+										<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+									</textElement>
+									<text><![CDATA[จำนวน]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+									<reportElement uuid="566f8d42-8ff7-42be-b04b-e55ba06cca32" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="47" height="20"/>
+									<box>
+										<topPen lineWidth="0.5" lineColor="#666666"/>
+										<leftPen lineWidth="0.5" lineColor="#666666"/>
+										<bottomPen lineWidth="0.5" lineColor="#666666"/>
+										<rightPen lineWidth="0.5" lineColor="#666666"/>
+									</box>
+									<textElement textAlignment="Center">
+										<font fontName="TH SarabunPSK" size="14"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{counts}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

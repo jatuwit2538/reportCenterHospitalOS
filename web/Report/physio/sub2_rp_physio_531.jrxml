@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sub2_rp_physio_531" language="groovy" pageWidth="180" pageHeight="150" columnWidth="180" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\01_ProjectSVN56\\CHU1\\WorkingDirectory\\Development\\DevDocument\\2.jrxml_รายงานหน้าห้องตรวจ\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+b_person_type.description as person_type
+,count(distinct t_visit.t_patient_id) as hn_count
+FROM
+            t_patient INNER JOIN t_visit ON t_patient.t_patient_id = t_visit.t_patient_id
+                   INNER JOIN f_patient_prefix ON t_patient.f_patient_prefix_id = f_patient_prefix.f_patient_prefix_id
+                   INNER JOIN t_health_family on t_health_family.t_health_family_id = t_patient.t_health_family_id
+                   LEFT JOIN b_person_type on t_health_family.b_person_type_id = b_person_type.b_person_type_id
+
+
+                inner join t_physical_therapy_order_detail on t_visit.t_visit_id = t_physical_therapy_order_detail.t_visit_record_id
+                                                            and t_physical_therapy_order_detail.status = '1'
+                inner join t_physical_therapy_order on t_physical_therapy_order_detail.t_physical_therapy_order_id = t_physical_therapy_order.t_physical_therapy_order_id
+                                                            and t_physical_therapy_order.active = '1'
+                inner join b_item on t_physical_therapy_order.b_item_id =b_item.b_item_id
+                 left join f_patient_occupation on t_patient.f_patient_occupation_id = f_patient_occupation.f_patient_occupation_id
+WHERE b_item.item_number IN( '56001', '56002', '56003', '56004', '56005', '56006', '56010', '56102', '56121', '56702', '56007', '56008', '56701')
+and item_active = '1'
+and t_visit.f_visit_status_id <> '4'
+and substring(t_visit.visit_begin_visit_time,1,10) Between $P{start_date} and $P{end_date}
+GROUP BY person_type
+order by
+        hn_count desc]]>
+	</queryString>
+	<field name="person_type" class="java.lang.String"/>
+	<field name="hn_count" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="17">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8a1d6af3-9389-49aa-9644-05d4654844e9" x="128" y="0" width="52" height="17"/>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Dashed" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hn_count} + "  คน"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8a1d6af3-9389-49aa-9644-05d4654844e9" x="0" y="0" width="128" height="17"/>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Dashed" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed" lineColor="#CCCCCC"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="10" isBold="false"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{person_type}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

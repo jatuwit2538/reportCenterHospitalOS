@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="item_all_cost" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e54b5e73-72ff-48b0-8068-be2e0b3b714a">
+	<property name="ireport.zoom" value="0.9313819845887326"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select b_item.item_common_name as common_name
+        ,b_item.item_trade_name as trade_name
+        ,b_item.item_nick_name as nick_name
+        ,stock_mgnt.unit_price::float as cost
+        ,b_item_price.item_price::float as price
+        ,b_item_subgroup.item_subgroup_description as subgroup
+from imed.item
+inner join b_item on item.item_id =  b_item.b_item_id
+inner join b_item_subgroup on b_item.b_item_subgroup_id = b_item_subgroup.b_item_subgroup_id
+inner join b_item_price on b_item.b_item_id = b_item_price.b_item_id
+inner join (select b_item_id as item_id
+                    ,max(item_price_active_date) as active_date
+                from b_item_price
+                group by b_item_id
+                ) as item_price on b_item_price.b_item_id = item_price.item_id
+                                    and b_item_price.item_price_active_date = item_price.active_date
+inner join (select receive_item.item_id as item_id
+                            ,max(receive_date_time) as receive_date_time
+                    from
+                            (select item_id as item_id
+                                       ,item_code as item_code
+                                       ,receive_date || ',' || receive_time as receive_date_time
+                             from stock_mgnt
+                             where stock_mgnt.active = '1'
+                             and stock_id = '02'
+                             ) as receive_item
+                    group by item_id
+                ) as max_receive on max_receive.item_id = item.item_id
+inner join  imed.stock_mgnt on max_receive.item_id = stock_mgnt.item_id
+                                         and max_receive.receive_date_time = (stock_mgnt.receive_date || ',' || stock_mgnt.receive_time)
+where b_item.item_active = '1'
+and b_item_subgroup.f_item_group_id in ('1','4')
+order by b_item.item_common_name]]>
+	</queryString>
+	<field name="common_name" class="java.lang.String"/>
+	<field name="trade_name" class="java.lang.String"/>
+	<field name="nick_name" class="java.lang.String"/>
+	<field name="cost" class="java.lang.Double"/>
+	<field name="price" class="java.lang.Double"/>
+	<field name="subgroup" class="java.lang.String"/>
+	<variable name="item_num" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{common_name}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="253" y="9" width="296" height="22" uuid="9ffd123e-c875-4413-8a08-116403c8ecb6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[โรงพยาบาลคริสเตียนแม่น้ำแควน้อย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="31" width="296" height="22" uuid="9ffd123e-c875-4413-8a08-116403c8ecb6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[รายการยาและเวชภัณฑ์ที่มีทั้งหมด]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="40" y="1" width="155" height="22" uuid="0e6786a7-9b7b-491d-a0ce-92d8483a279f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ชื่อสามัญ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="1" width="155" height="22" uuid="9b503442-5387-4c6a-8a7f-981e884a64ae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ชื่อทางการค้า]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="1" width="155" height="22" uuid="2e7e9115-6801-40ef-afe5-899dbc5f04a4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ชื่อทั่วไป]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="580" y="1" width="75" height="22" uuid="b2e3c1b4-4a74-4ea9-ba31-ffef64a4f181"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ราคาขาย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="655" y="1" width="147" height="22" uuid="54285286-045c-4486-a75a-b5ff2b399206"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ประเภท]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1" width="40" height="22" uuid="9b503442-5387-4c6a-8a7f-981e884a64ae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="1" width="75" height="22" uuid="b2e3c1b4-4a74-4ea9-ba31-ffef64a4f181"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ราคาทุน]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="45" y="1" width="150" height="22" isPrintWhenDetailOverflows="true" uuid="d296857d-4fcb-4d7a-9314-1732d354b787"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{common_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="200" y="1" width="150" height="22" isPrintWhenDetailOverflows="true" uuid="42df22f8-4008-4b14-a101-60cd904f7677"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trade_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="355" y="1" width="150" height="22" isPrintWhenDetailOverflows="true" uuid="a5ad4327-6cd7-4edd-825c-7a5d73c911f8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nick_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement x="580" y="1" width="60" height="22" isPrintWhenDetailOverflows="true" uuid="b9249ced-62b9-4bea-bb5b-0153e030727a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="660" y="1" width="142" height="22" isPrintWhenDetailOverflows="true" uuid="5ecf8966-4a71-41d4-a8f5-40bf1fbb48a5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subgroup}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="1" width="40" height="22" uuid="004c7886-87d1-48f1-9a83-bc631dead7c7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{item_num}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement x="505" y="1" width="60" height="22" isPrintWhenDetailOverflows="true" uuid="b9249ced-62b9-4bea-bb5b-0153e030727a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cost}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="506" y="3" width="296" height="20" uuid="5822823f-4bd2-4127-8e21-7eb558659775"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="12" isBold="false" isItalic="false" isUnderline="false" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd-MM-yyyy,HH:mm:ss", new java.util.Locale("th", "TH")).format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

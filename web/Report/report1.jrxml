@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString language="SQL">
+		<![CDATA[select user.phoneNo,name,address,emailId,adharcardNo,meterconnection.meterNo,connectionType,connectionAddress,size,connectionDate,readings,modeOfPayment,dueDate,discountRate,returnedChecksCharge,delinquentCharge,reestablishedConnectionCharge,billDateFrom,billDateTo,totalBill from User,MeterConnection,Bill,RatePerUnit,PaymentDetails,DummyReportFields
+where user.phoneNo=meterconnection.phoneNo and meterconnection.meterNo=bill.meterNo and rateperunit.tier=paymentdetails.currentTier and meterconnection.meterNo='54-70-1234';]]>
+	</queryString>
+	<field name="phoneNo" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="emailId" class="java.lang.String"/>
+	<field name="adharcardNo" class="java.lang.String"/>
+	<field name="meterNo" class="java.lang.String"/>
+	<field name="connectionType" class="java.lang.String"/>
+	<field name="connectionAddress" class="java.lang.String"/>
+	<field name="size" class="java.lang.Double"/>
+	<field name="connectionDate" class="java.sql.Date"/>
+	<field name="readings" class="java.lang.Double"/>
+	<field name="modeOfPayment" class="java.lang.String"/>
+	<field name="dueDate" class="java.sql.Date"/>
+	<field name="discountRate" class="java.lang.Double"/>
+	<field name="returnedChecksCharge" class="java.lang.Double"/>
+	<field name="delinquentCharge" class="java.lang.Double"/>
+	<field name="reestablishedConnectionCharge" class="java.lang.Double"/>
+	<field name="billDateFrom" class="java.sql.Date"/>
+	<field name="billDateTo" class="java.sql.Date"/>
+	<field name="totalBill" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<image>
+				<reportElement x="275" y="0" width="300" height="64"/>
+				<imageExpression><![CDATA["leaf_banner_violet.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Leaf Violet Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="63" y="46" width="200" height="22"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Leaf Violet SubTitle]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[phoneNo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="27" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="54" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="81" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[emailId]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="108" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[adharcardNo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="135" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[meterNo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="162" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[connectionType]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="189" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[connectionAddress]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="216" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[size]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="243" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[connectionDate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="270" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[readings]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="297" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[modeOfPayment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="324" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[dueDate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="351" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[discountRate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="378" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[returnedChecksCharge]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="405" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[delinquentCharge]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="432" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[reestablishedConnectionCharge]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="459" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[billDateFrom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="486" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[billDateTo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="513" y="19" width="27" height="15"/>
+				<textElement/>
+				<text><![CDATA[totalBill]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{phoneNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="27" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="54" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="81" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{emailId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="108" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{adharcardNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="135" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{meterNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="162" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{connectionType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="189" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{connectionAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="216" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{size}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="243" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{connectionDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="270" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{readings}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="297" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{modeOfPayment}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="324" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dueDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="351" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{discountRate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="378" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{returnedChecksCharge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="405" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{delinquentCharge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="432" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{reestablishedConnectionCharge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="459" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{billDateFrom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="486" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{billDateTo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="513" y="0" width="27" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{totalBill}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

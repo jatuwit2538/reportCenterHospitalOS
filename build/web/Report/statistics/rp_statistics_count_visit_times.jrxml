@@ -1,0 +1,995 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="statistics_count_visit_times" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfad3ff3-ab19-4593-b19f-fe312b07c0a9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fiscal_year" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="report_by" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+        q.*
+            ,employee_print.employee_name as employee_print
+from
+(select
+        1 as seq
+        ,'00:00 - 08:00' as times
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '10'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end) as "10"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '11'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "11"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '12'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "12"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '01'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "01"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '02'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "02"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '03'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "03"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '04'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "04"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '05'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "05"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '06'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "06"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '07'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "07"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '08'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "08"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '09'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '00:00' and '07:59'
+                        then 1 else 0 end)  as "09"
+
+from t_visit
+where
+        substr(t_visit.visit_begin_visit_time,1,10)  between ($P{fiscal_year} -1)||'-10-01' and $P{fiscal_year} ||'-09-30'
+        and t_visit.visit_money_discharge_status = '1'
+        --and t_visit.visit_doctor_discharge_status = '1'
+        and t_visit.f_visit_status_id <> '4'
+
+union
+
+select
+        2 as seq
+        ,'08:00 - 09:30' as times
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '10'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end) as "10"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '11'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "11"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '12'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "12"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '01'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "01"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '02'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "02"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '03'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "03"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '04'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "04"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '05'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "05"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '06'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "06"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '07'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "07"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '08'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "08"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '09'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '08:00' and '09:29'
+                        then 1 else 0 end)  as "09"
+
+from t_visit
+where
+        substr(t_visit.visit_begin_visit_time,1,10)  between ($P{fiscal_year} -1)||'-10-01' and $P{fiscal_year} ||'-09-30'
+        and t_visit.visit_money_discharge_status = '1'
+        --and t_visit.visit_doctor_discharge_status = '1'
+        and t_visit.f_visit_status_id <> '4'
+
+union
+
+select
+        3 as seq
+        ,'09:30 - 11:30' as times
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '10'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end) as "10"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '11'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "11"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '12'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "12"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '01'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "01"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '02'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "02"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '03'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "03"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '04'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "04"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '05'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "05"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '06'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "06"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '07'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "07"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '08'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "08"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '09'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '09:30' and '11:29'
+                        then 1 else 0 end)  as "09"
+
+from t_visit
+where
+        substr(t_visit.visit_begin_visit_time,1,10)  between ($P{fiscal_year} -1)||'-10-01' and $P{fiscal_year} ||'-09-30'
+        and t_visit.visit_money_discharge_status = '1'
+        --and t_visit.visit_doctor_discharge_status = '1'
+        and t_visit.f_visit_status_id <> '4'
+
+union
+
+select
+        4 as seq
+        ,'11:30 - 13:30' as times
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '10'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end) as "10"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '11'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "11"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '12'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "12"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '01'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "01"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '02'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "02"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '03'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "03"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '04'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "04"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '05'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "05"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '06'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "06"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '07'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "07"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '08'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "08"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '09'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '11:30' and '13:29'
+                        then 1 else 0 end)  as "09"
+
+from t_visit
+where
+        substr(t_visit.visit_begin_visit_time,1,10)  between ($P{fiscal_year} -1)||'-10-01' and $P{fiscal_year} ||'-09-30'
+        and t_visit.visit_money_discharge_status = '1'
+        --and t_visit.visit_doctor_discharge_status = '1'
+        and t_visit.f_visit_status_id <> '4'
+
+union
+
+select
+        5 as seq
+        ,'13:30 - 15:30' as times
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '10'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end) as "10"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '11'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "11"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '12'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "12"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '01'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "01"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '02'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "02"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '03'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "03"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '04'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "04"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '05'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "05"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '06'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "06"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '07'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "07"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '08'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "08"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '09'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '13:30' and '15:29'
+                        then 1 else 0 end)  as "09"
+
+from t_visit
+where
+        substr(t_visit.visit_begin_visit_time,1,10)  between ($P{fiscal_year} -1)||'-10-01' and $P{fiscal_year} ||'-09-30'
+        and t_visit.visit_money_discharge_status = '1'
+        --and t_visit.visit_doctor_discharge_status = '1'
+        and t_visit.f_visit_status_id <> '4'
+
+union
+
+select
+        6 as seq
+        ,'15:30 - 00:00' as times
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '10'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end) as "10"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '11'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "11"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '12'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "12"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '01'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "01"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '02'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "02"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '03'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "03"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '04'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "04"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '05'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "05"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '06'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "06"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '07'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "07"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '08'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "08"
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '09'
+                        and substr(t_visit.visit_begin_visit_time,12,5) between '15:30' and '23:59'
+                        then 1 else 0 end)  as "09"
+
+from t_visit
+where
+        substr(t_visit.visit_begin_visit_time,1,10)  between ($P{fiscal_year} -1)||'-10-01' and $P{fiscal_year} ||'-09-30'
+        and t_visit.visit_money_discharge_status = '1'
+        --and t_visit.visit_doctor_discharge_status = '1'
+        and t_visit.f_visit_status_id <> '4') as q
+
+	cross join (select
+                                        b_employee.b_employee_id
+                                        ,case when person_print.t_person_id is not null and prefix_print.f_patient_prefix_id <> '000'
+                                                    then prefix_print.patient_prefix_description||person_print.person_firstname||'  '||person_print.person_lastname
+                                                when person_print.t_person_id is not null and prefix_print.f_patient_prefix_id = '000'
+                                                    then person_print.person_firstname||'  '||person_print.person_lastname
+                                                    else b_employee.employee_firstname||'  '||b_employee.employee_lastname
+                                        end  as employee_name
+
+                                from b_employee as b_employee left join t_person as person_print on b_employee.t_person_id = person_print.t_person_id
+                                         left join f_patient_prefix as prefix_print on person_print.f_prefix_id = prefix_print.f_patient_prefix_id
+                                where
+                                        b_employee.b_employee_id   = $P{report_by}
+                ) as employee_print
+
+order by
+        seq asc]]>
+	</queryString>
+	<field name="seq" class="java.lang.Integer"/>
+	<field name="times" class="java.lang.String"/>
+	<field name="10" class="java.lang.Long"/>
+	<field name="11" class="java.lang.Long"/>
+	<field name="12" class="java.lang.Long"/>
+	<field name="01" class="java.lang.Long"/>
+	<field name="02" class="java.lang.Long"/>
+	<field name="03" class="java.lang.Long"/>
+	<field name="04" class="java.lang.Long"/>
+	<field name="05" class="java.lang.Long"/>
+	<field name="06" class="java.lang.Long"/>
+	<field name="07" class="java.lang.Long"/>
+	<field name="08" class="java.lang.Long"/>
+	<field name="09" class="java.lang.Long"/>
+	<field name="employee_print" class="java.lang.String"/>
+	<variable name="sum_10" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{10}]]></variableExpression>
+	</variable>
+	<variable name="sum_11" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{11}]]></variableExpression>
+	</variable>
+	<variable name="sum_12" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{12}]]></variableExpression>
+	</variable>
+	<variable name="sum_01" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{01}]]></variableExpression>
+	</variable>
+	<variable name="sum_02" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{02}]]></variableExpression>
+	</variable>
+	<variable name="sum_03" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{03}]]></variableExpression>
+	</variable>
+	<variable name="sum_04" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{04}]]></variableExpression>
+	</variable>
+	<variable name="sum_05" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{05}]]></variableExpression>
+	</variable>
+	<variable name="sum_06" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{06}]]></variableExpression>
+	</variable>
+	<variable name="sum_07" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{07}]]></variableExpression>
+	</variable>
+	<variable name="sum_08" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{08}]]></variableExpression>
+	</variable>
+	<variable name="sum_09" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{09}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="48" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="23" width="802" height="25" uuid="9806475f-0a74-4538-9f6f-e768808f0238"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ประจำปีงบประมาณ "+ $P{fiscal_year}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="2" width="802" height="25" uuid="e2ff836d-2ab7-4d14-b907-563fab75019e"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[สถิติผู้รับบริการแยกตามช่วงเวลา]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="142" height="20" uuid="1d23cf55-c753-4d2a-b030-81e99bba0f2f"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ช่วงเวลา]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ต.ค. "+($P{fiscal_year}-1).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="197" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พ.ย. "+($P{fiscal_year}-1).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ธ.ค. "+($P{fiscal_year}-1).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="307" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ม.ค. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ก.พ. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="417" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["มี.ค. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["เม.ย. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="527" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พ.ค. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="582" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["มิ.ย. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="637" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ก.ค. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="692" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ส.ค. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="747" y="0" width="55" height="20" uuid="3d14cb27-47dd-4673-9f43-11bb0684a940"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ก.ย. "+($P{fiscal_year}).toString().substring( 2 )]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="142" height="20" uuid="a228e45f-65e2-47b8-957c-e0db068928f8"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{times}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="142" y="0" width="55" height="20" uuid="0523990c-cec7-47e8-a6cc-0a8396703938"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="197" y="0" width="55" height="20" uuid="26b4fb11-22b1-45bd-8a87-7fe7e428c479"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="252" y="0" width="55" height="20" uuid="e4730ee3-b49a-4ae9-be42-d284c7518f13"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="307" y="0" width="55" height="20" uuid="116f6759-7f9a-40bb-a29d-dcb04d7eca09"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{01}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="362" y="0" width="55" height="20" uuid="1f9eba34-0663-41d9-9b24-4bf06782d2f1"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{02}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="417" y="0" width="55" height="20" uuid="51f1d272-6a83-48d2-89c6-e452e2717150"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{03}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="472" y="0" width="55" height="20" uuid="efe3fd74-eef5-421d-80c7-139d8609a913"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{04}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="527" y="0" width="55" height="20" uuid="f5066f0e-d401-4285-a190-77dde2368391"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{05}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="582" y="0" width="55" height="20" uuid="744f2419-c2a3-4c89-bd2f-f57e69867716"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{06}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="637" y="0" width="55" height="20" uuid="437c2437-e7b8-4ef2-980c-45e7aa8cc7f7"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{07}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="692" y="0" width="55" height="20" uuid="04cf7f4f-cad2-44b1-a3d7-2f264ce0d0d0"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{08}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="747" y="0" width="55" height="20" uuid="2fdefcb3-d3e0-4a14-b5dc-93649bc2e68b"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{09}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="548" y="0" width="254" height="20" uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="52" height="20" uuid="9997830a-eb68-4485-a70f-9b2a445e6f1c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า "+$V{PAGE_NUMBER}+" จาก"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="52" y="0" width="40" height="20" uuid="216d58c7-f5fe-4d60-b6c9-94ece2386ea5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="314" y="0" width="175" height="20" uuid="a7fb9d54-5cb1-4b7e-8c28-70c285d2b24e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employee_print} == null ? ""
+:"รายงานโดย "+ $F{employee_print}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement x="142" y="0" width="55" height="20" uuid="1a485f42-5108-4263-9c0d-82f2f48277aa"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="197" y="0" width="55" height="20" uuid="2a3694da-b099-48d9-9057-33d2fdc85d62"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="252" y="0" width="55" height="20" uuid="bb92dca3-1480-4942-acc5-06c06d9baad5"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="307" y="0" width="55" height="20" uuid="e3e8e67a-02dc-4944-8eea-00ef057900b0"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_01}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="362" y="0" width="55" height="20" uuid="5b9b9700-c843-4f75-a5ce-948070d6730d"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_02}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="417" y="0" width="55" height="20" uuid="3e45093f-14b8-423d-918c-1810105e214e"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_03}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="472" y="0" width="55" height="20" uuid="f168d7a8-47ff-4562-b6ee-71fcca59056c"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_04}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="527" y="0" width="55" height="20" uuid="178ca2dd-c341-450d-84bd-8155e307c1bc"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_05}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="582" y="0" width="55" height="20" uuid="590fa5ac-6985-40d9-8ff4-fed8e17aabe8"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_06}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="637" y="0" width="55" height="20" uuid="4b5572ed-5c85-459e-b0c5-688da4203904"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_07}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="692" y="0" width="55" height="20" uuid="7be882ae-060d-49cd-ab8a-4236922516d6"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_08}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="747" y="0" width="55" height="20" uuid="16a57576-3a5c-4490-a641-e0b43f770549"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_09}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="142" height="20" uuid="1d23cf55-c753-4d2a-b030-81e99bba0f2f"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="20"/>
+				</textElement>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="87" y="0" width="55" height="20" uuid="1a485f42-5108-4263-9c0d-82f2f48277aa"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#666666"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_10}+$V{sum_11}+$V{sum_12}
++$V{sum_01}+$V{sum_02}+$V{sum_03}
++$V{sum_04}+$V{sum_05}+$V{sum_06}
++$V{sum_07}+$V{sum_08}+$V{sum_09}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

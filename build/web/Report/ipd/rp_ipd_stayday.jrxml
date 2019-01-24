@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="รายงานรายชื่อผู้ป่วยใน จำหน่าย และ วันนอน" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a825bde1-9608-474d-b8ef-46f5ac8cac69">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String"/>
+	<parameter name="end_date" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="report_by" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[--ipd001รายชื่อผู้ป่วยในจำหน่ายและวันนอน
+
+SELECT distinct
+t_patient.patient_hn as "HN"
+, t_visit.visit_vn as "AN"
+,f_patient_prefix.patient_prefix_description || '' || t_patient.patient_firstname || '   ' || t_patient.patient_lastname as fname
+,t_visit.visit_patient_age as patient_age
+,substr(t_visit.visit_begin_admit_date_time,1,10) AS admit
+,substr(t_visit.visit_staff_doctor_discharge_date_time,1,10) AS ipd_discharge
+,substr(t_visit.visit_financial_discharge_time,1,10) AS financial_discharge_time
+,b_contract_plans.contract_plans_description as plans
+,sum(t_billing_invoice.billing_invoice_total) AS billing_invoice_total
+,(case when (cast(t_visit.visit_ipd_discharge_date_time as date) - cast(t_visit.visit_begin_admit_date_time as date)) > 0
+          then (cast(t_visit.visit_ipd_discharge_date_time as date) - cast(t_visit.visit_begin_admit_date_time as date))
+         else 1
+end) as stay_day
+,t_visit.visit_bed As bed
+,b_visit_ward.visit_ward_description As ward
+,b_site.site_name as site_name
+FROM t_visit
+        INNER JOIN t_patient ON t_patient.t_patient_id = t_visit.t_patient_id AND t_visit.f_visit_status_id <>'4' AND t_visit.f_visit_type_id = '1'
+        INNER JOIN f_patient_prefix ON t_patient.f_patient_prefix_id = f_patient_prefix.f_patient_prefix_id
+        INNER JOIN b_visit_ward ON t_visit.b_visit_ward_id = b_visit_ward.b_visit_ward_id
+        LEFT JOIN t_billing_invoice ON t_billing_invoice.t_visit_id = t_visit.t_visit_id AND t_billing_invoice.billing_invoice_active ='1'
+       LEFT JOIN t_visit_payment ON t_billing_invoice.t_payment_id = t_visit_payment.t_visit_payment_id
+                           AND t_visit_payment.visit_payment_priority ='0' AND t_visit_payment.visit_payment_active ='1'
+        LEFT JOIN b_contract_plans ON t_visit_payment.b_contract_plans_id = b_contract_plans.b_contract_plans_id
+,b_site
+WHERE
+substr (t_visit.visit_financial_discharge_time,1,10) between $P{start_date} and $P{end_date}
+group by t_patient.patient_hn,t_visit.visit_vn,f_patient_prefix.patient_prefix_description,t_patient.patient_firstname,t_patient.patient_lastname
+,t_visit.visit_patient_age,t_visit.visit_begin_admit_date_time,t_visit.visit_staff_doctor_discharge_date_time,t_visit.visit_financial_discharge_time
+,b_contract_plans.contract_plans_description,t_visit.visit_bed,b_visit_ward.visit_ward_description
+,b_site.site_name,t_visit.visit_ipd_discharge_date_time
+order by substr(t_visit.visit_financial_discharge_time,1,10) asc]]>
+	</queryString>
+	<field name="HN" class="java.lang.String"/>
+	<field name="AN" class="java.lang.String"/>
+	<field name="fname" class="java.lang.String"/>
+	<field name="patient_age" class="java.lang.String"/>
+	<field name="admit" class="java.lang.String"/>
+	<field name="ipd_discharge" class="java.lang.String"/>
+	<field name="financial_discharge_time" class="java.lang.String"/>
+	<field name="plans" class="java.lang.String"/>
+	<field name="billing_invoice_total" class="java.lang.Double"/>
+	<field name="stay_day" class="java.lang.Integer"/>
+	<field name="bed" class="java.lang.String"/>
+	<field name="ward" class="java.lang.String"/>
+	<field name="site_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e3a5f58e-f2bd-49d4-8984-1ad8192ae986" x="0" y="50" width="802" height="30"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="24" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รายงานรายชื่อผู้ป่วยใน จำหน่ายและวันนอน]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement uuid="69bc699f-213e-417d-ad45-9f1e213ff8f5" x="0" y="80" width="802" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["จากวันที่"+"  "+
+$P{start_date}.substring( 8, 10 )+
+" "+(($P{start_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{start_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{start_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{start_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{start_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{start_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{start_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{start_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{start_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{start_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{start_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{start_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{start_date}.substring( 5, 7 ))+
+" "+$P{start_date}.substring( 0, 4 )+
+"  "+"ถึงวันที่"+"  "+
+$P{end_date}.substring( 8, 10 )+
+" "+(($P{end_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{end_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{end_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{end_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{end_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{end_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{end_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{end_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{end_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{end_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{end_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{end_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{end_date}.substring( 5, 7 ))+
+" "+$P{end_date}.substring( 0, 4 )]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5ba087e5-3b1e-49c9-b7a1-e6bc68b4d048" x="1" y="0" width="44" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[HN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cb11f555-c02a-4c56-8745-7c068b4f7836" x="46" y="0" width="49" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[VN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="129d33df-fb1a-4cf4-9d14-f06746180b15" x="96" y="0" width="133" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ชื่อ - นามสกุล]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d9e2ff8d-6922-4e1b-894d-451a56199983" x="229" y="0" width="26" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[อายุ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a64cdffd-a684-4b51-b645-9a2577d9acc3" x="257" y="0" width="72" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[วัน Admit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eb7527db-7b98-4069-8823-e3a0db77e248" x="330" y="0" width="86" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[วันจำหน่ายทางการแพทย์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="22e7f56c-b372-48bc-a291-2a5e50b17307" x="417" y="0" width="88" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[วันจำหน่ายทางการเงิน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a5e947c5-aaae-4168-a40b-699a057ebb7b" x="506" y="0" width="139" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[สิทธิการรักษา]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="97c2aefb-c551-4e06-a17d-901bc8a76615" x="646" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนเงิน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="43c8972e-1da0-4a06-b30a-71ccfe8841d0" x="717" y="-1" width="37" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[เตียง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="37d8c4d9-b838-4af8-949d-6cabff39850c" x="754" y="-1" width="48" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[วอร์ด]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ec5da01-3e0f-4ee3-8fcc-b387186ef59c" x="688" y="0" width="28" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[วันนอน]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="0cb47e86-147a-4d25-8664-89edefc8ca2a" x="0" y="0" width="802" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="ef20e4e5-bdf6-4503-8b71-94baa080b9f5" x="0" y="19" width="802" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="533a59d7-fcc6-45a0-a8c3-99c660f06d3b" x="0" y="1" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement uuid="6b08d361-d6b4-4dbf-8e7a-6d9502d996d7" x="45" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="0103c633-11e0-4dd9-a8c3-fe3f6ca69f0b" x="95" y="1" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement uuid="2de0c3c3-e69d-4c2f-a2dc-caa7c08691d8" x="229" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="e9c8c01f-8d8b-4587-b6e2-05b208a8f6b5" x="256" y="1" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="c3580d54-34aa-4e24-992c-c8cdd0b68d9c" x="329" y="1" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="7dc9e78c-ec68-49d4-9f23-1f8a9bc33d02" x="416" y="1" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement uuid="c689fb8f-4e70-44d2-af7c-e22222be3111" x="505" y="1" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="75a9c851-c84d-4595-a52e-c0cf0ee5917b" x="645" y="1" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement uuid="b16300b3-7524-44a3-93b1-dfd98cb05dda" x="686" y="1" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="129ffa15-4840-4dc0-8c67-189b404daba6" x="716" y="1" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="3bc5a340-e4e9-4d4d-84ce-f0bb101a6d9a" x="753" y="1" width="1" height="19"/>
+			</line>
+			<line>
+				<reportElement uuid="974cdbae-495a-48b1-a827-66f70e05d59b" x="801" y="1" width="1" height="19"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="61" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a8a6aa84-ebc0-4340-96fd-26568d87902d" x="1" y="0" width="44" height="60"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{HN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="abf1ba75-365d-4181-a48c-f0abe644561c" x="46" y="0" width="49" height="60"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="b6a861c3-1ab7-4c1f-b62e-98ecb2d10341" stretchType="RelativeToTallestObject" x="96" y="0" width="133" height="60"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="706c246b-d42e-4e7b-b643-eca335e79e5e" x="229" y="0" width="26" height="60"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient_age}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="edf97ceb-4a19-42dc-a919-28928b54d7ca" x="257" y="0" width="72" height="60"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{admit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="576a4e62-f4fe-448f-9561-8a5531af3d01" x="330" y="0" width="87" height="60"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ipd_discharge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5e25841a-5559-44bf-899a-2db905b0f756" x="417" y="0" width="89" height="60"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{financial_discharge_time}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c03f1a1d-114a-4996-96c4-37eeeac183cc" stretchType="RelativeToTallestObject" x="506" y="0" width="139" height="60"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{plans}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3ab4272e-86a1-42e6-8910-d9d982fdf1c4" x="646" y="0" width="40" height="60"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{billing_invoice_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ff7ee93b-dee4-4382-8ac5-cbf40a85467b" x="686" y="0" width="30" height="60"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stay_day}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1b90edca-5dda-4fea-8595-86799d535d1c" x="754" y="0" width="47" height="60"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ward}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c8f92e85-d0ec-40de-8c45-b2de9fee4860" x="718" y="0" width="35" height="60"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bed}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="ac389acd-2da8-4591-94da-cf050ac6ab96" x="0" y="60" width="802" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="bf7869d4-d7ec-4604-a5fc-dabf8a9dad3c" x="0" y="0" width="1" height="60"/>
+			</line>
+			<line>
+				<reportElement uuid="fc381eb4-651e-4880-848b-7976717e1cda" x="45" y="0" width="1" height="59"/>
+			</line>
+			<line>
+				<reportElement uuid="90ac0528-e43d-41a1-9e53-58e5e60f3502" x="95" y="0" width="1" height="60"/>
+			</line>
+			<line>
+				<reportElement uuid="e7561cc3-6a75-41bb-845e-2ec93177024a" x="229" y="0" width="1" height="60"/>
+			</line>
+			<line>
+				<reportElement uuid="e0f19b08-daff-411f-8b92-f32ae3fbcbb5" x="256" y="0" width="1" height="60"/>
+			</line>
+			<line>
+				<reportElement uuid="295a48f7-6210-4263-ac03-126bf0317a4a" x="329" y="0" width="1" height="59"/>
+			</line>
+			<line>
+				<reportElement uuid="4e18466a-a967-4713-81f9-a2e6312edf6e" x="416" y="-1" width="1" height="61"/>
+			</line>
+			<line>
+				<reportElement uuid="3fcd2437-430b-455e-bd7f-19efb9a1ecee" x="505" y="-1" width="1" height="61"/>
+			</line>
+			<line>
+				<reportElement uuid="dbe03db0-79c0-4fd7-94de-cd056f206a28" x="645" y="0" width="1" height="60"/>
+			</line>
+			<line>
+				<reportElement uuid="344f76b7-1180-4f9d-a6cf-61691b058757" x="686" y="-1" width="1" height="60"/>
+			</line>
+			<line>
+				<reportElement uuid="229e9a83-703d-4380-8cfa-e806ef641043" x="716" y="0" width="1" height="59"/>
+			</line>
+			<line>
+				<reportElement uuid="67687860-ee18-4a58-8d6b-1198c17a70ec" x="753" y="0" width="1" height="59"/>
+			</line>
+			<line>
+				<reportElement uuid="24f7eced-2a68-40d8-80a0-72a928041c83" x="801" y="0" width="1" height="59"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement uuid="7a0af8f3-4959-4379-a1cb-e939c99009d5" x="663" y="24" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="adb178d8-5313-4f0b-8054-b7c8d5879048" x="743" y="24" width="40" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0ff33d8a-1f0e-466e-b722-d25677b50a62" x="166" y="24" width="257" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{report_by}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement uuid="409ded11-382e-4d1b-9fb3-001290c31ab8" x="13" y="24" width="153" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

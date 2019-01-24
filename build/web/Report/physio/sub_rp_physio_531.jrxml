@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_patient_pstype" language="groovy" pageWidth="450" pageHeight="120" columnWidth="450" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\01_ProjectSVN56\\CHU1\\WorkingDirectory\\Development\\DevDocument\\2.jrxml_รายงานหน้าห้องตรวจ\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+count(distinct case when f_patient_occupation.patient_occupation_description like '%ข้าราชการ%' then t_visit.t_visit_id else null end) as ข้าราชการ
+,count(distinct case when f_patient_occupation.patient_occupation_description like '%นิสิต%' then t_visit.t_visit_id else null end)  as นิสิต
+,count(distinct case when f_patient_occupation.patient_occupation_description like '%บุคคลภายนอก%' then t_visit.t_visit_id else null end) as บุคคลภายนอก
+,count(distinct case when f_patient_occupation.patient_occupation_description like '%บุคลากร%' then t_visit.t_visit_id else null end) as บุคลากร
+,count(distinct case when f_patient_occupation.patient_occupation_description like '%พนักงานมหาวิทยาลัย%' then t_visit.t_visit_id else null end) as พนักงานมหาวิทยาลัย
+,count(distinct case when f_patient_occupation.patient_occupation_description like '%แม่บ้าน%' then t_visit.t_visit_id else null  end) as แม่บ้าน
+,count(distinct case when f_patient_occupation.patient_occupation_description like '%ลูกจ้าง%' then t_visit.t_visit_id else null end) as ลูกจ้าง
+,count(distinct case when f_patient_occupation.patient_occupation_description like '%-%' then t_visit.t_visit_id else null end) as ไม่ระบุ
+FROM     t_patient INNER JOIN t_visit ON t_patient.t_patient_id = t_visit.t_patient_id
+                   INNER JOIN f_patient_prefix ON t_patient.f_patient_prefix_id = f_patient_prefix.f_patient_prefix_id
+                   INNER JOIN t_order on t_order.t_visit_id = t_visit.t_visit_id
+                   INNER JOIN b_item on b_item.b_item_id =t_order.b_item_id
+                   INNER JOIN t_health_family on t_health_family.t_health_family_id = t_patient.t_health_family_id
+                    INNER JOIN f_patient_occupation on t_patient.f_patient_occupation_id = f_patient_occupation.f_patient_occupation_id
+                  INNER JOIN b_employee on t_order.order_staff_verify=b_employee.b_employee_id
+ --LEFT JOIN b_person_type on t_health_family.b_person_type_id = b_person_type.b_person_type_id
+WHERE b_item.item_number IN( '56001', '56002', '56003', '56004', '56005', '56006', '56010', '56102', '56121', '56702', '56007', '56008', '56701')
+and item_active = '1'
+and substring(t_visit.visit_begin_visit_time,1,10) Between $P{start_date} and $P{end_date}]]>
+	</queryString>
+	<field name="ข้าราชการ" class="java.lang.Long"/>
+	<field name="นิสิต" class="java.lang.Long"/>
+	<field name="บุคคลภายนอก" class="java.lang.Long"/>
+	<field name="บุคลากร" class="java.lang.Long"/>
+	<field name="พนักงานมหาวิทยาลัย" class="java.lang.Long"/>
+	<field name="แม่บ้าน" class="java.lang.Long"/>
+	<field name="ลูกจ้าง" class="java.lang.Long"/>
+	<field name="ไม่ระบุ" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="94">
+			<staticText>
+				<reportElement uuid="7fe73949-26b9-4cec-982c-6115be692c83" x="15" y="0" width="58" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ข้าราชการ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a1eed0e0-c358-40ed-a575-39830b694b2d" x="73" y="0" width="54" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ข้าราชการ}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e9b9dbac-baf1-4592-9da3-e54b54550090" x="15" y="20" width="58" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[นิสิต]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="171f5aae-bc79-44aa-b5bf-f679104ae715" x="73" y="20" width="54" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{นิสิต}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="22660596-bd28-42e4-a1ef-ade1b8886de2" x="15" y="40" width="58" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[บุคคลภายนอก]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="05d6b3f2-f280-45ae-a6c8-e554373dbbc1" x="73" y="40" width="54" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{บุคคลภายนอก}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0d713df7-9104-4545-afa4-8bc85d5b7b69" x="155" y="0" width="100" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[บุคลากร]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9d48342a-b3f5-45be-971d-124008bc5bbf" x="255" y="0" width="69" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{บุคลากร}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5a0ab768-1b8b-4dd1-94cb-0bb03c1bda59" x="155" y="20" width="100" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[พนักงานมหาวิทยาลัย]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6432447e-6614-4ec6-8922-56ec62cd1e36" x="255" y="20" width="69" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{พนักงานมหาวิทยาลัย}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f1de754a-f8b8-459e-af1a-417a9ef59b64" x="155" y="40" width="100" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[แม่บ้าน]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="728246d4-af86-49e9-b849-c65b4f566989" x="255" y="40" width="69" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{แม่บ้าน}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="755ebd46-c1df-4ce4-a2d5-7e2fca48392b" x="15" y="60" width="58" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ลูกจ้าง]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9c6a51ce-a2a4-4213-87f8-a5aefd6f12c4" x="73" y="60" width="54" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ลูกจ้าง}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8d6839b8-43ab-4fcf-9d29-9f4cf5455870" x="155" y="60" width="100" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<text><![CDATA[ไม่ระบุ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b46a596d-9ddf-432e-aab3-1f36a7e95bb0" x="255" y="60" width="69" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ไม่ระบุ}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

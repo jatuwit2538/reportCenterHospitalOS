@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="รายงานวันนอน แยกตามโรค" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d3748278-accf-4371-8d08-e500c668ae6a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String"/>
+	<parameter name="end_date" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="report_by" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+q1.icd10_description AS diag_name
+,q1.icd10_number AS icd10
+,q1.t_patient_id AS patient
+,q1.totalsleep AS sleep
+,(q1.totalsleep / q1.t_patient_id) AS sleep_ag
+from
+
+(select
+b_icd10.icd10_description AS icd10_description
+,b_icd10.icd10_number AS icd10_number
+,count(t_patient.t_patient_id) AS t_patient_id
+, sum(
+	(case when (cast(t_visit.visit_ipd_discharge_date_time as date) - cast(t_visit.visit_begin_admit_date_time as date)) > 0
+          then (cast(t_visit.visit_ipd_discharge_date_time as date) - cast(t_visit.visit_begin_admit_date_time as date))
+         else 1
+end)) as totalsleep
+
+
+from t_patient
+INNER JOIN t_visit
+ON t_patient.t_patient_id = t_visit.t_patient_id
+INNER JOIN t_diag_icd10
+ON t_diag_icd10.diag_icd10_vn = t_visit.t_visit_id
+INNER JOIN b_icd10
+ON t_diag_icd10.diag_icd10_number = b_icd10.icd10_number
+
+where substr(t_visit.visit_financial_discharge_time,1,10) between  $P{start_date} and $P{end_date}
+AND t_visit.f_visit_type_id='1'
+and t_visit.f_visit_status_id <> '4'
+
+group by
+b_icd10.icd10_number
+,b_icd10.icd10_description) AS q1]]>
+	</queryString>
+	<field name="diag_name" class="java.lang.String"/>
+	<field name="icd10" class="java.lang.String"/>
+	<field name="patient" class="java.lang.Long"/>
+	<field name="sleep" class="java.lang.Long"/>
+	<field name="sleep_ag" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="75" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="49" uuid="93546651-5fc6-4cae-a00d-5b3b9b6393b1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="36" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[รายงานวันนอน แยกตามโรค]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="321" y="52" width="100" height="20" uuid="09c4d6fa-9473-4c89-aa9b-aefc0f0e773a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{end_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="139" y="52" width="45" height="20" uuid="c3d0b534-f172-4c02-814e-b58f4e284898"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[จากวันที่]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="184" y="52" width="100" height="20" uuid="ffb65cd7-e5f7-4ac5-aa50-8b6f7a43eec7"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{start_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="284" y="52" width="38" height="20" uuid="e0c434cf-a9ff-4aa1-b35f-ce14215ebed9"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ถึงวันที่]]></text>
+			</staticText>
+			<image>
+				<reportElement x="91" y="3" width="51" height="47" uuid="7de13ccc-2862-4ad7-9485-b9a1b74bb5bd"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="154" height="19" uuid="c12ec27e-dbb8-4f51-b998-64e13e9d8054"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ชื่อโรค]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="156" y="0" width="68" height="19" uuid="badb9e0d-918a-4d9a-be88-efb419ee60fa"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ICD10]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="224" y="1" width="119" height="19" uuid="48d8f926-5b91-4230-97a0-e1ed58d199f3"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[จำนวนผู้ป่วย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="0" width="106" height="19" uuid="a7b816ba-6400-4af3-b3bf-cae882106e02"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[วันนอนทั้งหมด]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="1" width="105" height="19" uuid="1a7bd964-78b0-4c95-bfc6-4d57b379148b"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[จำนวนเฉลี่ย]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="e2c0b780-a13b-4f35-8621-9651d0c77472"/>
+			</line>
+			<line>
+				<reportElement x="0" y="1" width="1" height="18" uuid="cf6b7089-dd2f-4209-b0d2-f92d515e7dfc"/>
+			</line>
+			<line>
+				<reportElement x="155" y="1" width="1" height="18" uuid="573fc2c3-3a4e-402e-9eb9-657ed8f2a93b"/>
+			</line>
+			<line>
+				<reportElement x="223" y="1" width="1" height="19" uuid="2b805bb8-243d-4f88-a1e9-20875e64d902"/>
+			</line>
+			<line>
+				<reportElement x="343" y="1" width="1" height="19" uuid="874f6813-aaa3-4945-a223-cbb14d021465"/>
+			</line>
+			<line>
+				<reportElement x="449" y="1" width="1" height="19" uuid="eff1112d-ec3c-4073-a6aa-2f1d97c147c0"/>
+			</line>
+			<line>
+				<reportElement x="554" y="0" width="1" height="19" uuid="877dd94f-86f7-413e-8713-8af3f0108b7f"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="0" width="154" height="20" uuid="d94e1106-cfd9-446f-8394-698d1173db0e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{diag_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="155" y="0" width="69" height="19" uuid="5d1ae3c3-697b-4bed-a26f-92c926ae0cda"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{icd10}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="224" y="0" width="120" height="20" uuid="51cbbb77-1227-49fb-8159-296ce97b7508"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="343" y="0" width="107" height="20" uuid="15512702-1dc8-4881-bd2e-ae22dd756a06"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sleep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="449" y="0" width="104" height="20" uuid="f45869ed-f782-4e83-ad33-9812a57d9822"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sleep_ag}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="-1" width="555" height="1" uuid="ffa22576-6326-49ca-abbc-16c379656fd8"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="19" uuid="c17331fe-b7e5-428c-9b43-0b6b5d37c05e"/>
+			</line>
+			<line>
+				<reportElement x="155" y="-1" width="1" height="20" uuid="c6b4f751-87a5-42a3-a753-487c3d2de527"/>
+			</line>
+			<line>
+				<reportElement x="223" y="-1" width="1" height="20" uuid="559b849c-8be2-45ff-bf62-be5b903479d1"/>
+			</line>
+			<line>
+				<reportElement x="343" y="-1" width="1" height="20" uuid="ad864866-f42a-43fe-ad23-c06a4c50bbb1"/>
+			</line>
+			<line>
+				<reportElement x="449" y="-1" width="1" height="20" uuid="19cadbd6-ce16-4cd4-8345-6c13c10f6a54"/>
+			</line>
+			<line>
+				<reportElement x="554" y="-1" width="1" height="20" uuid="a26cad4d-e0ea-4f6c-b619-10e6852cbfc9"/>
+			</line>
+			<line>
+				<reportElement x="0" y="18" width="555" height="1" uuid="d6a5344a-f258-4670-b9b2-ec9bd218afe7"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="513" y="8" width="40" height="20" uuid="7fb98f42-e029-4a53-b48d-b10bf1a2e474"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="433" y="8" width="80" height="20" uuid="e909853a-72a5-4c44-8431-5b1be3c85d38"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="154" y="9" width="257" height="20" uuid="dbe6576f-a104-4f0d-bd5a-51124f345b78"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{report_by}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="1" y="9" width="153" height="20" uuid="6fc14919-1ab7-49dd-a5cc-cd2d15bef17b"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

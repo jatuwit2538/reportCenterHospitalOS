@@ -1,0 +1,303 @@
+.html{
+    font-family: TH SarabunPSK;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 12px;
+    padding: 2px 2px; 
+  
+}
+
+th, td {
+    text-align: center;
+    padding: 0px;
+    width:100px;
+    cursor: pointer;
+    
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+
+
+
+th {
+    background-color: #01A9DB;
+    color: #f2f2f2;
+}
+/*search button */
+#search {
+    width: 180px;
+    height: 25px;
+   
+}
+
+/* When the input field gets focus, change its width to 100% */
+
+
+.button {
+    background-color: #01A9DB; /* Green */
+    border: none;
+    color: white;
+    
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 6px;
+   
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    
+}
+.searchText {
+    background-color: #01A9DB; 
+    color: white; 
+    border: 2px solid #008CBA;
+    
+}
+.searchText:hover {
+    background-color: white;
+    color: black;
+    border-radius: 12px;
+}
+
+
+
+.buttonBack span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.buttonBack span:after {
+  content: '��͹';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: -40px;
+  transition: 0.5s;
+}
+
+.buttonBack:hover span {
+  padding-left: 25px;
+}
+
+.buttonBack:hover span:after {
+  opacity: 1;
+  left: 0;
+}
+
+
+#mySidenav button {
+    position: absolute;
+    left: 0px;
+    transition: 0.3s;
+    padding: 5px;
+    width: 100px;
+    text-decoration: none;
+    font-size: 16px;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+
+
+#about {
+    top: 10px;
+    background-color: #e60000;
+}
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 12px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+  transition-duration: 0.4s;
+}
+
+#myBtn:hover {
+  background-color: orangered;
+  padding: 30px 8px;
+}
+
+div.tab {
+    overflow: hidden;
+    
+    background-color: white;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: inherit;
+    float: right;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    
+    transition: 0.6s;
+    font-size: 22px;
+    
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #cceeff;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+   
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+
+
+select {
+        border:2px solid lightblue;
+	border-radius:6px;
+	padding: 0px 0px;
+	width: 130px;
+        font-size: 18px;
+        width: 25%;
+        height:35px;
+        
+}
+ #header{
+                font-family: TH SarabunPSK;
+                font-weight: bold;
+                
+            }
+
+input[type=date] {
+        border:2px solid lightblue;
+	border-radius:6px;
+        padding: 0px 0px;
+	height: 35px;
+	width: 25%;
+        font-size: 18px;
+}
+
+input[type=text] {
+        border:2px solid lightblue;
+	border-radius:6px;
+	height: 35px;
+	width: 130px;
+        font-size: 18px;
+        margin-top: 10px;
+}
+
+
+
+
+#pagewrap {
+                border: solid 1px #ccc;
+                font-family: TH SarabunPSK;
+                font-size: 23px;
+                font-weight: bold;
+                margin: 12px 12px;
+                padding-right: 25px;
+                padding-bottom: 25px;
+                
+            }  
+#pageForm {
+              border: solid 1px #ccc;
+                font-family: TH SarabunPSK;
+                font-size: 23px;
+                font-weight: bold;
+                margin: 12px 12px; 
+                padding-right: 25px;
+                padding-bottom: 25px;
+            }
+
+#img {
+    
+    
+}
+
+#textLogin{
+        border:2px solid #74B3DF;  
+	border-radius:6px;
+	height: 40px;
+	width: 200px;
+        font-size: 25px;
+    
+}
+#loginButton{
+   background-color: #ffffff; 
+   border-radius:6px;
+   font-weight: bold;
+   font-family: TH SarabunPSK;
+   font-size: 25px;
+   margin: 8px 12px;
+   color: black;
+   height: 40px;
+   width: 100px;
+   border:2px solid #74B3DF;
+   
+   cursor: pointer;
+}
+#loginButton:hover{
+    color: white;
+    background-color: #005ce6;
+    transition-duration: 0.3s;
+}
+
+inputForm{
+        border:2px solid lightblue;  
+	border-radius:6px;
+	height: 40px;
+	width: 200px;
+        font-size: 25px;
+}
+.addButton {
+   background-color: #ffffff; 
+   border-radius:6px;
+   font-weight: bold;
+   font-family: TH SarabunPSK;
+   font-size: 24px;
+   padding: 0px 11px;
+   color: black;
+   height: 40px;
+   
+   border:2px solid #74B3DF;
+   cursor: pointer;
+}
+.addButton:hover{
+    color: white;
+    background-color: #005ce6;
+    transition-duration: 0.3s;
+     
+}
+#textInput{
+        border:2px solid #74B3DF;  
+	border-radius:6px;
+	height: 40px;
+	width: 250px;
+        font-size: 25px;
+    
+}
+#menuButton{
+          font-family: TH SarabunPSK;
+          text-align: center;  
+          font-weight: bold;
+          background-color: blue; 
+          font-size: 19px;
+          width: 100%;
+      }

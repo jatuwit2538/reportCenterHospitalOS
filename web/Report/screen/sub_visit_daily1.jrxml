@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sub_rp_visit_daily1" language="groovy" pageWidth="500" pageHeight="100" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+count ( case when substr(period.time,1,5) <= '09:30' then period.visit_hn else null end) as t1
+,count ( case when substr(period.time,1,5) between '09:31' and   '11:30'then period.visit_hn else null end) as t2
+,count ( case when substr(period.time,1,5) between '11:31' and   '13:30'then period.visit_hn else null end) as t3
+,count ( case when substr(period.time,1,5) >=   '13:31'then period.visit_hn else null end) as t4
+FROM
+(select distinct
+f_patient_prefix.patient_prefix_description || t_person.person_firstname ||' '|| t_person.person_lastname as dt_name
+,d_clinic.visit_clinic_description AS clinic
+,visit_hn,visit_vn
+,t_visit.t_visit_id
+,t_patient.patient_firstname ||' ' || t_patient.patient_lastname as pt_name
+,substr(t_visit.visit_begin_visit_time,1,10) as date
+,substr(t_visit.visit_begin_visit_time,12) as time
+,t_diag_icd10.diag_icd10_number
+,substring(t_patient.patient_record_date_time,1,10) as rc
+,substr(t_visit.visit_begin_visit_time,1,10) as visit
+
+ from t_visit inner  join t_patient on t_visit.t_patient_id = t_patient.t_patient_id
+    inner JOIN t_diag_icd10 on (t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn and diag_icd10_active='1' and t_diag_icd10.f_diag_icd10_type_id = '1')
+    inner JOIN b_visit_clinic on t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+    inner JOIN b_employee on t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+    left  join b_visit_clinic d_clinic on d_clinic.b_visit_clinic_id = b_employee.b_visit_clinic_id
+    inner join t_person on t_person.t_person_id = b_employee.t_person_id
+    inner join f_patient_prefix on f_patient_prefix.f_patient_prefix_id = t_person.f_prefix_id
+where substr(t_visit.visit_begin_visit_time,1,10)  between  $P{start_date} and $P{end_date}
+
+and t_visit.f_visit_status_id <> '4'
+order by dt_name,clinic) as period
+WHERE period.clinic is not null
+and period.dt_name not ilike '%พยาบาล%']]>
+	</queryString>
+	<field name="t1" class="java.lang.Long"/>
+	<field name="t2" class="java.lang.Long"/>
+	<field name="t3" class="java.lang.Long"/>
+	<field name="t4" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="9b591c7e-9928-4cb9-bf6c-6549fb4d7cc6" x="0" y="0" width="500" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[08.00-09.30....................ราย   09.30-11.30....................ราย   11.30-13.30....................ราย   13.30-15.30....................ราย]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="50" y="0" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{t1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="167" y="0" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{t2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="282" y="0" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{t3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="18d17051-5b3b-4b0d-b428-8dee0df76027" x="400" y="0" width="41" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{t4}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<lastPageFooter>
+		<band/>
+	</lastPageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

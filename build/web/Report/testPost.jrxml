@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28fc61c0-0dbe-42d4-a555-116f342e9b20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select *
+from f_pp_result_detail]]>
+	</queryString>
+	<field name="f_pp_result_detail_id" class="java.lang.String"/>
+	<field name="pp_result_detail_description" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="47" y="2" width="100" height="20" uuid="36b99125-99b8-4651-a58b-e7b6b731d9b0"/>
+				<textElement>
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<text><![CDATA[f_pp_result_detail_id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="2" width="100" height="20" uuid="2bef42e8-9005-4add-adaa-a4f792a50af1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<text><![CDATA[pp_result_detail_description]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="47" y="12" width="100" height="20" uuid="e08e061d-3d63-4ec6-8d3e-ca9c8d4c5b63"/>
+				<textElement>
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{f_pp_result_detail_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="271" y="12" width="100" height="20" uuid="53fe4cd0-89be-43d5-8d38-87d3ecead9de"/>
+				<textElement>
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pp_result_detail_description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="รายงานผู้ป่วยในที่รับใหม่และจำหน่าย" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5250a270-0c99-4f9a-b671-3e7c2bbc5c1f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String"/>
+	<parameter name="end_date" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="report_by" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT   b_contract_plans.contract_plans_description as payment
+,SUM(CASE WHEN ((t_patient.f_sex_id ='1') and (SubString(t_visit.visit_begin_admit_date_time,0,11) Between $P{start_date} And $P{end_date}))  THEN 1 ELSE 0  END) as male_inservice
+,SUM(CASE WHEN ((t_patient.f_sex_id ='2') and (SubString(t_visit.visit_begin_admit_date_time,0,11) between $P{start_date} And $P{end_date}))THEN 1 ELSE 0  END) as female_inservice
+,SUM(CASE WHEN ((t_patient.f_sex_id ='3') and (SubString(t_visit.visit_begin_admit_date_time,0,11) Between $P{start_date} And $P{end_date})) THEN 1  ELSE 0  END) as nospec_inservice
+,SUM(CASE WHEN ((t_patient.f_sex_id ='1') and (SubString(t_visit.visit_financial_discharge_time,0,11) Between $P{start_date} And $P{end_date})) THEN 1  ELSE 0  END) as male_discharge
+,SUM(CASE WHEN ((t_patient.f_sex_id ='2') and (SubString(t_visit.visit_financial_discharge_time,0,11) Between $P{start_date} And $P{end_date})) THEN 1 ELSE 0  END) as female_discharge
+,SUM(CASE WHEN ((t_patient.f_sex_id ='3') and (SubString(t_visit.visit_financial_discharge_time,0,11) Between $P{start_date} And $P{end_date})) THEN 1  ELSE 0  END) as nospec_discharge
+FROM   t_patient   INNER JOIN ((t_visit_payment INNER JOIN t_visit ON t_visit_payment.t_visit_id = t_visit.t_visit_id)
+INNER JOIN b_contract_plans ON t_visit_payment.b_contract_plans_id = b_contract_plans.b_contract_plans_id)  ON t_patient.t_patient_id = t_visit.t_patient_id
+WHERE   (((t_visit.f_visit_type_id)='1')   AND ((t_visit.f_visit_status_id)<>'4')
+AND ((t_visit_payment.visit_payment_priority)='0')  AND (t_visit_payment.visit_payment_active= '1')
+AND ((SubString(t_visit.visit_begin_admit_date_time,0,11) Between $P{start_date} And $P{end_date})
+OR (SubString(t_visit.visit_financial_discharge_time,0,11)  Between $P{start_date} And $P{end_date})))
+GROUP BY  b_contract_plans.contract_plans_description
+ORDER BY  b_contract_plans.contract_plans_description]]>
+	</queryString>
+	<field name="payment" class="java.lang.String"/>
+	<field name="male_inservice" class="java.lang.Long"/>
+	<field name="female_inservice" class="java.lang.Long"/>
+	<field name="nospec_inservice" class="java.lang.Long"/>
+	<field name="male_discharge" class="java.lang.Long"/>
+	<field name="female_discharge" class="java.lang.Long"/>
+	<field name="nospec_discharge" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="95" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0384e12a-dcce-4a49-abc2-540e45d39f82" x="1" y="42" width="800" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="24" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รายงานผู้ป่วยในที่รับใหม่ และจำหน่าย]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement uuid="641fbfbd-310d-4926-a49d-f2092ca97ed9" x="0" y="72" width="802" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["จากวันที่"+"  "+
+$P{start_date}.substring( 8, 10 )+
+" "+(($P{start_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{start_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{start_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{start_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{start_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{start_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{start_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{start_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{start_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{start_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{start_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{start_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{start_date}.substring( 5, 7 ))+
+" "+$P{start_date}.substring( 0, 4 )+
+"  "+"ถึงวันที่"+"  "+
+$P{end_date}.substring( 8, 10 )+
+" "+(($P{end_date}.substring( 5, 7 )).equals("01")?String.valueOf("มกราคม"):($P{end_date}.substring( 5, 7 )).equals("02")?String.valueOf("กุมภาพันธ์"):($P{end_date}.substring( 5, 7 )).equals("03")?String.valueOf("มีนาคม"):($P{end_date}.substring( 5, 7 )).equals("04")?String.valueOf("เมษายน"):($P{end_date}.substring( 5, 7 )).equals("05")?String.valueOf("พฤษภาคม"):($P{end_date}.substring( 5, 7 )).equals("06")?String.valueOf("มิถุนายน"):($P{end_date}.substring( 5, 7 )).equals("07")?String.valueOf("กรกฎาคม"):($P{end_date}.substring( 5, 7 )).equals("08")?String.valueOf("สิงหาคม"):($P{end_date}.substring( 5, 7 )).equals("09")?String.valueOf("กันยายน"):($P{end_date}.substring( 5, 7 )).equals("10")?String.valueOf("ตุลาคม"):($P{end_date}.substring( 5, 7 )).equals("11")?String.valueOf("พฤศจิกายน"):($P{end_date}.substring( 5, 7 )).equals("12")?String.valueOf("ธันวาคม"):$P{end_date}.substring( 5, 7 ))+
+" "+$P{end_date}.substring( 0, 4 )]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="af2b6413-3952-44b4-aa8e-fe6873bd432d" x="2" y="4" width="165" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[สิทธิการรักษา]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2a97014d-9df4-49e2-bd6d-afa5ad610e92" x="166" y="0" width="98" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="10" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รับเข้าเป็นผู้ป่วยในจำนวน(ชาย)คน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8116ce6b-c357-424f-8ad4-517b602ecb30" x="264" y="0" width="100" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="10" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รับเข้าเป็นผู้ป่วยในจำนวน(หญิง)คน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f19d2f6-a7cf-4872-bd3c-e06bd46bf4d4" x="359" y="0" width="123" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="10" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รับเข้าเป็นผู้ป่วยในจำนวน(ไม่ระบุเพศ)คน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d983af4f-fbf4-49b2-af7e-03189b375b0f" x="477" y="0" width="113" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="10" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำหน่ายผู้ป่วยในจำนวน(ชาย)คน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c8568095-5482-434a-baf8-1a6b1cba66b6" x="590" y="0" width="99" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="10" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำหน่ายผู้ป่วยในจำนวน(หญิง)คน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="34af3e0b-946e-4e2c-8e51-938f2e5f57d7" x="689" y="0" width="113" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="10" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำหน่ายผู้ป่วยในจำนวน(ไม่ระบุเพศ)คน]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="46bc57d2-8139-48c9-a052-702388495356" x="0" y="-1" width="802" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="7479fbe5-0d0d-4fae-9db8-f3c7d5e7fb03" x="0" y="26" width="802" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="59" splitType="Stretch">
+			<line>
+				<reportElement uuid="1dcf00a2-eee8-4035-a48d-558c7392a654" x="0" y="58" width="802" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="c1faca52-9650-4222-be21-098e22ae9c00" x="165" y="-28" width="1" height="87"/>
+			</line>
+			<line>
+				<reportElement uuid="50f19ab7-4d6b-4abb-b4b7-63e5a00a7a47" x="0" y="-28" width="1" height="87"/>
+			</line>
+			<line>
+				<reportElement uuid="d4b8223b-b5a4-47a6-bd35-99ad8c3831e1" x="264" y="-28" width="1" height="87"/>
+			</line>
+			<line>
+				<reportElement uuid="f91d1b8a-3ea9-4a81-8b33-f920870086cc" x="364" y="-28" width="1" height="87"/>
+			</line>
+			<line>
+				<reportElement uuid="1e33e384-dd9c-4a60-ac45-1a642cbbd4f0" x="478" y="-28" width="1" height="87"/>
+			</line>
+			<line>
+				<reportElement uuid="7bb06bb1-e4db-4584-ba02-326635a1ecd9" x="589" y="-28" width="1" height="87"/>
+			</line>
+			<line>
+				<reportElement uuid="d4b39907-0e4f-4fcb-8a7a-761bc16b8b2b" x="689" y="-28" width="1" height="87"/>
+			</line>
+			<line>
+				<reportElement uuid="000f3239-49a2-403f-9fb8-5094960b5a50" x="801" y="-28" width="1" height="87"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="326dcdfd-ab10-4dd1-b837-9f52f8368167" stretchType="RelativeToTallestObject" x="7" y="1" width="158" height="58"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{payment}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="75b7b7f2-8cfe-4b6a-b780-09b7890d3b22" x="167" y="1" width="53" height="58"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{male_inservice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cafb661e-7743-4cfe-a2af-9704118b3e04" x="265" y="1" width="50" height="58"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{female_inservice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="970edb65-fe60-4d88-84d3-876f26e029e4" x="365" y="1" width="62" height="58"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nospec_inservice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8fb7c4f8-1901-40c4-bf36-3dfe8e8530e9" x="479" y="1" width="56" height="58"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{male_discharge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="45edeb84-d7a3-4a84-8d5c-8f5baf705ec7" x="590" y="1" width="52" height="58"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{female_discharge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f69c3e67-514a-468c-8be8-f7a84a3a1d78" x="690" y="1" width="57" height="58"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nospec_discharge}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="38" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement uuid="9f6c5cce-57b6-4177-be00-f2197cd439f6" x="762" y="10" width="40" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f79f93ea-a361-42a6-bcbc-bde666390f7d" x="682" y="10" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isStrikeThrough="false" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="390062d0-55c4-440b-8905-3a394b11c878" x="156" y="9" width="257" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{report_by}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement uuid="f2a0e17e-7d65-46bf-9dee-97c7f0ceccfb" x="3" y="9" width="153" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true" pdfFontName="fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

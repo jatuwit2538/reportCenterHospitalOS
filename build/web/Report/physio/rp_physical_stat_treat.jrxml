@@ -1,0 +1,2089 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_ physical_stat_treat" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6b57b090-95aa-4cee-89d7-1c9b3a397c96">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="dayoff1" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff1}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff2" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff2}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff3" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff3}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff4" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff4}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff5" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff5}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff6" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff6}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff7" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff7}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff8" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff8}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff9" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff9}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff10" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff10}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff11" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff11}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff12" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff12}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff13" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff13}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff14" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff14}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff15" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff15}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff16" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff16}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff17" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff17}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff18" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff18}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff19" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff19}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff20" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff20}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff21" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff21}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff22" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff22}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff23" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff23}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff24" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff24}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff25" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff25}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff26" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff26}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff27" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff27}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff28" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff28}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff29" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff29}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff30" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff30}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<style name="dayoff31" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{dayoff31}]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CCCCCC"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="year" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="month" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="report_by" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+            physical_therapy_order.seq as physical_therapy_seq
+            ,physical_therapy_order.label_th as physical_therapy_orders_th
+            ,physical_therapy_order.label_en as physical_therapy_orders_en
+            , sum("1") as "1"
+            , sum("2") as "2"
+            , sum("3") as "3"
+            , sum("4") as "4"
+            , sum("5") as "5"
+            , sum("6") as "6"
+            , sum("7") as "7"
+            , sum("8") as "8"
+            , sum("9") as "9"
+            , sum("10") as "10"
+            , sum("11") as "11"
+            , sum("12") as "12"
+            , sum("13") as "13"
+            , sum("14") as "14"
+            , sum("15") as "15"
+            , sum("16") as "16"
+            , sum("17") as "17"
+            , sum("18") as "18"
+            , sum("19") as "19"
+            , sum("20") as "20"
+            , sum("21") as "21"
+            , sum("22") as "22"
+            , sum("23") as "23"
+            , sum("24") as "24"
+            , sum("25") as "25"
+            , sum("26") as "26"
+            , sum("27") as "27"
+            , sum("28") as "28"
+            , sum("29") as "29"
+            , sum("30") as "30"
+            , sum("31")  as "31"
+
+            ,sum(total) as total
+
+       ,case when (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'01')::date in (select  sch_dayoff.day  from sch_dayoff ))
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'01')::date)) in (6,7))
+                    then true else false end as  dayoff1
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'02')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'02')::date)) in (6,7))
+                    then true else false end as  dayoff2
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'03')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'03')::date)) in (6,7))
+                    then true else false end as  dayoff3
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'04')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'04')::date)) in (6,7))
+                    then true else false end as  dayoff4
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'05')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'05')::date)) in (6,7))
+                    then true else false end as  dayoff5
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'06')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'06')::date)) in (6,7))
+                    then true else false end as  dayoff6
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'07')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'07')::date)) in (6,7))
+                    then true else false end as  dayoff7
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'08')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'08')::date)) in (6,7))
+                    then true else false end as  dayoff8
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'09')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'09')::date)) in (6,7))
+                    then true else false end as  dayoff9
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'10')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'10')::date)) in (6,7))
+                    then true else false end as  dayoff10
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'11')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'11')::date)) in (6,7))
+                    then true else false end as  dayoff11
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'12')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'12')::date)) in (6,7))
+                    then true else false end as  dayoff12
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'13')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'13')::date)) in (6,7))
+                    then true else false end as  dayoff13
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'14')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'14')::date)) in (6,7))
+                    then true else false end as  dayoff14
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'15')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'15')::date)) in (6,7))
+                    then true else false end as  dayoff15
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'16')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'16')::date)) in (6,7))
+                    then true else false end as  dayoff16
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'17')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'17')::date)) in (6,7))
+                    then true else false end as  dayoff17
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'18')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'18')::date)) in (6,7))
+                    then true else false end as  dayoff18
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'19')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'19')::date)) in (6,7))
+                    then true else false end as  dayoff19
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'20')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'20')::date)) in (6,7))
+                    then true else false end as  dayoff20
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'21')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'21')::date)) in (6,7))
+                    then true else false end as  dayoff21
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'22')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'22')::date)) in (6,7))
+                    then true else false end as  dayoff22
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'23')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'23')::date)) in (6,7))
+                    then true else false end as  dayoff23
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'24')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'24')::date)) in (6,7))
+                    then true else false end as  dayoff24
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'25')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'25')::date)) in (6,7))
+                    then true else false end as  dayoff25
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'26')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'26')::date)) in (6,7))
+                    then true else false end as  dayoff26
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'27')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'27')::date)) in (6,7))
+                    then true else false end as  dayoff27
+
+       ,case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'28')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'28')::date)) in (6,7))
+                    then true else false end as  dayoff28
+
+       ,case when substr((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0')),5,2) not in ('02')
+                        then  (case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'29')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                            or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'29')::date)) in (6,7))
+                                    then true else false end)
+                      when substr((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0')),5,2) in ('02')
+                                        and (substr((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0')),1,4)::int % 4 ) = 0
+                                        and (substr((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0')),1,4)::int % 100) !=0
+                        then (case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'29')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                            or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'29')::date)) in (6,7))
+                                    then true else false end)
+                        else  true end as  dayoff29
+
+       ,case when substr((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0')),5,2) not in ('02')
+                    then (case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'30')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                            or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'30')::date)) in (6,7))
+                                then true else false end)
+                    else  true end as  dayoff30
+
+       ,case when substr((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0')),5,2) not in ('02','04','06','09','11')
+                    then (case when ((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'31')::date in (select  sch_dayoff.day  from sch_dayoff )
+                                            or (EXTRACT(ISODOW FROM (((((($P{year}) - 543)::text)||lpad(($P{month})::text,2,'0'))||'31')::date)) in (6,7))
+                                then true else false end)
+                    else true end as  dayoff31
+
+        ,employee_print.employee_name as employee_print
+
+from (with physical_therapy_order(code, seq, label_th,label_en) as (
+    values ('56001',1,'แผ่นความร้อน','Hydrocollator')
+                 ,('56002',2,'กระตุ้นกระแสไฟฟ้า','Electrical Stimulator')
+                 ,('56003',3,'การรักษาด้วยคลื่นเสียง','Ultrasound Diathermy')
+                 ,('56004',4,'การรักษาด้วยคลื่นสั้น','Short Wave Diathermy')
+                 ,('56005',5,'การรักษาด้วยคลื่นเลเซอร์','Laser Therapy')
+                 ,('56006',6,'แเช่พาราฟิน','Paraffin Bath')
+                 ,('56010',7,'ออกกำลังกาย','Exercise')
+                 ,('56102',8,'ดึงคอ','Cervial Traction')
+                 ,('56121',9,'ดึงหลัง','Pelvic Traction')
+                 ,('56702',10,'การดัดดึงข้อต่อ','Manipulation&Mobilization')
+                 ,('56007',11,'การกดจุดและนวด','Massage')
+                 ,('56008',12,'การพันเทป','Taping')
+                 ,('56701',13,'ยืดกล้ามเนื้อ','Stretch'))
+select * from physical_therapy_order)  as physical_therapy_order left join
+(select
+                    b_item.item_number as item_number
+
+                    ,t_physical_therapy_order_detail.t_visit_record_id
+                    ,t_visit.visit_begin_visit_time
+                    ,t_physical_therapy_order_detail.record_datetime
+
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '01' then 1 else 0 end as "1"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '02' then 1 else 0 end as "2"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '03' then 1 else 0 end as "3"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '04' then 1 else 0 end as "4"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '05' then 1 else 0 end as "5"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '06' then 1 else 0 end as "6"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '07' then 1 else 0 end as "7"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '08' then 1 else 0 end as "8"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '09' then 1 else 0 end as "9"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '10' then 1 else 0 end as "10"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '11' then 1 else 0 end as "11"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '12' then 1 else 0 end as "12"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '13' then 1 else 0 end as "13"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '14' then 1 else 0 end as "14"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '15' then 1 else 0 end as "15"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '16' then 1 else 0 end as "16"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '17' then 1 else 0 end as "17"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '18' then 1 else 0 end as "18"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '19' then 1 else 0 end as "19"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '20' then 1 else 0 end as "20"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '21' then 1 else 0 end as "21"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '22' then 1 else 0 end as "22"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '23' then 1 else 0 end as "23"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '24' then 1 else 0 end as "24"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '25' then 1 else 0 end as "25"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '26' then 1 else 0 end as "26"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '27' then 1 else 0 end as "27"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '28' then 1 else 0 end as "28"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '29' then 1 else 0 end as "29"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '30' then 1 else 0 end as "30"
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) = '31' then 1 else 0 end as "31"
+
+                    ,case when substr(t_visit.visit_begin_visit_time,9,2) <> '' then 1 else 0 end as total
+
+
+FROM
+            t_physical_therapy_order_detail inner join t_physical_therapy_order
+                        on t_physical_therapy_order_detail.t_physical_therapy_order_id = t_physical_therapy_order.t_physical_therapy_order_id
+                        and t_physical_therapy_order.active = '1'
+             inner join b_item on t_physical_therapy_order.b_item_id =b_item.b_item_id
+            inner join t_visit on t_physical_therapy_order_detail.t_visit_record_id = t_visit.t_visit_id
+
+where
+            b_item.item_number in( '56001', '56002', '56003', '56004', '56005', '56006', '56010', '56102', '56121', '56702', '56007', '56008', '56701')
+            and item_active = '1'
+        and t_visit.f_visit_status_id <> '4'
+        and t_physical_therapy_order_detail.status = '1'
+        and substring(t_visit.visit_begin_visit_time,1,7) = ($P{year})::text||'-'||lpad(($P{month})::text,2,'0')
+) as q
+on physical_therapy_order.code = q.item_number
+
+                cross join (select
+                                                        b_employee.b_employee_id
+                                                        ,case when person_print.t_person_id is not null and prefix_print.f_patient_prefix_id <> '000'
+                                                                    then prefix_print.patient_prefix_description||person_print.person_firstname||'  '||person_print.person_lastname
+                                                                when person_print.t_person_id is not null and prefix_print.f_patient_prefix_id = '000'
+                                                                    then person_print.person_firstname||'  '||person_print.person_lastname
+                                                                    else b_employee.employee_firstname||'  '||b_employee.employee_lastname
+                                                        end  as employee_name
+
+                                                from b_employee as b_employee left join t_person as person_print on b_employee.t_person_id = person_print.t_person_id
+                                                         left join f_patient_prefix as prefix_print on person_print.f_prefix_id = prefix_print.f_patient_prefix_id
+                                                where
+                                                        b_employee.b_employee_id   = $P{report_by}
+                                ) as employee_print
+
+group by
+            physical_therapy_seq
+            ,physical_therapy_orders_th
+            ,physical_therapy_orders_en
+            ,dayoff1
+            ,dayoff2
+            ,dayoff3
+            ,dayoff4
+            ,dayoff5
+            ,dayoff6
+            ,dayoff7
+            ,dayoff8
+            ,dayoff9
+            ,dayoff10
+            ,dayoff11
+            ,dayoff12
+            ,dayoff13
+            ,dayoff14
+            ,dayoff15
+            ,dayoff16
+            ,dayoff17
+            ,dayoff18
+            ,dayoff19
+            ,dayoff20
+            ,dayoff21
+            ,dayoff22
+            ,dayoff23
+            ,dayoff24
+            ,dayoff25
+            ,dayoff26
+            ,dayoff27
+            ,dayoff28
+            ,dayoff29
+            ,dayoff30
+            ,dayoff31
+            ,employee_print
+
+order by
+          physical_therapy_seq asc]]>
+	</queryString>
+	<field name="physical_therapy_seq" class="java.lang.Integer"/>
+	<field name="physical_therapy_orders_th" class="java.lang.String"/>
+	<field name="physical_therapy_orders_en" class="java.lang.String"/>
+	<field name="1" class="java.lang.Long"/>
+	<field name="2" class="java.lang.Long"/>
+	<field name="3" class="java.lang.Long"/>
+	<field name="4" class="java.lang.Long"/>
+	<field name="5" class="java.lang.Long"/>
+	<field name="6" class="java.lang.Long"/>
+	<field name="7" class="java.lang.Long"/>
+	<field name="8" class="java.lang.Long"/>
+	<field name="9" class="java.lang.Long"/>
+	<field name="10" class="java.lang.Long"/>
+	<field name="11" class="java.lang.Long"/>
+	<field name="12" class="java.lang.Long"/>
+	<field name="13" class="java.lang.Long"/>
+	<field name="14" class="java.lang.Long"/>
+	<field name="15" class="java.lang.Long"/>
+	<field name="16" class="java.lang.Long"/>
+	<field name="17" class="java.lang.Long"/>
+	<field name="18" class="java.lang.Long"/>
+	<field name="19" class="java.lang.Long"/>
+	<field name="20" class="java.lang.Long"/>
+	<field name="21" class="java.lang.Long"/>
+	<field name="22" class="java.lang.Long"/>
+	<field name="23" class="java.lang.Long"/>
+	<field name="24" class="java.lang.Long"/>
+	<field name="25" class="java.lang.Long"/>
+	<field name="26" class="java.lang.Long"/>
+	<field name="27" class="java.lang.Long"/>
+	<field name="28" class="java.lang.Long"/>
+	<field name="29" class="java.lang.Long"/>
+	<field name="30" class="java.lang.Long"/>
+	<field name="31" class="java.lang.Long"/>
+	<field name="total" class="java.lang.Long"/>
+	<field name="dayoff1" class="java.lang.Boolean"/>
+	<field name="dayoff2" class="java.lang.Boolean"/>
+	<field name="dayoff3" class="java.lang.Boolean"/>
+	<field name="dayoff4" class="java.lang.Boolean"/>
+	<field name="dayoff5" class="java.lang.Boolean"/>
+	<field name="dayoff6" class="java.lang.Boolean"/>
+	<field name="dayoff7" class="java.lang.Boolean"/>
+	<field name="dayoff8" class="java.lang.Boolean"/>
+	<field name="dayoff9" class="java.lang.Boolean"/>
+	<field name="dayoff10" class="java.lang.Boolean"/>
+	<field name="dayoff11" class="java.lang.Boolean"/>
+	<field name="dayoff12" class="java.lang.Boolean"/>
+	<field name="dayoff13" class="java.lang.Boolean"/>
+	<field name="dayoff14" class="java.lang.Boolean"/>
+	<field name="dayoff15" class="java.lang.Boolean"/>
+	<field name="dayoff16" class="java.lang.Boolean"/>
+	<field name="dayoff17" class="java.lang.Boolean"/>
+	<field name="dayoff18" class="java.lang.Boolean"/>
+	<field name="dayoff19" class="java.lang.Boolean"/>
+	<field name="dayoff20" class="java.lang.Boolean"/>
+	<field name="dayoff21" class="java.lang.Boolean"/>
+	<field name="dayoff22" class="java.lang.Boolean"/>
+	<field name="dayoff23" class="java.lang.Boolean"/>
+	<field name="dayoff24" class="java.lang.Boolean"/>
+	<field name="dayoff25" class="java.lang.Boolean"/>
+	<field name="dayoff26" class="java.lang.Boolean"/>
+	<field name="dayoff27" class="java.lang.Boolean"/>
+	<field name="dayoff28" class="java.lang.Boolean"/>
+	<field name="dayoff29" class="java.lang.Boolean"/>
+	<field name="dayoff30" class="java.lang.Boolean"/>
+	<field name="dayoff31" class="java.lang.Boolean"/>
+	<field name="employee_print" class="java.lang.String"/>
+	<variable name="sum_1" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{1}]]></variableExpression>
+	</variable>
+	<variable name="sum_2" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{2}]]></variableExpression>
+	</variable>
+	<variable name="sum_3" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{3}]]></variableExpression>
+	</variable>
+	<variable name="sum_4" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{4}]]></variableExpression>
+	</variable>
+	<variable name="sum_5" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{5}]]></variableExpression>
+	</variable>
+	<variable name="sum_6" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{6}]]></variableExpression>
+	</variable>
+	<variable name="sum_7" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{7}]]></variableExpression>
+	</variable>
+	<variable name="sum_8" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{8}]]></variableExpression>
+	</variable>
+	<variable name="sum_9" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{9}]]></variableExpression>
+	</variable>
+	<variable name="sum_10" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{10}]]></variableExpression>
+	</variable>
+	<variable name="sum_11" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{11}]]></variableExpression>
+	</variable>
+	<variable name="sum_12" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{12}]]></variableExpression>
+	</variable>
+	<variable name="sum_13" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{13}]]></variableExpression>
+	</variable>
+	<variable name="sum_14" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{14}]]></variableExpression>
+	</variable>
+	<variable name="sum_15" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{15}]]></variableExpression>
+	</variable>
+	<variable name="sum_16" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{16}]]></variableExpression>
+	</variable>
+	<variable name="sum_17" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{17}]]></variableExpression>
+	</variable>
+	<variable name="sum_18" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{18}]]></variableExpression>
+	</variable>
+	<variable name="sum_19" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{19}]]></variableExpression>
+	</variable>
+	<variable name="sum_20" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{20}]]></variableExpression>
+	</variable>
+	<variable name="sum_21" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{21}]]></variableExpression>
+	</variable>
+	<variable name="sum_22" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{22}]]></variableExpression>
+	</variable>
+	<variable name="sum_23" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{23}]]></variableExpression>
+	</variable>
+	<variable name="sum_24" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{24}]]></variableExpression>
+	</variable>
+	<variable name="sum_25" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{25}]]></variableExpression>
+	</variable>
+	<variable name="sum_26" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{26}]]></variableExpression>
+	</variable>
+	<variable name="sum_27" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{27}]]></variableExpression>
+	</variable>
+	<variable name="sum_28" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{28}]]></variableExpression>
+	</variable>
+	<variable name="sum_29" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{29}]]></variableExpression>
+	</variable>
+	<variable name="sum_30" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{30}]]></variableExpression>
+	</variable>
+	<variable name="sum_31" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{31}]]></variableExpression>
+	</variable>
+	<variable name="sum_total" class="java.lang.Number" resetType="Group" resetGroup="summary1" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<group name="summary1">
+		<groupFooter>
+			<band height="20">
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="c3c08926-13dd-4d7e-bd1c-160a8ccd45aa" style="dayoff10" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="320" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff10} == true ?   ""
+:$V{sum_10}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="aa5af213-01eb-41fe-a725-de2cd113b8a9" style="dayoff5" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="220" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff5} == true ?   ""
+:$V{sum_5}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="a98546af-5b03-4fb6-aedf-eeb33821f39c" style="dayoff6" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="240" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff6} == true ?   ""
+:$V{sum_6}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="0ee2159e-d01e-4dbd-a5a8-4b469f2ab338" style="dayoff1" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="140" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff1} == true ?   ""
+:$V{sum_1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="51ff93ff-079e-4655-a934-aacb050fee8f" style="dayoff3" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="180" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff3} == true ?   ""
+:$V{sum_3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="2398917d-f689-4039-bd42-649454f41293" style="dayoff8" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="280" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff8} == true ?   ""
+:$V{sum_8}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="f46fcb94-711f-4303-9079-034ddb642261" style="dayoff7" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="260" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff7} == true ?   ""
+:$V{sum_7}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="27e8d8e0-4ebf-49b6-9a44-0b818253fed0" style="dayoff2" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="160" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff2} == true ?   ""
+:$V{sum_2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="db27b68c-a88e-4132-b223-d37e27ed76b2" style="dayoff9" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff9} == true ?   ""
+:$V{sum_9}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="81e76c75-ab31-45c1-a36e-2f77dbc2b215" style="dayoff4" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="200" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff4} == true ?   ""
+:$V{sum_4}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="aa5af213-01eb-41fe-a725-de2cd113b8a9" style="dayoff15" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="420" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff15} == true ?   ""
+:$V{sum_15}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="f46fcb94-711f-4303-9079-034ddb642261" style="dayoff17" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="460" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff17} == true ?   ""
+:$V{sum_17}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="51ff93ff-079e-4655-a934-aacb050fee8f" style="dayoff13" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="380" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff13} == true ?   ""
+:$V{sum_13}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="a98546af-5b03-4fb6-aedf-eeb33821f39c" style="dayoff16" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="440" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff16} == true ?   ""
+:$V{sum_16}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="27e8d8e0-4ebf-49b6-9a44-0b818253fed0" style="dayoff12" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="360" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff12} == true ?   ""
+:$V{sum_12}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="c3c08926-13dd-4d7e-bd1c-160a8ccd45aa" style="dayoff20" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="520" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff20} == true ?   ""
+:$V{sum_20}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="81e76c75-ab31-45c1-a36e-2f77dbc2b215" style="dayoff14" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="400" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff14} == true ?   ""
+:$V{sum_14}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="0ee2159e-d01e-4dbd-a5a8-4b469f2ab338" style="dayoff11" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="340" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff11} == true ?   ""
+:$V{sum_11}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="2398917d-f689-4039-bd42-649454f41293" style="dayoff18" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="480" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff18} == true ?   ""
+:$V{sum_18}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="db27b68c-a88e-4132-b223-d37e27ed76b2" style="dayoff19" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="500" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff19} == true ?   ""
+:$V{sum_19}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="aa5af213-01eb-41fe-a725-de2cd113b8a9" style="dayoff25" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="620" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff25} == true ?   ""
+:$V{sum_25}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="f46fcb94-711f-4303-9079-034ddb642261" style="dayoff27" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="660" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff27} == true ?   ""
+:$V{sum_27}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="51ff93ff-079e-4655-a934-aacb050fee8f" style="dayoff23" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="580" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff23} == true ?   ""
+:$V{sum_23}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="a98546af-5b03-4fb6-aedf-eeb33821f39c" style="dayoff26" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="640" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff26} == true ?   ""
+:$V{sum_26}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="0ee2159e-d01e-4dbd-a5a8-4b469f2ab338" style="dayoff31" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="740" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff31} == true ?   ""
+:$V{sum_31}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="27e8d8e0-4ebf-49b6-9a44-0b818253fed0" style="dayoff22" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="560" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff22} == true ?   ""
+:$V{sum_22}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="c3c08926-13dd-4d7e-bd1c-160a8ccd45aa" style="dayoff30" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="720" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff30} == true ?   ""
+:$V{sum_30}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="81e76c75-ab31-45c1-a36e-2f77dbc2b215" style="dayoff24" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="600" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff24} == true ?   ""
+:$V{sum_24}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="0ee2159e-d01e-4dbd-a5a8-4b469f2ab338" style="dayoff21" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="540" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff21} == true ?   ""
+:$V{sum_21}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="2398917d-f689-4039-bd42-649454f41293" style="dayoff28" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="680" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff28} == true ?   ""
+:$V{sum_28}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="db27b68c-a88e-4132-b223-d37e27ed76b2" style="dayoff29" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="700" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dayoff29} == true ?   ""
+:$V{sum_29}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="eccbc655-ce99-4232-a9e8-33402fe5b699" x="0" y="0" width="140" height="20"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[รวม]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+					<reportElement uuid="6163b43e-b74e-4451-9a10-95dfab5600c7" x="760" y="0" width="42" height="20"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#666666"/>
+						<leftPen lineWidth="0.5" lineColor="#666666"/>
+						<bottomPen lineWidth="0.5" lineColor="#666666"/>
+						<rightPen lineWidth="0.5" lineColor="#666666"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sum_total}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="52" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="290703e2-db48-40c1-8934-6be82cf1d5ea" x="0" y="28" width="802" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายงานสถิติกายภาพบำบัด แยกตามประเภทการรักษา ประจำเดือน "
++ new java.text.SimpleDateFormat("MMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyyMM", new java.util.Locale("th", "TH")).parse($P{year}+$P{month}))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3e9a7893-7190-4ae8-9f94-3206f674957d" x="0" y="0" width="802" height="28"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ศูนย์บริการสุขภาพแห่งจุฬาลงกรณ์มหาวิทยาลัย]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="eccbc655-ce99-4232-a9e8-33402fe5b699" x="0" y="0" width="140" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รายการ/วัน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0f1dc2ef-03f2-48d8-a48e-f5c7194b9e5b" x="300" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[9]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a54678c7-2fbe-4346-93be-8cd690a3cc30" x="380" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[13]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="55a53c32-7eeb-4ec0-ae81-3dab70a061fe" x="180" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="26db8999-7184-4c08-be1e-e7ee762fb19d" x="240" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6444b04f-c85b-43b4-8a56-fb79f3189963" x="220" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="61602387-16d8-4ae9-8b9f-e01d4cf20cb4" x="280" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[8]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2714378c-5588-49b6-9e91-18551a151e3a" x="320" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[10]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="913314fd-cc02-444b-a4e1-9f9b5189a56f" x="260" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[7]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8e34964c-18f8-4bc0-9c73-252f2bcc5e4d" x="140" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="48df865e-a858-496f-a17b-dcc1e998120c" x="400" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[14]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e3593fd6-7ae9-415d-864c-ab7a868cb451" x="200" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="30ba55d9-48c3-4d2d-8b5b-e37bc05b84fd" x="360" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[12]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="20e33294-4a60-4349-90a4-280d06eb80e4" x="160" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="099c6343-adf8-4f10-8cdc-4fd2a7737616" x="340" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[11]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="26db8999-7184-4c08-be1e-e7ee762fb19d" x="640" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[26]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2714378c-5588-49b6-9e91-18551a151e3a" x="720" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[30]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0f1dc2ef-03f2-48d8-a48e-f5c7194b9e5b" x="500" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[19]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="913314fd-cc02-444b-a4e1-9f9b5189a56f" x="660" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[27]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7de3db6d-196a-4c3a-b5e9-b58e9b61eb99" x="420" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[15]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="61602387-16d8-4ae9-8b9f-e01d4cf20cb4" x="680" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[28]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="26db8999-7184-4c08-be1e-e7ee762fb19d" x="440" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[16]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="099c6343-adf8-4f10-8cdc-4fd2a7737616" x="740" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[31]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0f1dc2ef-03f2-48d8-a48e-f5c7194b9e5b" x="700" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[29]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="61602387-16d8-4ae9-8b9f-e01d4cf20cb4" x="480" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[18]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8e34964c-18f8-4bc0-9c73-252f2bcc5e4d" x="540" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[21]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="55a53c32-7eeb-4ec0-ae81-3dab70a061fe" x="580" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[23]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="20e33294-4a60-4349-90a4-280d06eb80e4" x="560" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[22]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2714378c-5588-49b6-9e91-18551a151e3a" x="520" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="913314fd-cc02-444b-a4e1-9f9b5189a56f" x="460" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[17]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e3593fd6-7ae9-415d-864c-ab7a868cb451" x="600" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[24]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6444b04f-c85b-43b4-8a56-fb79f3189963" x="620" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[25]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="099c6343-adf8-4f10-8cdc-4fd2a7737616" x="760" y="0" width="42" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7247e974-ead9-4d70-abf2-ead875bda6a0" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="140" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{physical_therapy_orders_en}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="c3c08926-13dd-4d7e-bd1c-160a8ccd45aa" style="dayoff10" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="320" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff10} == true ? ""
+:($F{10} == 0 ? "" : $F{10} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="2398917d-f689-4039-bd42-649454f41293" style="dayoff8" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="280" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff8} == true ? ""
+:($F{8} == 0 ? "" : $F{8} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="81e76c75-ab31-45c1-a36e-2f77dbc2b215" style="dayoff4" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="200" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff4} == true ? ""
+:($F{4} == 0 ? "" : $F{4} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="27e8d8e0-4ebf-49b6-9a44-0b818253fed0" style="dayoff22" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="560" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff22} == true ? ""
+:($F{22} == 0 ? "" : $F{22} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="db27b68c-a88e-4132-b223-d37e27ed76b2" style="dayoff9" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff9} == true ? ""
+:($F{9} == 0 ? "" : $F{9} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="f269f542-2f50-46f4-9cbd-5c9ffc3f4a90" style="dayoff15" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="420" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff15} == true ? ""
+:($F{15} == 0 ? "" : $F{15} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="ba98f4c1-ba62-4edf-b300-54b7dcf06563" style="dayoff14" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="400" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff14} == true ? ""
+:($F{14} == 0 ? "" : $F{14} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="51ff93ff-079e-4655-a934-aacb050fee8f" style="dayoff23" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="580" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff23} == true ? ""
+:($F{23} == 0 ? "" : $F{23} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="a98546af-5b03-4fb6-aedf-eeb33821f39c" style="dayoff16" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="440" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff16} == true ? ""
+:($F{16} == 0 ? "" : $F{16} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="c3c08926-13dd-4d7e-bd1c-160a8ccd45aa" style="dayoff20" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="520" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff20} == true ? ""
+:($F{20} == 0 ? "" : $F{20} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="e6f8b368-b45f-4b9c-a4e1-69a5534ac370" style="dayoff11" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="340" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff11} == true ? ""
+:($F{11} == 0 ? "" : $F{11} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="81e76c75-ab31-45c1-a36e-2f77dbc2b215" style="dayoff24" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="600" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff24} == true ? ""
+:($F{24} == 0 ? "" : $F{24} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="2398917d-f689-4039-bd42-649454f41293" style="dayoff28" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="680" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff28} == true ? ""
+:($F{28} == 0 ? "" : $F{28} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="db27b68c-a88e-4132-b223-d37e27ed76b2" style="dayoff19" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="500" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff19} == true ? ""
+:($F{19} == 0 ? "" : $F{19} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="e6f8b368-b45f-4b9c-a4e1-69a5534ac370" style="dayoff31" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="740" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff31} == true ? ""
+:($F{31} == 0 ? "" : $F{31} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="a21582fe-76a2-4c64-bc64-6a22e3481f81" style="dayoff12" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="360" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff12} == true ? ""
+:($F{12} == 0 ? "" : $F{12} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="f46fcb94-711f-4303-9079-034ddb642261" style="dayoff27" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="660" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff27} == true ? ""
+:($F{27} == 0 ? "" : $F{27} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="f46fcb94-711f-4303-9079-034ddb642261" style="dayoff7" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="260" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff7} == true ? ""
+:($F{7} == 0 ? "" : $F{7} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="aa5af213-01eb-41fe-a725-de2cd113b8a9" style="dayoff5" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="220" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff5} == true ? ""
+:($F{5} == 0 ? "" : $F{5} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="a98546af-5b03-4fb6-aedf-eeb33821f39c" style="dayoff26" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="640" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff26} == true ? ""
+:($F{26} == 0 ? "" : $F{26} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="db27b68c-a88e-4132-b223-d37e27ed76b2" style="dayoff29" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="700" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff29} == true ? ""
+:($F{29} == 0 ? "" : $F{29} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="3adfd26b-d2dd-4338-a7ba-0f0802ecc50f" style="dayoff13" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="380" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff13} == true ? ""
+:($F{13} == 0 ? "" : $F{13} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="aa5af213-01eb-41fe-a725-de2cd113b8a9" style="dayoff25" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="620" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff25} == true ? ""
+:($F{25} == 0 ? "" : $F{25} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="a98546af-5b03-4fb6-aedf-eeb33821f39c" style="dayoff6" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="240" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff6} == true ? ""
+:($F{6} == 0 ? "" : $F{6} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="0ee2159e-d01e-4dbd-a5a8-4b469f2ab338" style="dayoff1" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="140" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff1} == true ?   ""
+:($F{1} == 0 ? "" : $F{1} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="f46fcb94-711f-4303-9079-034ddb642261" style="dayoff17" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="460" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff17} == true ? ""
+:($F{17} == 0 ? "" : $F{17} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="27e8d8e0-4ebf-49b6-9a44-0b818253fed0" style="dayoff2" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="160" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff2} == true ? ""
+:($F{2} == 0 ? "" : $F{2} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="0ee2159e-d01e-4dbd-a5a8-4b469f2ab338" style="dayoff21" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="540" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff21} == true ? ""
+:($F{21} == 0 ? "" : $F{21} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="2398917d-f689-4039-bd42-649454f41293" style="dayoff18" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="480" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff18} == true ? ""
+:($F{18} == 0 ? "" : $F{18} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="51ff93ff-079e-4655-a934-aacb050fee8f" style="dayoff3" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="180" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff3} == true ? ""
+:($F{3} == 0 ? "" : $F{3} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="c3c08926-13dd-4d7e-bd1c-160a8ccd45aa" style="dayoff30" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="720" y="0" width="20" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayoff30} == true ? ""
+:($F{30} == 0 ? "" : $F{30} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="293e631a-4cef-4679-a482-6afdbfc2c24b" x="760" y="0" width="42" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField evaluationTime="Report">
+				<reportElement uuid="216d58c7-f5fe-4d60-b6c9-94ece2386ea5" x="52" y="0" width="40" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3" x="548" y="0" width="254" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9997830a-eb68-4485-a70f-9b2a445e6f1c" x="0" y="0" width="52" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า "+$V{PAGE_NUMBER}+" จาก"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a7fb9d54-5cb1-4b7e-8c28-70c285d2b24e" x="314" y="0" width="175" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employee_print} == null ? ""
+:"รายงานโดย "+ $F{employee_print}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_ physical_type_sub1" language="groovy" pageWidth="550" pageHeight="842" columnWidth="550" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="b402c40d-0670-4e5b-9edd-c74a4595a52d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+        q.seq
+        ,q.employee_type
+        ,array_to_string(array_agg(q.employee_name),' , ') as employee_name
+from
+(select
+        distinct
+        1 as seq
+        ,'นักกายภาพ' as employee_type
+        ,case when person_physiotherapist.t_person_id is not null and prefix_physiotherapist.f_patient_prefix_id <> '000'
+                    then prefix_physiotherapist.patient_prefix_description||person_physiotherapist.person_firstname||'  '||person_physiotherapist.person_lastname
+                when person_physiotherapist.t_person_id is not null and prefix_physiotherapist.f_patient_prefix_id = '000'
+                    then person_physiotherapist.person_firstname||'  '||person_physiotherapist.person_lastname
+                    else employee_physiotherapist.employee_firstname||'  '||employee_physiotherapist.employee_lastname
+        end  as employee_name
+
+
+/*         ,case when person_assistant_physiotherapist.t_person_id is not null and prefix_assistant_physiotherapist.f_patient_prefix_id <> '000'
+                    then prefix_assistant_physiotherapist.patient_prefix_description||person_assistant_physiotherapist.person_firstname||'  '||person_assistant_physiotherapist.person_lastname
+                when person_assistant_physiotherapist.t_person_id is not null and prefix_assistant_physiotherapist.f_patient_prefix_id = '000'
+                    then person_assistant_physiotherapist.person_firstname||'  '||person_assistant_physiotherapist.person_lastname
+                    else employee_assistant_physiotherapist.employee_firstname||'  '||employee_assistant_physiotherapist.employee_lastname
+        end  as assistant_physiotherapist
+
+        ,case when person_nurse.t_person_id is not null and prefix_nurse.f_patient_prefix_id <> '000'
+                    then prefix_nurse.patient_prefix_description||person_nurse.person_firstname||'  '||person_nurse.person_lastname
+                when person_nurse.t_person_id is not null and prefix_nurse.f_patient_prefix_id = '000'
+                    then person_nurse.person_firstname||'  '||person_nurse.person_lastname
+                    else employee_nurse.employee_firstname||'  '||employee_nurse.employee_lastname
+        end  as nurse */
+
+from
+        t_physical_therapy_order_detail inner join t_visit on t_physical_therapy_order_detail.t_visit_record_id = t_visit.t_visit_id
+
+         inner join b_employee as employee_physiotherapist on t_physical_therapy_order_detail.physiotherapist_id = employee_physiotherapist.b_employee_id
+         left join t_person as person_physiotherapist on employee_physiotherapist.t_person_id = person_physiotherapist.t_person_id
+         left join f_patient_prefix as prefix_physiotherapist on person_physiotherapist.f_prefix_id = prefix_physiotherapist.f_patient_prefix_id
+
+
+/*          left join b_employee as employee_assistant_physiotherapist on t_physical_therapy_order_detail.assistant_physiotherapist_id = employee_assistant_physiotherapist.b_employee_id
+         left join t_person as person_assistant_physiotherapist on employee_assistant_physiotherapist.t_person_id = person_assistant_physiotherapist.t_person_id
+         left join f_patient_prefix as prefix_assistant_physiotherapist on person_assistant_physiotherapist.f_prefix_id = prefix_assistant_physiotherapist.f_patient_prefix_id
+
+         left join b_employee as employee_nurse on t_physical_therapy_order_detail.nurse_id = employee_nurse.b_employee_id
+         left join t_person as person_nurse on employee_nurse.t_person_id = person_nurse.t_person_id
+         left join f_patient_prefix as prefix_nurse on person_nurse.f_prefix_id = prefix_nurse.f_patient_prefix_id */
+where
+            t_physical_therapy_order_detail.status = '1'
+            and t_visit.f_visit_status_id <> '4'
+            and substring(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+
+union
+
+select
+        distinct
+        2 as seq
+        ,'ผู้ช่วยกายภาพ' as employee_type
+        ,case when person_assistant_physiotherapist.t_person_id is not null and prefix_assistant_physiotherapist.f_patient_prefix_id <> '000'
+                    then prefix_assistant_physiotherapist.patient_prefix_description||person_assistant_physiotherapist.person_firstname||'  '||person_assistant_physiotherapist.person_lastname
+                when person_assistant_physiotherapist.t_person_id is not null and prefix_assistant_physiotherapist.f_patient_prefix_id = '000'
+                    then person_assistant_physiotherapist.person_firstname||'  '||person_assistant_physiotherapist.person_lastname
+                    else employee_assistant_physiotherapist.employee_firstname||'  '||employee_assistant_physiotherapist.employee_lastname
+        end   as employee_name
+
+
+from
+        t_physical_therapy_order_detail inner join t_visit on t_physical_therapy_order_detail.t_visit_record_id = t_visit.t_visit_id
+
+         inner join b_employee as employee_assistant_physiotherapist on t_physical_therapy_order_detail.assistant_physiotherapist_id = employee_assistant_physiotherapist.b_employee_id
+         left join t_person as person_assistant_physiotherapist on employee_assistant_physiotherapist.t_person_id = person_assistant_physiotherapist.t_person_id
+         left join f_patient_prefix as prefix_assistant_physiotherapist on person_assistant_physiotherapist.f_prefix_id = prefix_assistant_physiotherapist.f_patient_prefix_id
+
+where
+            t_physical_therapy_order_detail.status = '1'
+            and t_visit.f_visit_status_id <> '4'
+            and substring(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+union
+
+select
+        distinct
+        3 as seq
+        ,'พยาบาล' as employee_type
+        ,case when person_nurse.t_person_id is not null and prefix_nurse.f_patient_prefix_id <> '000'
+                    then prefix_nurse.patient_prefix_description||person_nurse.person_firstname||'  '||person_nurse.person_lastname
+                when person_nurse.t_person_id is not null and prefix_nurse.f_patient_prefix_id = '000'
+                    then person_nurse.person_firstname||'  '||person_nurse.person_lastname
+                    else employee_nurse.employee_firstname||'  '||employee_nurse.employee_lastname
+        end   as employee_name
+
+
+from
+        t_physical_therapy_order_detail inner join t_visit on t_physical_therapy_order_detail.t_visit_record_id = t_visit.t_visit_id
+
+         inner join b_employee as employee_nurse on t_physical_therapy_order_detail.nurse_id = employee_nurse.b_employee_id
+         left join t_person as person_nurse on employee_nurse.t_person_id = person_nurse.t_person_id
+         left join f_patient_prefix as prefix_nurse on person_nurse.f_prefix_id = prefix_nurse.f_patient_prefix_id
+where
+            t_physical_therapy_order_detail.status = '1'
+            and t_visit.f_visit_status_id <> '4'
+            and substring(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date} ) as q
+group by
+        q.seq
+        ,q.employee_type
+order by
+        q.seq    asc]]>
+	</queryString>
+	<field name="seq" class="java.lang.Integer"/>
+	<field name="employee_type" class="java.lang.String"/>
+	<field name="employee_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5a4f7b26-d16d-4d6b-99b3-a1dfafc92900" x="0" y="0" width="80" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employee_type}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="16e3bc5f-bbfb-43d5-b853-b154f983b79a" x="80" y="0" width="470" height="20"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employee_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

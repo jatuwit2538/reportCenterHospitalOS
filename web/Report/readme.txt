@@ -1,0 +1,1 @@
+copy ทั้งหมดใน example ไปไว้ใน ..\resources\ireport\module\menureport\

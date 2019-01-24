@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_patient_pstype" language="groovy" pageWidth="595" pageHeight="842" columnWidth="527" leftMargin="34" rightMargin="34" topMargin="34" bottomMargin="34" uuid="cb997b3f-9ba2-46cd-92dd-9e0208c9a9fe">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/เวชระเบ_ยน/rp_patient_service_point"/>
+	<property name="ireport.jasperserver.url" value="http://172.16.4.204:8080/jasperserver/services/repository"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+count(distinct t_patient_appointment.t_visit_id) AS appoint
+,(select count(distinct t_patient_id) from t_patient where t_patient_id in ( SELECT t_patient.t_patient_id
+FROM
+    t_patient
+            INNER JOIN f_patient_prefix ON f_patient_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+            INNER join t_health_family ON t_patient.t_health_family_id = t_health_family.t_health_family_id
+            INNER JOIN t_visit on t_visit.t_patient_id = t_patient.t_patient_id
+
+WHERE
+ t_patient.patient_active = '1' and t_health_family.health_family_active = '1' and f_visit_status_id <>'4'
+AND substring(t_patient.patient_record_date_time,1,10) Between  $P{start_date} and $P{end_date}
+AND substr(visit_begin_visit_time,1,10)  BETWEEN $P{start_date} and $P{end_date}
+)) as new_pt
+
+,(select count(distinct t_patient.t_patient_id) from t_patient inner join t_visit on  t_visit.t_patient_id = t_patient.t_patient_id
+where  substr(visit_begin_visit_time,1,10)  BETWEEN $P{start_date} and $P{end_date}
+and f_visit_status_id <>'4'
+and t_patient.t_patient_id not in ( SELECT t_patient.t_patient_id
+FROM
+    t_patient
+            INNER JOIN f_patient_prefix ON f_patient_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+            INNER join t_health_family ON t_patient.t_health_family_id = t_health_family.t_health_family_id
+            INNER JOIN t_visit on t_visit.t_patient_id = t_patient.t_patient_id
+
+WHERE
+ t_patient.patient_active = '1' and t_health_family.health_family_active = '1' and f_visit_status_id <>'4'
+AND substring(t_patient.patient_record_date_time,1,10) Between  $P{start_date} and $P{end_date}
+
+)) as old_pt
+
+,(select count(distinct t_patient_id) from t_patient where t_patient_id in ( SELECT t_patient.t_patient_id
+FROM
+    t_patient
+            INNER JOIN f_patient_prefix ON f_patient_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+            INNER join t_health_family ON t_patient.t_health_family_id = t_health_family.t_health_family_id
+            INNER JOIN t_visit on t_visit.t_patient_id = t_patient.t_patient_id
+
+WHERE
+ t_patient.patient_active = '1' and t_health_family.health_family_active = '1' and f_visit_status_id <>'4'
+and (b_visit_office_id_refer_in <> '' or b_visit_office_id_refer_out <> '')
+AND substring(t_patient.patient_record_date_time,1,10) Between  $P{start_date} and $P{end_date}
+AND substr(visit_begin_visit_time,1,10)  BETWEEN $P{start_date} and $P{end_date}
+)) as new_pt_refer
+
+,(select count(distinct t_patient_id) from t_patient where t_patient_id in ( SELECT t_patient.t_patient_id
+FROM
+    t_patient
+            INNER JOIN f_patient_prefix ON f_patient_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+            INNER join t_health_family ON t_patient.t_health_family_id = t_health_family.t_health_family_id
+                      INNER JOIN t_visit on t_visit.t_patient_id = t_patient.t_patient_id
+
+WHERE
+ t_patient.patient_active = '1' and t_health_family.health_family_active = '1' and f_visit_status_id <>'4'
+and (b_visit_office_id_refer_in = '' and b_visit_office_id_refer_out = '')
+AND substring(t_patient.patient_record_date_time,1,10) Between  $P{start_date} and $P{end_date}
+AND substr(visit_begin_visit_time,1,10)  BETWEEN  $P{start_date} and $P{end_date}
+)) as new_pt_not_refer
+,(select count(distinct t_patient.t_patient_id) from t_patient inner join t_visit on  t_visit.t_patient_id = t_patient.t_patient_id
+where  substr(visit_begin_visit_time,1,10)  BETWEEN  $P{start_date} and $P{end_date}
+and (b_visit_office_id_refer_in <> '' or b_visit_office_id_refer_out <> '') and f_visit_status_id <>'4'
+and t_patient.t_patient_id not in ( SELECT t_patient.t_patient_id
+FROM
+    t_patient
+            INNER JOIN f_patient_prefix ON f_patient_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+            INNER join t_health_family ON t_patient.t_health_family_id = t_health_family.t_health_family_id
+                      INNER JOIN t_visit on t_visit.t_patient_id = t_patient.t_patient_id
+
+WHERE
+ t_patient.patient_active = '1' and t_health_family.health_family_active = '1'  and f_visit_status_id <>'4'
+
+AND substring(t_patient.patient_record_date_time,1,10) Between  $P{start_date} and $P{end_date}
+
+)) as old_pt_refer
+,(select count(distinct t_patient.t_patient_id) from t_patient inner join t_visit on  t_visit.t_patient_id = t_patient.t_patient_id
+where  substr(visit_begin_visit_time,1,10)  BETWEEN  $P{start_date} and $P{end_date}
+and (b_visit_office_id_refer_in ='' and b_visit_office_id_refer_out = '') and f_visit_status_id <>'4'
+and t_patient.t_patient_id not in ( SELECT t_patient.t_patient_id
+FROM
+    t_patient
+            INNER JOIN f_patient_prefix ON f_patient_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+            INNER join t_health_family ON t_patient.t_health_family_id = t_health_family.t_health_family_id
+                       INNER JOIN t_visit on t_visit.t_patient_id = t_patient.t_patient_id
+
+WHERE
+ t_patient.patient_active = '1' and t_health_family.health_family_active = '1'
+and f_visit_status_id <>'4'
+AND substring(t_patient.patient_record_date_time,1,10) Between  $P{start_date} and $P{end_date}
+
+)) as old_pt_not_refer
+
+FROM    t_visit
+    INNER JOIN t_patient ON t_patient.t_patient_id = t_visit.t_patient_id
+    INNER JOIN f_patient_prefix ON f_patient_prefix.f_patient_prefix_id = t_patient.f_patient_prefix_id
+    LEFT JOIN t_diag_icd10 ON (t_visit.t_visit_id=t_diag_icd10.diag_icd10_vn AND     diag_icd10_active='1' AND t_diag_icd10.f_diag_icd10_type_id = '1')
+    LEFT JOIN b_visit_clinic ON t_diag_icd10.b_visit_clinic_id=b_visit_clinic.b_visit_clinic_id
+    LEFT JOIN b_employee ON t_diag_icd10.diag_icd10_staff_doctor=b_employee.b_employee_id
+    INNER JOIN t_visit_payment ON t_visit.t_visit_id = t_visit_payment.t_visit_id
+    INNER JOIN b_contract_plans ON  b_contract_plans.b_contract_plans_id  = t_visit_payment.b_contract_plans_id
+    LEFT JOIN t_patient_appointment ON (t_patient_appointment.t_visit_id = t_visit.t_visit_id AND t_patient_appointment.patient_appointment_active = '1')
+    INNER join t_health_family ON t_patient.t_health_family_id = t_health_family.t_health_family_id
+
+
+WHERE
+ f_visit_status_id <>'4'
+ AND   t_visit_payment.visit_payment_active = '1' AND  t_visit_payment.visit_payment_priority ='0'
+ AND substr(visit_begin_visit_time,1,10)  BETWEEN $P{start_date} and $P{end_date}]]>
+	</queryString>
+	<field name="appoint" class="java.lang.Long"/>
+	<field name="new_pt" class="java.lang.Long"/>
+	<field name="old_pt" class="java.lang.Long"/>
+	<field name="new_pt_refer" class="java.lang.Long"/>
+	<field name="new_pt_not_refer" class="java.lang.Long"/>
+	<field name="old_pt_refer" class="java.lang.Long"/>
+	<field name="old_pt_not_refer" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="20">
+			<textField>
+				<reportElement x="-1" y="0" width="527" height="20" uuid="290703e2-db48-40c1-8934-6be82cf1d5ea"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["จำนวนผู้ป่วยเก่า, ใหม่ และนัด ที่มาใช้บริการ ระหว่างวันที่ "+
+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="316" y="0" width="105" height="20" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[refer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="0" width="105" height="20" uuid="9b591c7e-9928-4cb9-bf6c-6549fb4d7cc6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ผู้ป่วยเก่า]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="211" y="0" width="105" height="20" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ผู้ป่วยนัด]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="0" width="105" height="20" uuid="690a9781-e053-4f33-b9a3-6554d0707321"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ผู้ป่วยใหม่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="421" y="0" width="105" height="20" uuid="87470697-7c7b-4ec9-9588-9577fdf690c1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ไม่ refer]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField pattern="#,##0">
+				<reportElement x="211" y="0" width="105" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{appoint}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="316" y="0" width="105" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{new_pt_refer}+$F{old_pt_refer}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="1" y="0" width="105" height="20" uuid="12a1a40f-a4bd-4406-9940-25864635cb18"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{old_pt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="106" y="0" width="105" height="20" uuid="0d5e4694-3a66-4f34-964a-9ea5c8f29728"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{new_pt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="421" y="0" width="105" height="20" uuid="18d17051-5b3b-4b0d-b428-8dee0df76027"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="14" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{new_pt}+$F{old_pt}-$F{new_pt_refer}-$F{old_pt_refer}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="271" y="0" width="254" height="20" uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="65">
+			<subreport>
+				<reportElement x="1" y="0" width="525" height="65" uuid="4c1402bd-8457-4c05-9ff6-fe65c433f1ef"/>
+				<subreportParameter name="start_date">
+					<subreportParameterExpression><![CDATA[$P{start_date}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="end_date">
+					<subreportParameterExpression><![CDATA[$P{end_date}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "\\sub_rp_visit_sum.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

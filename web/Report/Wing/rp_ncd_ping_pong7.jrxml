@@ -1,0 +1,2613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_ncd_ping_pong7" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="09a72c25-bd67-465a-86cd-495fb1952d77">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="Table Dataset 1" uuid="b371cfd1-539c-4d8e-9cd3-e77dda54e956"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+--1 (1) เป้าหมาย
+        sum (case when patient_age between 15 and 34 then 1 else 0 end) as patient15_34
+        ,sum (case when patient_age between 35 and 59 then 1 else 0 end) as patient35_59
+        ,sum (case when patient_age >=60 then 1 else 0 end) as patient_60
+        ,count(t_patient_id) as sum_patient
+--2 (2) ผู้ป่วย
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number = '05'
+                 then 1 else 0 end) as dm_patient15_34_2
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number = '05'
+                 then 1 else 0 end) as dm_patient35_59_2
+        ,sum(case when patient_age >=60 and dm_chronic_number = '05'
+                 then 1 else 0 end) as dm_patient_60_2
+         ,sum(case when dm_chronic_number = '05'
+                        then 1 else 0 end)  as dm_sum_patient_2
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number = '02'
+                 then 1 else 0 end) as ht_patient15_34_2
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number = '02'
+                 then 1 else 0 end) as ht_patient35_59_2
+        ,sum(case when patient_age >=60 and ht_chronic_number = '02'
+                 then 1 else 0 end) as ht_patient_60_2
+         ,sum(case when ht_chronic_number = '02'
+                        then 1 else 0 end)  as ht_sum_patient_2
+--3 (3) จำนวนที่ต้องคัดกรอง
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is null
+                 then 1 else 0 end) as dm_patient15_34_3
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is null
+                 then 1 else 0 end) as dm_patient35_59_3
+        ,sum(case when patient_age >=60 and dm_chronic_number is null
+                 then 1 else 0 end) as dm_patient_60_3
+         ,sum(case when dm_chronic_number is null
+                        then 1 else 0 end)  as dm_sum_patient_3
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is null
+                 then 1 else 0 end) as ht_patient15_34_3
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is null
+                 then 1 else 0 end) as ht_patient35_59_3
+        ,sum(case when patient_age >=60 and ht_chronic_number is null
+                 then 1 else 0 end) as ht_patient_60_3
+         ,sum(case when ht_chronic_number is null
+                        then 1 else 0 end)  as ht_sum_patient_3
+--4 (4) ดำเนินการแล้ว
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is null
+                        and order_ncd is not null
+                 then 1 else 0 end) as dm_patient15_34_4
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is null
+                        and order_ncd is not null
+                 then 1 else 0 end) as dm_patient35_59_4
+        ,sum(case when patient_age >=60 and dm_chronic_number is null
+                        and order_ncd is not null
+                 then 1 else 0 end) as dm_patient_60_4
+         ,sum(case when dm_chronic_number is null
+                        and order_ncd is not null
+                        then 1 else 0 end)  as dm_sum_patient_4
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is null
+                         and ((bps <= 120 and bpd  <= 80)
+                                    or (bps >= 121 or bpd >= 81))
+                 then 1 else 0 end) as ht_patient15_34_4
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is null
+                         and ((bps <= 120 and bpd  <= 80)
+                                    or (bps >= 121 or bpd >= 81))
+                 then 1 else 0 end) as ht_patient35_59_4
+        ,sum(case when patient_age >=60 and ht_chronic_number is null
+                         and ((bps <= 120 and bpd  <= 80)
+                                    or (bps >= 121 or bpd >= 81))
+                 then 1 else 0 end) as ht_patient_60_4
+         ,sum(case when ht_chronic_number is null
+                         and ((bps <= 120 and bpd  <= 80)
+                                    or (bps >= 121 or bpd >= 81))
+                        then 1 else 0 end)  as ht_sum_patient_4
+--5 (5) คงเหลือ
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is null
+                        and order_ncd is null
+                 then 1 else 0 end) as dm_patient15_34_5
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is null
+                        and order_ncd is null
+                 then 1 else 0 end) as dm_patient35_59_5
+        ,sum(case when patient_age >=60 and dm_chronic_number is null
+                        and order_ncd is null
+                 then 1 else 0 end) as dm_patient_60_5
+         ,sum(case when dm_chronic_number is null
+                        and order_ncd is null
+                        then 1 else 0 end)  as dm_sum_patient_5
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is null
+                         and visit_vital_sign is null
+                 then 1 else 0 end) as ht_patient15_34_5
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is null
+                         and visit_vital_sign is null
+                 then 1 else 0 end) as ht_patient35_59_5
+        ,sum(case when patient_age >=60 and ht_chronic_number is null
+                         and visit_vital_sign is null
+                 then 1 else 0 end) as ht_patient_60_5
+         ,sum(case when ht_chronic_number is null
+                         and visit_vital_sign is null
+                        then 1 else 0 end)  as ht_sum_patient_5
+--7 ขาว
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is null
+                        and fbs <= 100
+                 then 1 else 0 end) as dm_patient15_34_7
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is null
+                        and fbs <= 100
+                 then 1 else 0 end) as dm_patient35_59_7
+        ,sum(case when patient_age >=60 and dm_chronic_number is null
+                        and fbs <= 100
+                 then 1 else 0 end) as dm_patient_60_7
+         ,sum(case when dm_chronic_number is null
+                        and fbs <= 100
+                        then 1 else 0 end)  as dm_sum_patient_7
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is null
+                         and (bps <= 120 and bpd <= 80)
+                 then 1 else 0 end) as ht_patient15_34_7
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is null
+                         and (bps <= 120 and bpd <= 80)
+                 then 1 else 0 end) as ht_patient35_59_7
+        ,sum(case when patient_age >=60 and ht_chronic_number is null
+                         and (bps <= 120 and bpd <= 80)
+                 then 1 else 0 end) as ht_patient_60_7
+         ,sum(case when ht_chronic_number is null
+                         and (bps <= 120 and bpd <= 80)
+                        then 1 else 0 end)  as ht_sum_patient_7
+--8 เขียวอ่อน
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is null
+                        and fbs  > 100
+                 then 1 else 0 end) as dm_patient15_34_8
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is null
+                        and fbs  > 100
+                 then 1 else 0 end) as dm_patient35_59_8
+        ,sum(case when patient_age >=60 and dm_chronic_number is null
+                        and fbs  > 100
+                 then 1 else 0 end) as dm_patient_60_8
+         ,sum(case when dm_chronic_number is null
+                        and fbs  > 100
+                        then 1 else 0 end)  as dm_sum_patient_8
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is null
+                         and (bps >= 121 or bpd >= 81)
+                 then 1 else 0 end) as ht_patient15_34_8
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is null
+                         and (bps >= 121 or bpd >= 81)
+                 then 1 else 0 end) as ht_patient35_59_8
+        ,sum(case when patient_age >=60 and ht_chronic_number is null
+                         and (bps >= 121 or bpd >= 81)
+                 then 1 else 0 end) as ht_patient_60_8
+         ,sum(case when ht_chronic_number is null
+                         and (bps >= 121 or bpd >= 81)
+                        then 1 else 0 end)  as ht_sum_patient_8
+
+--10 เขียวแก่
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is not null
+                        and fbs_hba1c = 1
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient15_34_10
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is not null
+                        and fbs_hba1c = 1
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient35_59_10
+        ,sum(case when patient_age >=60 and dm_chronic_number is not null
+                        and fbs_hba1c = 1
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient_60_10
+         ,sum(case when dm_chronic_number is not null
+                        and fbs_hba1c = 1
+                        and disease_complications_dm is null
+                        then 1 else 0 end)  as dm_sum_patient_10
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is not null
+                         and bps_bpd =1
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient15_34_10
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is not null
+                         and bps_bpd =1
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient35_59_10
+        ,sum(case when patient_age >=60 and ht_chronic_number is not null
+                         and bps_bpd =1
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient_60_10
+         ,sum(case when ht_chronic_number is not null
+                         and bps_bpd =1
+                        and disease_complications_ht is null
+                        then 1 else 0 end)  as ht_sum_patient_10
+--11 เหลือง
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is not null
+                        and fbs_hba1c = 2
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient15_34_11
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is not null
+                        and fbs_hba1c = 2
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient35_59_11
+        ,sum(case when patient_age >=60 and dm_chronic_number is not null
+                        and fbs_hba1c = 2
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient_60_11
+         ,sum(case when dm_chronic_number is not null
+                        and fbs_hba1c = 2
+                        and disease_complications_dm is null
+                        then 1 else 0 end)  as dm_sum_patient_11
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is not null
+                         and bps_bpd =2
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient15_34_11
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is not null
+                        and bps_bpd =2
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient35_59_11
+        ,sum(case when patient_age >=60 and ht_chronic_number is not null
+                        and bps_bpd =2
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient_60_11
+         ,sum(case when ht_chronic_number is not null
+                        and bps_bpd =2
+                        and disease_complications_ht is null
+                        then 1 else 0 end)  as ht_sum_patient_11
+--12 ส้ม
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is not null
+                        and fbs_hba1c = 3
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient15_34_12
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is not null
+                        and fbs_hba1c = 3
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient35_59_12
+        ,sum(case when patient_age >=60 and dm_chronic_number is not null
+                        and fbs_hba1c = 3
+                        and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient_60_12
+         ,sum(case when dm_chronic_number is not null
+                        and fbs_hba1c = 3
+                        and disease_complications_dm is null
+                        then 1 else 0 end)  as dm_sum_patient_12
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is not null
+                        and bps_bpd =3
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient15_34_12
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is not null
+                        and bps_bpd =3
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient35_59_12
+        ,sum(case when patient_age >=60 and ht_chronic_number is not null
+                        and bps_bpd =3
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient_60_12
+         ,sum(case when ht_chronic_number is not null
+                        and bps_bpd =3
+                        and disease_complications_ht is null
+                        then 1 else 0 end)  as ht_sum_patient_12
+--13 แดง
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is not null
+                            and fbs_hba1c = 4
+                            and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient15_34_13
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is not null
+                            and fbs_hba1c = 4
+                            and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient35_59_13
+        ,sum(case when patient_age >=60 and dm_chronic_number is not null
+                            and fbs_hba1c = 4
+                            and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient_60_13
+         ,sum(case when dm_chronic_number is not null
+                            and fbs_hba1c = 4
+                            and disease_complications_dm is null
+                        then 1 else 0 end)  as dm_sum_patient_13
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is not null
+                        and bps_bpd =4
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient15_34_13
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is not null
+                        and bps_bpd =4
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient35_59_13
+        ,sum(case when patient_age >=60 and ht_chronic_number is not null
+                        and bps_bpd =4
+                        and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient_60_13
+         ,sum(case when ht_chronic_number is not null
+                        and bps_bpd =4
+                        and disease_complications_ht is null
+                        then 1 else 0 end)  as ht_sum_patient_13
+--14 ดำ
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is not null
+                            and disease_complications_dm ='01'
+                 then 1 else 0 end) as dm_patient15_34_14
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is not null
+                            and disease_complications_dm ='01'
+                 then 1 else 0 end) as dm_patient35_59_14
+        ,sum(case when patient_age >=60 and dm_chronic_number is not null
+                            and disease_complications_dm ='01'
+                 then 1 else 0 end) as dm_patient_60_14
+         ,sum(case when dm_chronic_number is not null
+                            and disease_complications_dm ='01'
+                        then 1 else 0 end)  as dm_sum_patient_14
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is not null
+                         and disease_complications_ht ='02'
+                 then 1 else 0 end) as ht_patient15_34_14
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is not null
+                         and disease_complications_ht ='02'
+                 then 1 else 0 end) as ht_patient35_59_14
+        ,sum(case when patient_age >=60 and ht_chronic_number is not null
+                         and disease_complications_ht ='02'
+                 then 1 else 0 end) as ht_patient_60_14
+         ,sum(case when ht_chronic_number is not null
+                         and disease_complications_ht ='02'
+                        then 1 else 0 end)  as ht_sum_patient_14
+
+--15 ไม่ได้รับการติดตาม
+        ,sum(case when patient_age between 15 and 34 and dm_chronic_number is not null
+                            and order_ncd is null
+                           and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient15_34_15
+        ,sum(case when patient_age between 35 and 59 and dm_chronic_number is not null
+                            and order_ncd is null
+                            and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient35_59_15
+        ,sum(case when patient_age >=60 and dm_chronic_number is not null
+                            and order_ncd is null
+                            and disease_complications_dm is null
+                 then 1 else 0 end) as dm_patient_60_15
+         ,sum(case when dm_chronic_number is not null
+                            and order_ncd is null
+                            and disease_complications_dm is null
+                        then 1 else 0 end)  as dm_sum_patient_15
+
+        ,sum(case when patient_age between 15 and 34 and ht_chronic_number is not null
+                            and visit_vital_sign is null
+                            and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient15_34_15
+        ,sum(case when patient_age between 35 and 59 and ht_chronic_number is not null
+                            and visit_vital_sign is null
+                            and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient35_59_15
+        ,sum(case when patient_age >=60 and ht_chronic_number is not null
+                            and visit_vital_sign is null
+                            and disease_complications_ht is null
+                 then 1 else 0 end) as ht_patient_60_15
+         ,sum(case when ht_chronic_number is not null
+                            and visit_vital_sign is null
+                            and disease_complications_ht is null
+                        then 1 else 0 end)  as ht_sum_patient_15
+
+
+from(
+select
+        t_patient.t_patient_id as t_patient_id
+        , extract(year from age(to_date(substr(t_patient.patient_birthday,1,10),'YYYY-MM-DD') - interval '543 year')) AS patient_age
+        , patient_chronic_ht.chronic_number AS ht_chronic_number
+        , patient_chronic_dm.chronic_number AS dm_chronic_number
+        , order_ncd.t_patient_id as order_ncd
+        , order_ncd.fbs as fbs
+        , order_ncd.hba1c as hba1c
+        ,case when  order_ncd.fbs  <= 125
+                        then 1
+                when  order_ncd.fbs <= 154 and order_ncd.hba1c < 7
+                        and (order_ncd.fbs between 126 and 154
+                                    or order_ncd.hba1c < 7)
+                            then 2
+                when  order_ncd.fbs <=182 and order_ncd.hba1c <= 8
+                        and (order_ncd.fbs between 155 and 182
+                                or order_ncd.hba1c between 7 and 8)
+                            then 3
+                when order_ncd.fbs >= 183 or order_ncd.hba1c > 8
+                         then 4
+            else 0 end as fbs_hba1c
+        , t_visit_vital_sign.t_patient_id as visit_vital_sign
+        , t_visit_vital_sign.bps as bps
+        , t_visit_vital_sign.bpd as bpd
+        ,case when t_visit_vital_sign.bps <=139 and t_visit_vital_sign.bpd <= 89
+                        then 1
+                when t_visit_vital_sign.bps <=159 and t_visit_vital_sign.bpd <=99
+                         and (t_visit_vital_sign.bps between 140 and 159
+                                    or t_visit_vital_sign.bpd between 90 and 99)
+                            then 2
+                when t_visit_vital_sign.bps <=179 and t_visit_vital_sign.bpd <=109
+                         and (t_visit_vital_sign.bps between 160 and 179
+                                    or t_visit_vital_sign.bpd between 100 and 109)
+                            then 3
+                when t_visit_vital_sign.bps >= 180 or t_visit_vital_sign.bpd >= 110
+                         then 4
+                else 0 end as bps_bpd
+        , disease_complications.t_patient_id as disease_complications
+        , disease_complications.dm_code as disease_complications_dm
+        , disease_complications.ht_code as disease_complications_ht
+
+from
+            t_patient
+            left join (select
+                                    t_visit.t_patient_id as t_patient_id
+                                    ,b_group_chronic.group_chronic_number as chronic_number
+                                    ,max(t_diag_icd10.diag_icd10_diagnosis_date) as diag_icd10_diagnosis_date
+                            from t_diag_icd10 inner join t_visit on t_diag_icd10.diag_icd10_vn = t_visit.t_visit_id
+                                    left join b_group_icd10 on t_diag_icd10.diag_icd10_number = b_group_icd10.group_icd10_number
+                                    inner join b_group_chronic on b_group_icd10.b_group_chronic_id = b_group_chronic.b_group_chronic_id
+                            where
+                                    t_diag_icd10.diag_icd10_active = '1'
+                                    and t_visit.f_visit_status_id <> '4'
+                                    and t_diag_icd10.diag_icd10_diagnosis_date <> ''
+                                    and b_group_chronic.group_chronic_number in ('02')
+                                    and b_group_chronic.group_chronic_active = '1'
+                                    and substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+                            group by
+                                    t_visit.t_patient_id
+                                    ,b_group_chronic.group_chronic_number ) as patient_chronic_ht
+           on t_patient.t_patient_id = patient_chronic_ht.t_patient_id
+            left join(select
+                                    t_visit.t_patient_id as t_patient_id
+                                    ,b_group_chronic.group_chronic_number as chronic_number
+                                    ,max(t_diag_icd10.diag_icd10_diagnosis_date) as diag_icd10_diagnosis_date
+                            from t_diag_icd10 inner join t_visit on t_diag_icd10.diag_icd10_vn = t_visit.t_visit_id
+                                    left join b_group_icd10 on t_diag_icd10.diag_icd10_number = b_group_icd10.group_icd10_number
+                                    inner join b_group_chronic on b_group_icd10.b_group_chronic_id = b_group_chronic.b_group_chronic_id
+                            where
+                                    t_diag_icd10.diag_icd10_active = '1'
+                                    and t_visit.f_visit_status_id <> '4'
+                                    and t_diag_icd10.diag_icd10_diagnosis_date <> ''
+                                    and b_group_chronic.group_chronic_number in ('05')
+                                    and b_group_chronic.group_chronic_active = '1'
+                                    and substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+                            group by
+                                    t_visit.t_patient_id
+                                    ,b_group_chronic.group_chronic_number ) as patient_chronic_dm
+           on t_patient.t_patient_id = patient_chronic_dm.t_patient_id
+          left join(select
+                                t_order.t_patient_id
+                                ,max(case when lab_ncd.lab_number = '32203' and isdigits(t_result_lab.result_lab_value) then t_result_lab.result_lab_value::numeric else 0 end)  as FBS
+                                ,max(case when lab_ncd.lab_number = '32401' and isdigits(t_result_lab.result_lab_value) then t_result_lab.result_lab_value::numeric else 0 end)  as HbA1C
+                        from  t_order inner join t_result_lab on t_order.t_order_id = t_result_lab.t_order_id
+                                inner join (
+                                                  select --distinct
+                                                            t_order.t_patient_id  as t_patient_id
+                                                            ,b_item_lab_ncd_std.lab_number
+                                                            ,max(t_order.order_report_date_time) as order_report_date_time
+                                                    from t_order inner join b_item_map_lab_ncd on t_order.b_item_id = b_item_map_lab_ncd.b_item_id
+                                                            inner join t_visit on t_order.t_visit_id = t_visit.t_visit_id
+                                                            inner join t_result_lab on t_order.t_order_id = t_result_lab.t_order_id
+                                                                    and t_result_lab.result_lab_value <> ''
+                                                                    and t_result_lab.result_lab_value not like ('.%')
+                                                                    and t_result_lab.result_lab_value not like ('%..%')
+                                                                    and t_result_lab.result_lab_value not like ('%-.%')
+                                                            inner join b_item_lab_ncd_std on b_item_map_lab_ncd.b_item_lab_ncd_std_id = b_item_lab_ncd_std.b_item_lab_ncd_std_id
+                                                                    and b_item_lab_ncd_std.lab_number in ('32203','32401') --32203	Glucose(FBS) 32401	Hb A1C
+                                                    where t_order.f_order_status_id in ('4')
+                                                                and b_item_map_lab_ncd.active = '1'
+                                                                and t_result_lab.result_lab_active ='1'
+                                                                and t_visit.f_visit_status_id <> '4'
+                                                                and substr(t_visit.visit_begin_visit_time,1,10) <= $P{end_date}
+                                                    group by t_order.t_patient_id
+                                                            ,b_item_lab_ncd_std.lab_number ) as lab_ncd
+                                                  on t_order.t_patient_id = lab_ncd.t_patient_id
+                                                        and t_order.order_report_date_time = lab_ncd.order_report_date_time
+                        where t_order.f_order_status_id in ('4')
+                                    and t_result_lab.result_lab_active ='1'
+                                    and t_result_lab.result_lab_value <> ''
+                                    and t_result_lab.result_lab_value not like ('.%')
+                                    and t_result_lab.result_lab_value not like ('%..%')
+and t_result_lab.result_lab_value not like ('%-.%')
+
+                        group by
+                                t_order.t_patient_id) as order_ncd
+           on t_patient.t_patient_id = order_ncd.t_patient_id
+           left join (select
+                                    t_visit_vital_sign.t_patient_id
+                                    ,substr(t_visit_vital_sign.visit_vital_sign_blood_presure,1,(position('/' in t_visit_vital_sign.visit_vital_sign_blood_presure)-1))::numeric as bps
+                                    ,substr(t_visit_vital_sign.visit_vital_sign_blood_presure,(position('/' in t_visit_vital_sign.visit_vital_sign_blood_presure)+1))::numeric as bpd
+                            from t_visit_vital_sign inner join (select
+                                                                                    t_visit_vital_sign.t_patient_id as t_patient_id
+                                                                                    ,max(t_visit_vital_sign.record_date||','||t_visit_vital_sign.record_time) as record_date_time
+                                                                            from t_visit_vital_sign inner join t_visit on t_visit_vital_sign.t_visit_id = t_visit.t_visit_id
+                                                                            where
+                                                                                     t_visit_vital_sign.visit_vital_sign_active = '1'
+                                                                                     and t_visit_vital_sign.visit_vital_sign_blood_presure <>''
+                                                                                     and position('/' in t_visit_vital_sign.visit_vital_sign_blood_presure) >1
+                                                                                     and t_visit.f_visit_status_id <> '4'
+                                                                                 and substr(t_visit.visit_begin_visit_time,1,10) <= $P{end_date}
+                                                                            group by t_visit_vital_sign.t_patient_id) as max_record_vital_sign
+                                     on  t_visit_vital_sign.t_patient_id = max_record_vital_sign.t_patient_id
+                                          and (t_visit_vital_sign.record_date||','||t_visit_vital_sign.record_time) = max_record_vital_sign.record_date_time
+                            where
+                                        t_visit_vital_sign.visit_vital_sign_active = '1'
+                                        and t_visit_vital_sign.visit_vital_sign_blood_presure <>''
+                                        and position('/' in t_visit_vital_sign.visit_vital_sign_blood_presure) >1 ) as t_visit_vital_sign
+        on t_patient.t_patient_id = t_visit_vital_sign.t_patient_id
+        left join (select
+                                t_ncd_screen_disease_complications.t_patient_id as t_patient_id
+                                ,max(case when f_ncd_group_code.code = '01' then '01' else null end) as dm_code
+                                ,max(case when f_ncd_group_code.code = '02' then '02' else null end) as ht_code
+                                ,t_ncd_disease_complications.found_disease_complications
+                        from
+                                (select
+                                            t_ncd_screen_disease_complications.*
+                                from t_ncd_screen_disease_complications inner join (select
+                                                                                                                        t_ncd_screen_disease_complications.t_patient_id as t_patient_id
+                                                                                                                        ,t_ncd_screen_disease_complications.f_ncd_group_code_id as f_ncd_group_code_id
+                                                                                                                        ,max(t_ncd_screen_disease_complications.screen_date_time) as screen_date_time
+                                                                                                                from t_ncd_screen_disease_complications inner join t_visit on t_ncd_screen_disease_complications.t_visit_id = t_visit.t_visit_id
+                                                                                                                where
+                                                                                                                            t_visit.f_visit_status_id <> '4'
+                                                                                                                           and substr(t_visit.visit_begin_visit_time,1,10) <= $P{end_date}
+                                                                                                                            and t_ncd_screen_disease_complications.active = '1'
+                                                                                                                group by
+                                                                                                                        t_ncd_screen_disease_complications.t_patient_id
+                                                                                                                        ,t_ncd_screen_disease_complications.f_ncd_group_code_id) as max_screen_disease_complications
+                                                                                           on t_ncd_screen_disease_complications.t_patient_id = max_screen_disease_complications.t_patient_id
+                                                                                                and t_ncd_screen_disease_complications.screen_date_time = max_screen_disease_complications.screen_date_time
+                                                                                                and t_ncd_screen_disease_complications.f_ncd_group_code_id = max_screen_disease_complications.f_ncd_group_code_id) as t_ncd_screen_disease_complications
+                                left join f_ncd_group_code on t_ncd_screen_disease_complications.f_ncd_group_code_id = f_ncd_group_code.f_ncd_group_code_id
+                                left join t_ncd_disease_complications on t_ncd_screen_disease_complications.t_ncd_screen_disease_complications_id = t_ncd_disease_complications.t_ncd_screen_disease_complications_id
+                                left join f_ncd_disease_complications on t_ncd_disease_complications.f_ncd_disease_complications_id = f_ncd_disease_complications.f_ncd_disease_complications
+                        where
+                                t_ncd_disease_complications.found_disease_complications = '1'
+                                and t_ncd_screen_disease_complications.active = '1'
+                                and t_ncd_screen_disease_complications.f_ncd_group_code_id in ('ncd202000000000001','ncd202000000000002')
+                                        --ncd202000000000001	01	โรคเบาหวาน(Diabetes mellitus) ncd202000000000002	02	โรคความดัน(Hypertension)
+                        group by
+                                t_ncd_screen_disease_complications.t_patient_id
+                                ,t_ncd_disease_complications.found_disease_complications ) as disease_complications
+           on t_patient.t_patient_id = disease_complications.t_patient_id
+
+where
+            t_patient.patient_active = '1'
+            and t_patient.f_patient_area_status_id in ('0','1','3')
+            and substr(t_patient.patient_record_date_time,1,10) <= $P{end_date}
+            and extract(year from age(to_date(substr(t_patient.patient_birthday,1,10),'YYYY-MM-DD') - interval '543 year')) >= 15) as q]]>
+	</queryString>
+	<field name="patient15_34" class="java.lang.Long"/>
+	<field name="patient35_59" class="java.lang.Long"/>
+	<field name="patient_60" class="java.lang.Long"/>
+	<field name="sum_patient" class="java.lang.Long"/>
+	<field name="dm_patient15_34_2" class="java.lang.Long"/>
+	<field name="dm_patient35_59_2" class="java.lang.Long"/>
+	<field name="dm_patient_60_2" class="java.lang.Long"/>
+	<field name="dm_sum_patient_2" class="java.lang.Long"/>
+	<field name="ht_patient15_34_2" class="java.lang.Long"/>
+	<field name="ht_patient35_59_2" class="java.lang.Long"/>
+	<field name="ht_patient_60_2" class="java.lang.Long"/>
+	<field name="ht_sum_patient_2" class="java.lang.Long"/>
+	<field name="dm_patient15_34_3" class="java.lang.Long"/>
+	<field name="dm_patient35_59_3" class="java.lang.Long"/>
+	<field name="dm_patient_60_3" class="java.lang.Long"/>
+	<field name="dm_sum_patient_3" class="java.lang.Long"/>
+	<field name="ht_patient15_34_3" class="java.lang.Long"/>
+	<field name="ht_patient35_59_3" class="java.lang.Long"/>
+	<field name="ht_patient_60_3" class="java.lang.Long"/>
+	<field name="ht_sum_patient_3" class="java.lang.Long"/>
+	<field name="dm_patient15_34_4" class="java.lang.Long"/>
+	<field name="dm_patient35_59_4" class="java.lang.Long"/>
+	<field name="dm_patient_60_4" class="java.lang.Long"/>
+	<field name="dm_sum_patient_4" class="java.lang.Long"/>
+	<field name="ht_patient15_34_4" class="java.lang.Long"/>
+	<field name="ht_patient35_59_4" class="java.lang.Long"/>
+	<field name="ht_patient_60_4" class="java.lang.Long"/>
+	<field name="ht_sum_patient_4" class="java.lang.Long"/>
+	<field name="dm_patient15_34_5" class="java.lang.Long"/>
+	<field name="dm_patient35_59_5" class="java.lang.Long"/>
+	<field name="dm_patient_60_5" class="java.lang.Long"/>
+	<field name="dm_sum_patient_5" class="java.lang.Long"/>
+	<field name="ht_patient15_34_5" class="java.lang.Long"/>
+	<field name="ht_patient35_59_5" class="java.lang.Long"/>
+	<field name="ht_patient_60_5" class="java.lang.Long"/>
+	<field name="ht_sum_patient_5" class="java.lang.Long"/>
+	<field name="dm_patient15_34_7" class="java.lang.Long"/>
+	<field name="dm_patient35_59_7" class="java.lang.Long"/>
+	<field name="dm_patient_60_7" class="java.lang.Long"/>
+	<field name="dm_sum_patient_7" class="java.lang.Long"/>
+	<field name="ht_patient15_34_7" class="java.lang.Long"/>
+	<field name="ht_patient35_59_7" class="java.lang.Long"/>
+	<field name="ht_patient_60_7" class="java.lang.Long"/>
+	<field name="ht_sum_patient_7" class="java.lang.Long"/>
+	<field name="dm_patient15_34_8" class="java.lang.Long"/>
+	<field name="dm_patient35_59_8" class="java.lang.Long"/>
+	<field name="dm_patient_60_8" class="java.lang.Long"/>
+	<field name="dm_sum_patient_8" class="java.lang.Long"/>
+	<field name="ht_patient15_34_8" class="java.lang.Long"/>
+	<field name="ht_patient35_59_8" class="java.lang.Long"/>
+	<field name="ht_patient_60_8" class="java.lang.Long"/>
+	<field name="ht_sum_patient_8" class="java.lang.Long"/>
+	<field name="dm_patient15_34_10" class="java.lang.Long"/>
+	<field name="dm_patient35_59_10" class="java.lang.Long"/>
+	<field name="dm_patient_60_10" class="java.lang.Long"/>
+	<field name="dm_sum_patient_10" class="java.lang.Long"/>
+	<field name="ht_patient15_34_10" class="java.lang.Long"/>
+	<field name="ht_patient35_59_10" class="java.lang.Long"/>
+	<field name="ht_patient_60_10" class="java.lang.Long"/>
+	<field name="ht_sum_patient_10" class="java.lang.Long"/>
+	<field name="dm_patient15_34_11" class="java.lang.Long"/>
+	<field name="dm_patient35_59_11" class="java.lang.Long"/>
+	<field name="dm_patient_60_11" class="java.lang.Long"/>
+	<field name="dm_sum_patient_11" class="java.lang.Long"/>
+	<field name="ht_patient15_34_11" class="java.lang.Long"/>
+	<field name="ht_patient35_59_11" class="java.lang.Long"/>
+	<field name="ht_patient_60_11" class="java.lang.Long"/>
+	<field name="ht_sum_patient_11" class="java.lang.Long"/>
+	<field name="dm_patient15_34_12" class="java.lang.Long"/>
+	<field name="dm_patient35_59_12" class="java.lang.Long"/>
+	<field name="dm_patient_60_12" class="java.lang.Long"/>
+	<field name="dm_sum_patient_12" class="java.lang.Long"/>
+	<field name="ht_patient15_34_12" class="java.lang.Long"/>
+	<field name="ht_patient35_59_12" class="java.lang.Long"/>
+	<field name="ht_patient_60_12" class="java.lang.Long"/>
+	<field name="ht_sum_patient_12" class="java.lang.Long"/>
+	<field name="dm_patient15_34_13" class="java.lang.Long"/>
+	<field name="dm_patient35_59_13" class="java.lang.Long"/>
+	<field name="dm_patient_60_13" class="java.lang.Long"/>
+	<field name="dm_sum_patient_13" class="java.lang.Long"/>
+	<field name="ht_patient15_34_13" class="java.lang.Long"/>
+	<field name="ht_patient35_59_13" class="java.lang.Long"/>
+	<field name="ht_patient_60_13" class="java.lang.Long"/>
+	<field name="ht_sum_patient_13" class="java.lang.Long"/>
+	<field name="dm_patient15_34_14" class="java.lang.Long"/>
+	<field name="dm_patient35_59_14" class="java.lang.Long"/>
+	<field name="dm_patient_60_14" class="java.lang.Long"/>
+	<field name="dm_sum_patient_14" class="java.lang.Long"/>
+	<field name="ht_patient15_34_14" class="java.lang.Long"/>
+	<field name="ht_patient35_59_14" class="java.lang.Long"/>
+	<field name="ht_patient_60_14" class="java.lang.Long"/>
+	<field name="ht_sum_patient_14" class="java.lang.Long"/>
+	<field name="dm_patient15_34_15" class="java.lang.Long"/>
+	<field name="dm_patient35_59_15" class="java.lang.Long"/>
+	<field name="dm_patient_60_15" class="java.lang.Long"/>
+	<field name="dm_sum_patient_15" class="java.lang.Long"/>
+	<field name="ht_patient15_34_15" class="java.lang.Long"/>
+	<field name="ht_patient35_59_15" class="java.lang.Long"/>
+	<field name="ht_patient_60_15" class="java.lang.Long"/>
+	<field name="ht_sum_patient_15" class="java.lang.Long"/>
+	<background>
+		<band height="555">
+			<staticText>
+				<reportElement uuid="b4ade274-735d-4ec0-83b5-e044d8af1b3c" x="0" y="10" width="802" height="30"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[แบบติดตามความก้าวหน้าระบบเฝ้าระวังและควบคุมการคัดกรองโรคเบาหวาน และความดันโลหิตสูง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f975b464-45d2-4719-ad13-103be7262cce" x="0" y="86" width="202" height="40"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ประเภทกลุ่มบริการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2cf8f038-d2e5-4e22-9752-6010997622a6" x="502" y="86" width="300" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ผลการคัดกรองโรคความดันโลหิตสูง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="42bdaffc-87d4-4fe9-b120-c68199ca8512" x="577" y="106" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[35 - 59 ปี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0cd14aab-49a7-4004-b046-f962ba33ee03" x="502" y="106" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[15 - 34 ปี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="49b81a82-395d-4fee-8e4a-cbc426811c66" x="652" y="106" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[> 60 ปี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="88b1eb3d-f85a-4b99-ad74-348e9bc77a67" x="727" y="106" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d63e72c5-b07a-47cf-b217-066d789801d0" x="202" y="86" width="300" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ผลการคัดกรองโรคเบาหวาน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e55d3e1-508d-47f3-9b2f-23571f0e625f" x="202" y="106" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[15 - 34 ปี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3aa28d68-b9cf-4ebe-916c-b993aeb088be" x="277" y="106" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[35 - 59 ปี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2940754b-35a0-40f8-8f40-66d0f0e9fb29" x="352" y="106" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[> 60 ปี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5fb54681-43e1-4e2d-b1b4-8934a96a8955" x="427" y="106" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="409f201c-23c8-4779-8506-2c0a495439a5" x="0" y="126" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  (1) เป้าหมาย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" x="0" y="146" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  (2) ผู้ป่วย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" x="0" y="166" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  (3) จำนวนที่ต้องคัดกรอง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" x="0" y="186" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  (4) ดำเนินการแล้ว]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" x="0" y="206" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  (5) คงเหลือ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" x="0" y="226" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  ร้อยละ(4) x 100% (3)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" x="0" y="246" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  ขาว]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" mode="Opaque" x="0" y="266" width="202" height="20" forecolor="#000000" backcolor="#00FF33"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  เขียวอ่อน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" x="0" y="286" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" mode="Opaque" x="0" y="306" width="202" height="20" forecolor="#000000" backcolor="#009933"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  เขียวแก่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" mode="Opaque" x="0" y="326" width="202" height="20" forecolor="#000000" backcolor="#FFFF00"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  เหลือง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" mode="Opaque" x="0" y="346" width="202" height="20" forecolor="#000000" backcolor="#FF9900"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  ส้ม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" mode="Opaque" x="0" y="366" width="202" height="20" forecolor="#000000" backcolor="#FF0000"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  แดง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" mode="Opaque" x="0" y="386" width="202" height="20" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  ดำ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f4f0fe-b7c2-474a-bc58-7919d28f6934" x="0" y="406" width="202" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<text><![CDATA[  ไม่ได้รับการติดตาม]]></text>
+			</staticText>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="126" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient15_34}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="126" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient35_59}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="126" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient_60}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="126" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sum_patient}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="126" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient15_34}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="126" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient35_59}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="126" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patient_60}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="126" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sum_patient}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="146" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="146" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="146" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="146" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="146" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="146" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="146" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="146" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="166" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="166" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="166" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="166" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="166" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="166" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="166" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="166" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="206" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="186" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="186" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="186" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="186" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="186" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="206" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="186" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="206" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="206" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="206" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="206" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="186" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="186" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="206" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="206" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="226" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_4} == 0
+|| $F{ht_patient_60_3} == 0 ? 0
+:$F{ht_patient_60_4}*100/$F{ht_patient_60_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="226" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_4} == 0
+|| $F{dm_patient35_59_3} == 0 ? 0
+:$F{dm_patient35_59_4}*100/$F{dm_patient35_59_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="226" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_4} == 0
+|| $F{ht_patient15_34_3} == 0 ? 0
+:$F{ht_patient15_34_4}*100/$F{ht_patient15_34_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="226" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_4} == 0
+|| $F{dm_patient_60_3} == 0 ? 0
+:$F{dm_patient_60_4}*100/$F{dm_patient_60_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="226" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_4} == 0
+|| $F{dm_sum_patient_3} == 0 ? 0
+:$F{dm_sum_patient_4}*100/$F{dm_sum_patient_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="226" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_4} == 0
+|| $F{dm_patient15_34_3} == 0 ? 0
+:$F{dm_patient15_34_4}*100/$F{dm_patient15_34_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="226" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_4} == 0
+|| $F{ht_patient35_59_3} == 0 ? 0
+:$F{ht_patient35_59_4}*100/$F{ht_patient35_59_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="226" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_4} == 0
+|| $F{ht_sum_patient_3} == 0 ? 0
+:$F{ht_sum_patient_4}*100/$F{ht_sum_patient_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="246" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="246" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="286" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_7}+$F{ht_sum_patient_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="266" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="246" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="286" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_7}+$F{dm_sum_patient_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="246" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="246" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="266" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="286" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_7}+$F{dm_patient15_34_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="266" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="286" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_7} + $F{dm_patient_60_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="246" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="266" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="266" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="286" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_7}+$F{ht_patient35_59_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="246" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="286" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_7}+$F{ht_patient_60_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="266" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="286" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_7}+$F{ht_patient15_34_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="246" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="266" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="266" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="286" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_7}+$F{dm_patient35_59_8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="326" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="326" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="326" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="326" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="306" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="306" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="306" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="306" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="326" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="326" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="326" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="306" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="326" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="306" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="306" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="306" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="346" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="366" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_13}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="366" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_13}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="346" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="366" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_13}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="346" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="346" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="346" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="366" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_13}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="346" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="346" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="366" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_13}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="346" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_12}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="366" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_13}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="366" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_13}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="366" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_13}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="386" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="386" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="406" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="406" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="19ab8cfa-0d90-48cc-b229-b7c3e2f1a570" x="277" y="386" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient35_59_14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="59905360-3cb7-4819-9864-e8134c31b6a3" x="502" y="386" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient15_34_14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="386" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="386" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="406" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="c9cabcdb-6339-49c9-ba5a-d15918ced043" x="427" y="406" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="406" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="ef1a4492-be63-43f4-a3c6-bf13134f35a2" x="577" y="406" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient35_59_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="1f075a94-d543-4cc7-b659-83da22bf745b" x="202" y="406" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient15_34_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="386" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="3846baa3-f3ab-4589-9762-53392b01dcd9" x="652" y="406" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_patient_60_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="352" y="386" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_patient_60_14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="69de86d8-d1c3-4de9-ba9d-45dc79c51207" x="427" y="426" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dm_sum_patient_10}+$F{dm_sum_patient_11}+$F{dm_sum_patient_12}+$F{dm_sum_patient_13}+$F{dm_sum_patient_14}+$F{dm_sum_patient_15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0  ">
+				<reportElement uuid="9b3fb2c5-3183-4c6b-9908-19cd9b97207e" x="727" y="426" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht_sum_patient_10}+$F{ht_sum_patient_11}+$F{ht_sum_patient_12}+$F{ht_sum_patient_13}+$F{ht_sum_patient_14}+$F{ht_sum_patient_15}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="99debfaa-1e84-4124-86e6-a7629311b3a1" x="0" y="41" width="802" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ตั้งแต่วันที่ "+new java.text.SimpleDateFormat("dd MMMM พ.ศ. yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+
+new java.text.SimpleDateFormat("dd MMMM พ.ศ. yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d33b608d-6173-403f-93dd-a74bd8dc90c6" x="465" y="535" width="337" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ข้อมูล ณ วันที่ "+new java.text.SimpleDateFormat("dd MMMM พ.ศ. yyyy", new java.util.Locale("th", "TH")).format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</background>
+</jasperReport>

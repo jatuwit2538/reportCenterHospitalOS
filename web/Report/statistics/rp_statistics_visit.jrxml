@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_statistics_visit" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="786" leftMargin="28" rightMargin="28" topMargin="28" bottomMargin="28" uuid="dc2d78a4-b148-4089-a8cf-14ca81957225">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<subDataset name="Dataset_chart" uuid="0d8aaee2-7abe-4546-a996-d5133c11a641">
+		<parameter name="start_date" class="java.lang.String"/>
+		<parameter name="end_date" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[select
+
+        case when substr(t_visit.visit_begin_visit_time,6,2) in ('10','11','12') then (substr(t_visit.visit_begin_visit_time,1,4))::int +1
+                else (substr(t_visit.visit_begin_visit_time,1,4))::int  end as fiscal_year
+
+        ,case when substr(t_visit.visit_begin_visit_time,6,2) = '10' then substr(t_visit.visit_begin_visit_time,1,4)||'10'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '11' then substr(t_visit.visit_begin_visit_time,1,4)||'11'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '12' then substr(t_visit.visit_begin_visit_time,1,4)||'12'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '01' then substr(t_visit.visit_begin_visit_time,1,4)||'01'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '02' then substr(t_visit.visit_begin_visit_time,1,4)||'02'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '03' then substr(t_visit.visit_begin_visit_time,1,4)||'03'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '04' then substr(t_visit.visit_begin_visit_time,1,4)||'04'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '05' then substr(t_visit.visit_begin_visit_time,1,4)||'05'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '06' then substr(t_visit.visit_begin_visit_time,1,4)||'06'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '07' then substr(t_visit.visit_begin_visit_time,1,4)||'07'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '08' then substr(t_visit.visit_begin_visit_time,1,4)||'08'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '09' then substr(t_visit.visit_begin_visit_time,1,4)||'09'
+                 end as months
+
+        ,case when substr(t_visit.visit_begin_visit_time,6,2) = '10' then '10'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '11' then '11'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '12' then '12'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '01' then '01'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '02' then '02'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '03' then '03'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '04' then '04'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '05' then '05'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '06' then '06'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '07' then '07'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '08' then '08'
+                when substr(t_visit.visit_begin_visit_time,6,2) = '09' then '09'
+                 end as months1
+
+/*         ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '10' then 1 else 0 end ) as Oct
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '11' then 1 else 0 end ) as Nov
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '12' then 1 else 0 end ) as Dec
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '01' then 1 else 0 end ) as Jan
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '02' then 1 else 0 end ) as Feb
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '03' then 1 else 0 end ) as Mar
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '04' then 1 else 0 end ) as Apr
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '05' then 1 else 0 end ) as May
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '06' then 1 else 0 end ) as Jun
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '07' then 1 else 0 end ) as Jul
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '08' then 1 else 0 end ) as Aug
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '09' then 1 else 0 end ) as Sep */
+         ,count(t_visit.t_visit_id)
+
+from t_visit
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_visit.visit_money_discharge_status = '1'
+        and substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+group by
+        fiscal_year
+        ,months
+        ,months1
+order by
+        fiscal_year asc
+        ,months asc]]>
+		</queryString>
+		<field name="fiscal_year" class="java.lang.Integer"/>
+		<field name="months" class="java.lang.String"/>
+		<field name="months1" class="java.lang.String"/>
+		<field name="count" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="start_date" class="java.lang.String"/>
+	<parameter name="end_date" class="java.lang.String"/>
+	<parameter name="report_by" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+
+        case when substr(t_visit.visit_begin_visit_time,6,2) in ('10','11','12') then (substr(t_visit.visit_begin_visit_time,1,4))::int +1
+                else (substr(t_visit.visit_begin_visit_time,1,4))::int  end as fiscal_year
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '10' then 1 else 0 end ) as Oct
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '11' then 1 else 0 end ) as Nov
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '12' then 1 else 0 end ) as Dec
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '01' then 1 else 0 end ) as Jan
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '02' then 1 else 0 end ) as Feb
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '03' then 1 else 0 end ) as Mar
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '04' then 1 else 0 end ) as Apr
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '05' then 1 else 0 end ) as May
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '06' then 1 else 0 end ) as Jun
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '07' then 1 else 0 end ) as Jul
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '08' then 1 else 0 end ) as Aug
+        ,sum(case when substr(t_visit.visit_begin_visit_time,6,2) = '09' then 1 else 0 end ) as Sep
+         ,count(t_visit.t_visit_id)
+
+        ,employee_print.employee_name as employee_print
+
+from t_visit
+        cross join (select
+                                        b_employee.b_employee_id
+                                        ,case when person_print.t_person_id is not null and prefix_print.f_patient_prefix_id <> '000'
+                                                    then prefix_print.patient_prefix_description||person_print.person_firstname||'  '||person_print.person_lastname
+                                                when person_print.t_person_id is not null and prefix_print.f_patient_prefix_id = '000'
+                                                    then person_print.person_firstname||'  '||person_print.person_lastname
+                                                    else b_employee.employee_firstname||'  '||b_employee.employee_lastname
+                                        end  as employee_name
+
+                                from b_employee as b_employee left join t_person as person_print on b_employee.t_person_id = person_print.t_person_id
+                                         left join f_patient_prefix as prefix_print on person_print.f_prefix_id = prefix_print.f_patient_prefix_id
+                                where
+                                        b_employee.b_employee_id   = $P{report_by}
+                ) as employee_print
+where
+        t_visit.f_visit_status_id <> '4'
+        and t_visit.visit_money_discharge_status = '1'
+        and substr(t_visit.visit_begin_visit_time,1,10) between $P{start_date} and $P{end_date}
+group by
+        fiscal_year
+        ,employee_print
+order by
+        fiscal_year asc]]>
+	</queryString>
+	<field name="fiscal_year" class="java.lang.Integer"/>
+	<field name="oct" class="java.lang.Long"/>
+	<field name="nov" class="java.lang.Long"/>
+	<field name="dec" class="java.lang.Long"/>
+	<field name="jan" class="java.lang.Long"/>
+	<field name="feb" class="java.lang.Long"/>
+	<field name="mar" class="java.lang.Long"/>
+	<field name="apr" class="java.lang.Long"/>
+	<field name="may" class="java.lang.Long"/>
+	<field name="jun" class="java.lang.Long"/>
+	<field name="jul" class="java.lang.Long"/>
+	<field name="aug" class="java.lang.Long"/>
+	<field name="sep" class="java.lang.Long"/>
+	<field name="count" class="java.lang.Long"/>
+	<field name="employee_print" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3e9a7893-7190-4ae8-9f94-3206f674957d" x="0" y="3" width="786" height="28"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ศูนย์บริการสุขภาพแห่งจุฬาลงกรณ์มหาวิทยาลัย]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="290703e2-db48-40c1-8934-6be82cf1d5ea" x="0" y="31" width="786" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["สถิติจำนวนผู้รับบริการ  ระหว่างวันที่ "+
+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="de7a034c-471f-4d45-9a19-b7719fcc68c3" x="15" y="0" width="100" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ปีงบประมาณ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e8f810e-b0ac-494c-a5d0-9524125314fc" x="115" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ตุลาคม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0d8fcd58-6b5b-4158-87c7-0d3cc9e5d1a1" x="170" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[พฤศจิกายน
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="853a519e-f3c5-41a4-bb45-208279128e61" x="225" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ธันวาคม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="99d0b561-4275-4943-befa-597ef6271674" x="280" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[มกราคม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="41b2722f-cc35-4cfc-8a6c-d88d9d54cf92" x="335" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[กุมภาพันธ์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="48522679-cb08-41b2-9e6b-d7b0f11f3b6c" x="390" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[มีนาคม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0bade6a9-3eac-43b1-b33c-4cb70b12693d" x="445" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[เมษายน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="141faf09-1e0a-4c9b-9071-eee7c7958839" x="500" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[พฤษภาคม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9adbd37c-eec9-476b-bfe2-4d09fdd31c9e" x="555" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[มิถุนายน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="254e7a21-094b-4979-b705-4b8a8a2d8c24" x="610" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[กรกฎาคม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c1addc20-fb94-4099-8f1e-797418eb0bcb" x="665" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[สิงหาคม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bd7b6e9b-7bda-484e-8ad1-35e1994eb8c7" x="720" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[กันยายน]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5b8ec247-cbdc-481d-87f7-8411a1915575" x="15" y="0" width="100" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fiscal_year}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="31dff927-3130-45ff-b8ce-c45107685298" x="115" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{oct}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="6704986b-ee10-4a94-bb97-37b8e272852e" x="170" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nov}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="ed1df14b-939c-4824-9b75-ad30d572242c" x="225" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dec}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="1d2d241d-47b8-441e-a0dd-6ac3f2a7414b" x="280" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="fdef54da-e00f-4a7b-acd2-a32fc3e727fa" x="335" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{feb}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="87eb2e30-e24e-4bb7-8d2b-ba50c94934c1" x="390" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="654d23d1-3605-480c-94e1-a9b0eb71e7cc" x="445" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{apr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="c14f6228-f1d4-44f8-95c3-65977dcd0310" x="500" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{may}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="a0ba215e-b499-4c39-822f-365a07cdeacd" x="555" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jun}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="56079ac6-3d3e-47da-a916-f3e2cd2a2a65" x="610" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jul}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="23e2c3d7-0cf7-4a02-a5c8-c6854f9bf766" x="665" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aug}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="fd1a903a-5580-405c-9f0a-d15ede098129" x="720" y="0" width="55" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="16"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sep}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField evaluationTime="Report">
+				<reportElement uuid="216d58c7-f5fe-4d60-b6c9-94ece2386ea5" x="51" y="0" width="40" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9997830a-eb68-4485-a70f-9b2a445e6f1c" x="-1" y="0" width="52" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า "+$V{PAGE_NUMBER}+" จาก"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a7fb9d54-5cb1-4b7e-8c28-70c285d2b24e" x="306" y="0" width="175" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employee_print} == null ? ""
+:"รายงานโดย "+ $F{employee_print}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3" x="532" y="0" width="254" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="20">
+			<textField evaluationTime="Report">
+				<reportElement uuid="216d58c7-f5fe-4d60-b6c9-94ece2386ea5" x="51" y="0" width="40" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a7fb9d54-5cb1-4b7e-8c28-70c285d2b24e" x="306" y="0" width="175" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employee_print} == null ? ""
+:"รายงานโดย "+ $F{employee_print}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9997830a-eb68-4485-a70f-9b2a445e6f1c" x="-1" y="0" width="52" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า "+$V{PAGE_NUMBER}+" จาก"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0200b55e-35d7-45a3-ab55-a6e003f407b3" x="532" y="0" width="254" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์วันที่ "+new java.text.SimpleDateFormat("dd MMMM yyyy เวลา HH:mm", new java.util.Locale("th", "TH")).format(new Date())
++" น."]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="414" splitType="Stretch">
+			<bar3DChart>
+				<chart>
+					<reportElement uuid="d931211d-7e39-4b44-9e57-665848d1dd0f" x="0" y="22" width="786" height="392"/>
+					<chartTitle>
+						<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+						<titleExpression><![CDATA["สถิติจำนวนผู้รับบริการ"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+						<subtitleExpression><![CDATA["ระหว่างวันที่ "+
+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{start_date}))
++" ถึงวันที่ "+new java.text.SimpleDateFormat("d MMMMM yyyy", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("yyyy-MM-dd", new java.util.Locale("th", "TH")).parse($P{end_date}))]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="Dataset_chart" uuid="5dbe5fe8-0b7a-4e2c-aa36-263c3c8caa30">
+							<datasetParameter name="start_date">
+								<datasetParameterExpression><![CDATA[$P{start_date}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="end_date">
+								<datasetParameterExpression><![CDATA[$P{end_date}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{fiscal_year}]]></seriesExpression>
+						<categoryExpression><![CDATA[new java.text.SimpleDateFormat("MMMMM", new java.util.Locale("th", "TH")).format(new java.text.SimpleDateFormat("MM", new java.util.Locale("th", "TH")).parse($F{months1}))]]></categoryExpression>
+						<valueExpression><![CDATA[$F{count}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot isShowLabels="true">
+					<plot labelRotation="-30.0"/>
+					<itemLabel>
+						<font fontName="TH SarabunPSK" size="14"/>
+					</itemLabel>
+					<categoryAxisFormat labelRotation="-30.0">
+						<axisFormat verticalTickLabels="true">
+							<labelFont>
+								<font fontName="TH SarabunPSK" size="14"/>
+							</labelFont>
+							<tickLabelFont>
+								<font fontName="TH SarabunPSK" size="14"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat verticalTickLabels="false">
+							<labelFont>
+								<font fontName="TH SarabunPSK" size="14"/>
+							</labelFont>
+							<tickLabelFont>
+								<font fontName="TH SarabunPSK" size="14"/>
+							</tickLabelFont>
+						</axisFormat>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</bar3DChart>
+		</band>
+	</summary>
+</jasperReport>
